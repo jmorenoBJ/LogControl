@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LogControl — Panel de Logística</title>
+<script src="https://alcdn.msauth.net/browser/2.38.0/js/msal-browser.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: #F5F6F8; color: #1a1a1a; font-size: 14px; min-height: 100vh; }
+
+/* TOPBAR */
+.topbar { background: #fff; border-bottom: 1px solid #e5e7eb; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
+.logo { display: flex; align-items: center; gap: 10px; }
+.logo-icon { width: 34px; height: 34px; background: #0078d4; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+.logo-icon svg { width: 18px; height: 18px; }
+.logo-title { font-size: 17px; font-weight: 700; color: #111; letter-spacing: -0.3px; }
+.logo-sub { font-size: 11px; color: #6b7280; margin-top: 1px; }
+.top-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.status-badge { display: flex; align-items: center; gap: 6px; font-size: 12px; padding: 5px 12px; border-radius: 20px; border: 1px solid; white-space: nowrap; }
+.status-ok   { color: #059669; background: #ecfdf5; border-color: #a7f3d0; }
+.status-warn { color: #d97706; background: #fffbeb; border-color: #fde68a; }
+.status-err  { color: #dc2626; background: #fef2f2; border-color: #fecaca; }
+.status-badge::before { content:''; width:7px; height:7px; border-radius:50%; display:inline-block; background:currentColor; }
+.user-pill { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #374151; background: #f3f4f6; padding: 5px 12px; border-radius: 20px; }
+.btn-sm { padding: 6px 12px; border: 1px solid #d1d5db; border-radius: 8px; background: #fff; font-size: 12px; color: #374151; cursor: pointer; }
+.btn-sm:hover { background: #f3f4f6; }
+
+/* MAIN */
+.main { max-width: 1400px; margin: 0 auto; padding: 24px; }
+
+/* KPIs */
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(155px,1fr)); gap: 12px; margin-bottom: 24px; }
+.kpi { background:#fff; border-radius:12px; border:1px solid #e5e7eb; padding:16px 20px; }
+.kpi-label { font-size:11px; font-weight:600; color:#6b7280; text-transform:uppercase; letter-spacing:.5px; margin-bottom:8px; }
+.kpi-val { font-size:32px; font-weight:700; color:#111; line-height:1; }
+.kpi-sub { font-size:11px; color:#9ca3af; margin-top:4px; }
+.kpi-val.amber { color:#d97706; }
+.kpi-val.red   { color:#dc2626; }
+
+/* CARD */
+.card { background:#fff; border-radius:12px; border:1px solid #e5e7eb; overflow:hidden; }
+
+/* TABS */
+.tabs { display:flex; gap:4px; background:#f3f4f6; border-radius:8px; padding:3px; margin-bottom:20px; }
+.tab { flex:1; padding:8px 14px; border:none; background:none; border-radius:6px; font-size:13px; font-weight:500; color:#6b7280; cursor:pointer; text-align:center; transition:all .15s; }
+.tab.active { background:#fff; color:#111; box-shadow:0 1px 3px rgba(0,0,0,.1); }
+
+/* TOOLBAR */
+.toolbar { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; padding:16px 20px; border-bottom:1px solid #f3f4f6; flex-wrap:wrap; }
+.search-input { padding:8px 12px; border:1px solid #d1d5db; border-radius:8px; font-size:13px; width:270px; background:#fafafa; color:#111; outline:none; font-family:inherit; }
+.search-input:focus { border-color:#0078d4; background:#fff; }
+.filter-chips { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
+.chip { padding:4px 10px; border-radius:20px; border:1px solid #d1d5db; background:#fff; font-size:11px; font-weight:500; color:#374151; cursor:pointer; transition:all .15s; }
+.chip:hover { background:#f9fafb; }
+.chip.active { background:#0078d4; color:#fff; border-color:#0078d4; }
+.btn-add { padding:8px 16px; background:#0078d4; color:#fff; border:none; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; white-space:nowrap; }
+.btn-add:hover { background:#006bb8; }
+.btn-add:disabled { background:#93c5fd; cursor:not-allowed; }
+
+/* TABLE */
+.table-wrap { overflow-x:auto; }
+table { width:100%; border-collapse:collapse; }
+thead { background:#f9fafb; }
+th { padding:10px 14px; font-size:11px; font-weight:600; color:#6b7280; text-transform:uppercase; letter-spacing:.4px; text-align:left; white-space:nowrap; border-bottom:1px solid #e5e7eb; }
+td { padding:11px 14px; border-bottom:1px solid #f3f4f6; vertical-align:middle; }
+tr:last-child td { border-bottom:none; }
+tr:hover td { background:#fafafa; }
+.td-clip { max-width:160px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+/* BADGES */
+.badge { display:inline-flex; align-items:center; font-size:11px; font-weight:600; padding:3px 9px; border-radius:20px; white-space:nowrap; }
+.b-aereo      { background:#eff6ff; color:#1d4ed8; }
+.b-maritimo   { background:#f0fdf4; color:#166534; }
+.b-transito   { background:#fffbeb; color:#92400e; }
+.b-aduana     { background:#fff7ed; color:#9a3412; }
+.b-entregado  { background:#f0fdf4; color:#166534; }
+.b-pendiente  { background:#f9fafb; color:#4b5563; border:1px solid #e5e7eb; }
+
+.eta-near { color:#d97706; font-weight:600; }
+.eta-late  { color:#dc2626; font-weight:600; }
+.link-tr { color:#0078d4; text-decoration:none; font-size:12px; }
+.link-tr:hover { text-decoration:underline; }
+
+/* ACTION BUTTONS */
+.action-btn { padding:4px 10px; border-radius:6px; border:1px solid #e5e7eb; background:#fff; font-size:11px; font-weight:500; color:#374151; cursor:pointer; margin-right:4px; }
+.action-btn:hover { background:#f3f4f6; }
+.action-del { color:#dc2626; border-color:#fecaca; }
+.action-del:hover { background:#fef2f2; }
+
+/* EMPTY / LOADING */
+.empty { text-align:center; padding:40px; color:#9ca3af; font-size:14px; }
+.loading { text-align:center; padding:40px; color:#6b7280; }
+.spin { display:inline-block; width:20px; height:20px; border:2px solid #e5e7eb; border-top-color:#0078d4; border-radius:50%; animation:spin .7s linear infinite; margin-bottom:8px; }
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* LOGIN SCREEN */
+.login-screen { min-height:100vh; display:flex; align-items:center; justify-content:center; background:#F5F6F8; }
+.login-card { background:#fff; border-radius:16px; border:1px solid #e5e7eb; padding:40px 48px; text-align:center; max-width:420px; width:100%; }
+.login-icon { width:56px; height:56px; background:#0078d4; border-radius:14px; display:flex; align-items:center; justify-content:center; margin:0 auto 20px; }
+.login-title { font-size:22px; font-weight:700; color:#111; margin-bottom:8px; }
+.login-sub { font-size:14px; color:#6b7280; margin-bottom:28px; line-height:1.6; }
+.btn-login { width:100%; padding:12px; background:#0078d4; color:#fff; border:none; border-radius:10px; font-size:15px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; }
+.btn-login:hover { background:#006bb8; }
+.btn-login svg { width:20px; height:20px; }
+
+/* CONFIG SCREEN */
+.config-screen { min-height:100vh; display:flex; align-items:center; justify-content:center; background:#F5F6F8; padding:24px; }
+.config-card { background:#fff; border-radius:16px; border:1px solid #e5e7eb; padding:36px 40px; max-width:540px; width:100%; }
+.config-title { font-size:20px; font-weight:700; color:#111; margin-bottom:6px; }
+.config-sub { font-size:13px; color:#6b7280; margin-bottom:24px; line-height:1.6; }
+.cfg-section { margin-bottom:20px; }
+.cfg-section h3 { font-size:12px; font-weight:700; color:#374151; text-transform:uppercase; letter-spacing:.5px; margin-bottom:10px; padding-bottom:6px; border-bottom:1px solid #f3f4f6; }
+.fg { display:flex; flex-direction:column; gap:5px; margin-bottom:14px; }
+.fg label { font-size:11px; font-weight:600; color:#6b7280; text-transform:uppercase; letter-spacing:.4px; }
+.fg input { font-size:13px; padding:9px 11px; border:1px solid #d1d5db; border-radius:8px; background:#fff; color:#111; width:100%; outline:none; font-family:inherit; }
+.fg input:focus { border-color:#0078d4; }
+.fg .hint { font-size:11px; color:#9ca3af; margin-top:2px; line-height:1.5; }
+.btn-primary { width:100%; padding:11px; background:#0078d4; color:#fff; border:none; border-radius:9px; font-size:14px; font-weight:600; cursor:pointer; margin-top:8px; }
+.btn-primary:hover { background:#006bb8; }
+.alert-info { background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; padding:10px 14px; border-radius:8px; font-size:13px; margin-bottom:20px; line-height:1.6; }
+.alert-err  { background:#fef2f2; color:#991b1b; border:1px solid #fecaca; padding:10px 14px; border-radius:8px; font-size:13px; margin-bottom:16px; }
+
+/* MODAL */
+.modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,.45); display:flex; align-items:center; justify-content:center; z-index:200; padding:16px; }
+.modal { background:#fff; border-radius:14px; width:100%; max-width:580px; max-height:90vh; overflow-y:auto; box-shadow:0 20px 60px rgba(0,0,0,.2); }
+.modal-hd { padding:20px 24px 16px; border-bottom:1px solid #f3f4f6; }
+.modal-title { font-size:17px; font-weight:700; color:#111; }
+.modal-bd { padding:20px 24px; }
+.modal-ft { padding:14px 24px 20px; display:flex; justify-content:flex-end; gap:8px; border-top:1px solid #f3f4f6; }
+.form-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.mfg { display:flex; flex-direction:column; gap:5px; }
+.mfg.full { grid-column:1/-1; }
+.mfg label { font-size:11px; font-weight:600; color:#6b7280; text-transform:uppercase; letter-spacing:.4px; }
+.mfg input, .mfg select, .mfg textarea { font-size:13px; padding:9px 11px; border:1px solid #d1d5db; border-radius:8px; background:#fff; color:#111; width:100%; outline:none; font-family:inherit; }
+.mfg input:focus, .mfg select:focus, .mfg textarea:focus { border-color:#0078d4; }
+.mfg textarea { height:72px; resize:vertical; }
+.mfg .hint { font-size:11px; color:#9ca3af; margin-top:2px; }
+.btn-cancel { padding:8px 16px; border:1px solid #d1d5db; border-radius:8px; background:#fff; font-size:13px; font-weight:500; color:#374151; cursor:pointer; }
+.btn-cancel:hover { background:#f9fafb; }
+.btn-save { padding:8px 18px; background:#0078d4; color:#fff; border:none; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; }
+.btn-save:hover { background:#006bb8; }
+.btn-save:disabled { background:#93c5fd; cursor:not-allowed; }
+
+@media(max-width:600px){
+  .main { padding:16px; }
+  .form-grid { grid-template-columns:1fr; }
+  .mfg.full { grid-column:1; }
+  .search-input { width:100%; }
+  .login-card, .config-card { padding:28px 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Pantallas dinámicas -->
+<div id="appRoot"></div>
+
+<!-- MODAL ENVÍO -->
+<div class="modal-overlay" id="modalE" style="display:none" onclick="olc(event,'modalE')">
+  <div class="modal">
+    <div class="modal-hd"><div class="modal-title" id="titleModalE">Nuevo envío</div></div>
+    <div class="modal-bd">
+      <div class="form-grid">
+        <div class="mfg full">
+          <label>Título del envío</label>
+          <input id="eTitle" placeholder="Ej: Barco Mayo 2026 / DHL Hong Kong junio">
+          <div class="hint">Nombre para identificar este envío fácilmente</div>
+        </div>
+        <div class="mfg">
+          <label>Tipo de envío</label>
+          <select id="eTipo">
+            <option value="Aéreo">✈ Aéreo</option>
+            <option value="Marítimo">⚓ Marítimo</option>
+          </select>
+        </div>
+        <div class="mfg">
+          <label>Estado</label>
+          <select id="eEstado">
+            <option value="En tránsito">En tránsito</option>
+            <option value="En aduana">En aduana</option>
+            <option value="Entregado">Entregado</option>
+            <option value="Pendiente">Pendiente</option>
+          </select>
+        </div>
+        <div class="mfg"><label>Origen</label><input id="eOrigen" placeholder="Ej: Shanghai / Hong Kong"></div>
+        <div class="mfg"><label>Destino</label><input id="eDestino" placeholder="Ej: Valencia / Madrid"></div>
+        <div class="mfg"><label>Proveedor / Naviera</label><input id="eProveedor" placeholder="Ej: Maersk, DHL, FedEx…"></div>
+        <div class="mfg">
+          <label>ETA — Fecha estimada de llegada</label>
+          <input type="date" id="eETA">
+        </div>
+        <div class="mfg full">
+          <label>Seguimiento (enlace de tracking)</label>
+          <input id="eSeguimiento" type="url" placeholder="https://www.track.maersk.com/…">
+          <div class="hint">URL de seguimiento en tiempo real del barco o avión</div>
+        </div>
+        <div class="mfg full">
+          <label>PCs Asociados (órdenes de compra)</label>
+          <textarea id="ePCs" placeholder="Ej: OC-2024-441, OC-2024-445&#10;Indica las órdenes de compra que van en este envío"></textarea>
+        </div>
+        <div class="mfg full"><label>Notas</label><textarea id="eNotas" placeholder="Observaciones adicionales…"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn-cancel" onclick="cm('modalE')">Cancelar</button>
+      <button class="btn-save" id="btnSaveE" onclick="saveEnvio()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PEDIDO -->
+<div class="modal-overlay" id="modalP" style="display:none" onclick="olc(event,'modalP')">
+  <div class="modal">
+    <div class="modal-hd"><div class="modal-title" id="titleModalP">Nuevo pedido de cliente</div></div>
+    <div class="modal-bd">
+      <div class="form-grid">
+        <div class="mfg">
+          <label>Título (identificador)</label>
+          <input id="pTitle" placeholder="Ej: García mayo / PED-0001">
+        </div>
+        <div class="mfg"><label>Cliente</label><input id="pCliente" placeholder="Nombre de la empresa"></div>
+        <div class="mfg full"><label>Producto / Descripción</label><input id="pProducto" placeholder="Qué ha pedido el cliente"></div>
+        <div class="mfg"><label>Proveedor</label><input id="pProveedor" placeholder="Proveedor del producto"></div>
+        <div class="mfg">
+          <label>Pedido de Venta (envío asociado)</label>
+          <select id="pPedidoVenta"></select>
+          <div class="hint">¿En qué envío va esta mercancía?</div>
+        </div>
+        <div class="mfg">
+          <label>ETA Cliente — Fecha compromiso</label>
+          <input type="date" id="pETACliente">
+        </div>
+        <div class="mfg full"><label>Notas</label><textarea id="pNotas" placeholder="Observaciones…"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn-cancel" onclick="cm('modalP')">Cancelar</button>
+      <button class="btn-save" id="btnSaveP" onclick="savePedido()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// CONFIGURACIÓN — se guarda en localStorage
+// ═══════════════════════════════════════════════════════
+const CFG = {
+  clientId: localStorage.getItem('lc_clientId') || '',
+  tenantId: localStorage.getItem('lc_tenantId') || '',
+  siteUrl:  localStorage.getItem('lc_siteUrl')  || ''
+};
+
+// Nombres internos de las columnas en SharePoint
+// Si SharePoint generó nombres distintos, ajústalos aquí
+const FE = {
+  title:       'Title',
+  tipo:        'Tipo_x0020_de_x0020_Envio',
+  origen:      'Origen',
+  destino:     'Destino',
+  proveedor:   'Proveedor',
+  estado:      'Estado',
+  eta:         'ETA',
+  seguimiento: 'Seguimiento',
+  pcs:         'PCs_x0020_Asociados',
+  notas:       'Notas'
+};
+const FP = {
+  title:       'Title',
+  cliente:     'Cliente',
+  producto:    'Producto',
+  proveedor:   'Proveedor',
+  pedidoVenta: 'Pedido_x0020_de_x0020_Venta',
+  etaCliente:  'ETA_x0020_Cliente',
+  notas:       'Notas'
+};
+
+// ═══════════════════════════════════════════════════════
+// ESTADO
+// ═══════════════════════════════════════════════════════
+let msalInstance = null;
+let accessToken  = null;
+let currentUser  = null;
+let envios   = [];
+let pedidos  = [];
+let editEId  = null;
+let editPId  = null;
+let filterE  = 'todos';
+let etypeE   = 'SP.Data.EnviosListItem';
+let etypeP   = 'SP.Data.PedidosListItem';
+
+// ═══════════════════════════════════════════════════════
+// RENDER INICIAL
+// ═══════════════════════════════════════════════════════
+function render() {
+  if (!CFG.clientId || !CFG.tenantId || !CFG.siteUrl) {
+    showConfigScreen();
+  } else {
+    initMsal();
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// PANTALLA DE CONFIGURACIÓN
+// ═══════════════════════════════════════════════════════
+function showConfigScreen(error) {
+  document.getElementById('appRoot').innerHTML = `
+    <div class="config-screen">
+      <div class="config-card">
+        <div class="config-title">Configuración inicial</div>
+        <div class="config-sub">Introduce los datos de tu tenant de Microsoft 365 para conectar LogControl con SharePoint.</div>
+        ${error ? `<div class="alert-err">⚠ ${error}</div>` : ''}
+        <div class="alert-info">
+          Necesitas registrar una app en Azure AD. <strong>Sigue las instrucciones del README</strong> o pide ayuda a tu administrador.
+        </div>
+        <div class="cfg-section">
+          <h3>Azure AD</h3>
+          <div class="fg">
+            <label>Client ID (ID de aplicación)</label>
+            <input id="cfgClientId" value="${CFG.clientId}" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+            <div class="hint">Lo encuentras en Azure Portal → App registrations → tu app → Application (client) ID</div>
+          </div>
+          <div class="fg">
+            <label>Tenant ID (ID de directorio)</label>
+            <input id="cfgTenantId" value="${CFG.tenantId}" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+            <div class="hint">Azure Portal → App registrations → tu app → Directory (tenant) ID</div>
+          </div>
+        </div>
+        <div class="cfg-section">
+          <h3>SharePoint</h3>
+          <div class="fg">
+            <label>URL del sitio SharePoint</label>
+            <input id="cfgSiteUrl" value="${CFG.siteUrl}" placeholder="https://tuempresa.sharepoint.com/sites/operaciones">
+            <div class="hint">La URL base de tu sitio, sin barra al final</div>
+          </div>
+        </div>
+        <button class="btn-primary" onclick="saveConfig()">Guardar y conectar</button>
+      </div>
+    </div>`;
+}
+
+function saveConfig() {
+  const clientId = document.getElementById('cfgClientId').value.trim();
+  const tenantId = document.getElementById('cfgTenantId').value.trim();
+  const siteUrl  = document.getElementById('cfgSiteUrl').value.trim().replace(/\/$/,'');
+  if (!clientId || !tenantId || !siteUrl) { alert('Rellena todos los campos.'); return; }
+  CFG.clientId = clientId;
+  CFG.tenantId = tenantId;
+  CFG.siteUrl  = siteUrl;
+  localStorage.setItem('lc_clientId', clientId);
+  localStorage.setItem('lc_tenantId', tenantId);
+  localStorage.setItem('lc_siteUrl',  siteUrl);
+  initMsal();
+}
+
+// ═══════════════════════════════════════════════════════
+// MSAL — AUTENTICACIÓN MICROSOFT
+// ═══════════════════════════════════════════════════════
+function initMsal() {
+  msalInstance = new msal.PublicClientApplication({
+    auth: {
+      clientId:    CFG.clientId,
+      authority:   `https://login.microsoftonline.com/${CFG.tenantId}`,
+      redirectUri: window.location.origin + window.location.pathname
+    },
+    cache: { cacheLocation: 'localStorage', storeAuthStateInCookie: false }
+  });
+
+  msalInstance.handleRedirectPromise().then(response => {
+    if (response) {
+      accessToken = response.accessToken;
+      currentUser = response.account;
+      showApp();
+      loadAll();
+    } else {
+      const accounts = msalInstance.getAllAccounts();
+      if (accounts.length > 0) {
+        currentUser = accounts[0];
+        acquireToken().then(() => { showApp(); loadAll(); }).catch(() => showLoginScreen());
+      } else {
+        showLoginScreen();
+      }
+    }
+  }).catch(err => {
+    console.error(err);
+    showConfigScreen('Error de autenticación: ' + err.message);
+  });
+}
+
+async function acquireToken() {
+  const scopes = [`${CFG.siteUrl}/.default`];
+  try {
+    const res = await msalInstance.acquireTokenSilent({ scopes, account: currentUser });
+    accessToken = res.accessToken;
+  } catch(e) {
+    const res = await msalInstance.acquireTokenPopup({ scopes });
+    accessToken = res.accessToken;
+    currentUser = res.account;
+  }
+}
+
+function showLoginScreen() {
+  document.getElementById('appRoot').innerHTML = `
+    <div class="login-screen">
+      <div class="login-card">
+        <div class="login-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M3 17h18M3 12l9-9 9 9"/></svg>
+        </div>
+        <div class="login-title">LogControl</div>
+        <div class="login-sub">Panel de logística para envíos aéreos y marítimos.<br>Inicia sesión con tu cuenta de Microsoft.</div>
+        <button class="btn-login" onclick="login()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="9" height="9"/><rect x="13" y="2" width="9" height="9"/><rect x="2" y="13" width="9" height="9"/><rect x="13" y="13" width="9" height="9"/></svg>
+          Iniciar sesión con Microsoft
+        </button>
+        <p style="font-size:11px;color:#9ca3af;margin-top:16px;cursor:pointer" onclick="showConfigScreen()">⚙ Cambiar configuración</p>
+      </div>
+    </div>`;
+}
+
+async function login() {
+  try {
+    await msalInstance.loginRedirect({ scopes: [`${CFG.siteUrl}/.default`] });
+  } catch(e) {
+    alert('Error al iniciar sesión: ' + e.message);
+  }
+}
+
+function logout() {
+  msalInstance.logoutRedirect();
+}
+
+// ═══════════════════════════════════════════════════════
+// APP PRINCIPAL
+// ═══════════════════════════════════════════════════════
+function showApp() {
+  const name = currentUser?.name || currentUser?.username || '';
+  document.getElementById('appRoot').innerHTML = `
+    <div class="topbar">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M3 17h18M3 12l9-9 9 9"/></svg>
+        </div>
+        <div>
+          <div class="logo-title">LogControl</div>
+          <div class="logo-sub">Panel de logística · Aéreo &amp; Marítimo</div>
+        </div>
+      </div>
+      <div class="top-right">
+        <span class="status-badge status-warn" id="statusBadge">Conectando…</span>
+        <span class="user-pill">👤 ${esc(name)}</span>
+        <button class="btn-sm" onclick="logout()">Cerrar sesión</button>
+        <button class="btn-sm" onclick="showConfigScreen()">⚙</button>
+      </div>
+    </div>
+    <div class="main">
+      <div class="kpi-grid">
+        <div class="kpi"><div class="kpi-label">En tránsito</div><div class="kpi-val" id="kpi1">—</div><div class="kpi-sub">Envíos activos</div></div>
+        <div class="kpi"><div class="kpi-label">En aduana</div><div class="kpi-val" id="kpi2">—</div><div class="kpi-sub">Requieren seguimiento</div></div>
+        <div class="kpi"><div class="kpi-label">Pedidos registrados</div><div class="kpi-val" id="kpi3">—</div><div class="kpi-sub">De clientes</div></div>
+        <div class="kpi"><div class="kpi-label">Total envíos</div><div class="kpi-val" id="kpi4">—</div><div class="kpi-sub">En la lista</div></div>
+      </div>
+      <div class="tabs">
+        <button class="tab active" id="tabE" onclick="switchTab('envios')">✈ Envíos</button>
+        <button class="tab" id="tabP" onclick="switchTab('pedidos')">📦 Pedidos de clientes</button>
+      </div>
+      <div class="card">
+        <!-- ENVÍOS -->
+        <div id="panelEnvios">
+          <div class="toolbar">
+            <div>
+              <input class="search-input" type="text" placeholder="Buscar nombre, origen, destino, PCs…" oninput="renderEnvios()" id="searchE">
+              <div class="filter-chips" id="chipsE"></div>
+            </div>
+            <button class="btn-add" onclick="openModalEnvio(null)">+ Nuevo envío</button>
+          </div>
+          <div class="table-wrap">
+            <div id="loadE" class="loading"><div class="spin"></div><br>Cargando envíos…</div>
+            <table id="tableE" style="display:none">
+              <thead><tr>
+                <th>Nombre del envío</th><th>Tipo</th><th>Origen → Destino</th>
+                <th>Proveedor</th><th>Estado</th><th>ETA</th>
+                <th>Seguimiento</th><th>PCs Asociados</th><th>Notas</th><th>Acciones</th>
+              </tr></thead>
+              <tbody id="tbodyE"></tbody>
+            </table>
+            <div id="emptyE" class="empty" style="display:none">No hay envíos con ese filtro.</div>
+          </div>
+        </div>
+        <!-- PEDIDOS -->
+        <div id="panelPedidos" style="display:none">
+          <div class="toolbar">
+            <div>
+              <input class="search-input" type="text" placeholder="Buscar cliente, producto, pedido de venta…" oninput="renderPedidos()" id="searchP">
+            </div>
+            <button class="btn-add" onclick="openModalPedido(null)">+ Nuevo pedido</button>
+          </div>
+          <div class="table-wrap">
+            <div id="loadP" class="loading" style="display:none"><div class="spin"></div><br>Cargando pedidos…</div>
+            <table id="tableP" style="display:none">
+              <thead><tr>
+                <th>Título</th><th>Cliente</th><th>Producto</th>
+                <th>Proveedor</th><th>Pedido de Venta</th><th>ETA Cliente</th>
+                <th>Notas</th><th>Acciones</th>
+              </tr></thead>
+              <tbody id="tbodyP"></tbody>
+            </table>
+            <div id="emptyP" class="empty" style="display:none">No hay pedidos registrados.</div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  renderChips();
+}
+
+// ═══════════════════════════════════════════════════════
+// SHAREPOINT REST API
+// ═══════════════════════════════════════════════════════
+async function spFetch(url, options = {}) {
+  await acquireToken();
+  const res = await fetch(url, {
+    ...options,
+    headers: {
+      'Accept': 'application/json;odata=verbose',
+      'Authorization': `Bearer ${accessToken}`,
+      ...(options.headers || {})
+    }
+  });
+  return res;
+}
+
+async function getDigest() {
+  const r = await spFetch(`${CFG.siteUrl}/_api/contextinfo`, { method: 'POST', headers: { 'Content-Type': 'application/json;odata=verbose' } });
+  if (!r.ok) throw new Error('No se pudo obtener el digest de SharePoint.');
+  return (await r.json()).d.GetContextWebInformation.FormDigestValue;
+}
+
+async function getEtypes() {
+  try {
+    const [re, rp] = await Promise.all([
+      spFetch(`${CFG.siteUrl}/_api/web/lists/getbytitle('Envios')?$select=ListItemEntityTypeFullName`),
+      spFetch(`${CFG.siteUrl}/_api/web/lists/getbytitle('Pedidos')?$select=ListItemEntityTypeFullName`)
+    ]);
+    if (re.ok) etypeE = (await re.json()).d.ListItemEntityTypeFullName;
+    if (rp.ok) etypeP = (await rp.json()).d.ListItemEntityTypeFullName;
+  } catch(e) { console.warn('Entity types por defecto.'); }
+}
+
+async function spGet(list) {
+  const r = await spFetch(`${CFG.siteUrl}/_api/web/lists/getbytitle('${list}')/items?$select=*&$top=500&$orderby=Id desc`);
+  if (!r.ok) throw new Error(`Error leyendo "${list}" (${r.status}). Comprueba que la lista existe.`);
+  return (await r.json()).d.results;
+}
+
+async function spCreate(list, etype, fields) {
+  const dg = await getDigest();
+  const r = await spFetch(`${CFG.siteUrl}/_api/web/lists/getbytitle('${list}')/items`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json;odata=verbose', 'X-RequestDigest': dg },
+    body: JSON.stringify({ __metadata: { type: etype }, ...fields })
+  });
+  if (!r.ok) { const t = await r.text(); throw new Error(`Error al crear: ${t}`); }
+  return await r.json();
+}
+
+async function spUpdate(list, id, etype, fields) {
+  const dg = await getDigest();
+  const r = await spFetch(`${CFG.siteUrl}/_api/web/lists/getbytitle('${list}')/items(${id})`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json;odata=verbose', 'X-RequestDigest': dg, 'X-HTTP-Method': 'MERGE', 'If-Match': '*' },
+    body: JSON.stringify({ __metadata: { type: etype }, ...fields })
+  });
+  if (!r.ok && r.status !== 204) throw new Error(`Error al actualizar (${r.status})`);
+}
+
+async function spDelete(list, id) {
+  const dg = await getDigest();
+  const r = await spFetch(`${CFG.siteUrl}/_api/web/lists/getbytitle('${list}')/items(${id})`, {
+    method: 'POST',
+    headers: { 'X-RequestDigest': dg, 'X-HTTP-Method': 'DELETE', 'If-Match': '*' }
+  });
+  if (!r.ok && r.status !== 204) throw new Error(`Error al eliminar (${r.status})`);
+}
+
+// ═══════════════════════════════════════════════════════
+// MAPPERS
+// ═══════════════════════════════════════════════════════
+function rowToEnvio(i) {
+  return {
+    id:          i.Id,
+    title:       i[FE.title]       || '',
+    tipo:        i[FE.tipo]        || '',
+    origen:      i[FE.origen]      || '',
+    destino:     i[FE.destino]     || '',
+    proveedor:   i[FE.proveedor]   || '',
+    estado:      i[FE.estado]      || '',
+    eta:         i[FE.eta]         ? i[FE.eta].split('T')[0] : '',
+    seguimiento: i[FE.seguimiento] || '',
+    pcs:         i[FE.pcs]         || '',
+    notas:       i[FE.notas]       || ''
+  };
+}
+function envioToRow(e) {
+  return {
+    [FE.title]:       e.title,
+    [FE.tipo]:        e.tipo,
+    [FE.origen]:      e.origen,
+    [FE.destino]:     e.destino,
+    [FE.proveedor]:   e.proveedor,
+    [FE.estado]:      e.estado,
+    [FE.eta]:         e.eta ? e.eta + 'T00:00:00Z' : null,
+    [FE.seguimiento]: e.seguimiento,
+    [FE.pcs]:         e.pcs,
+    [FE.notas]:       e.notas
+  };
+}
+function rowToPedido(i) {
+  return {
+    id:          i.Id,
+    title:       i[FP.title]       || '',
+    cliente:     i[FP.cliente]     || '',
+    producto:    i[FP.producto]    || '',
+    proveedor:   i[FP.proveedor]   || '',
+    pedidoVenta: i[FP.pedidoVenta] || '',
+    etaCliente:  i[FP.etaCliente]  ? i[FP.etaCliente].split('T')[0] : '',
+    notas:       i[FP.notas]       || ''
+  };
+}
+function pedidoToRow(p) {
+  return {
+    [FP.title]:       p.title,
+    [FP.cliente]:     p.cliente,
+    [FP.producto]:    p.producto,
+    [FP.proveedor]:   p.proveedor,
+    [FP.pedidoVenta]: p.pedidoVenta,
+    [FP.etaCliente]:  p.etaCliente ? p.etaCliente + 'T00:00:00Z' : null,
+    [FP.notas]:       p.notas
+  };
+}
+
+// ═══════════════════════════════════════════════════════
+// CARGA
+// ═══════════════════════════════════════════════════════
+async function loadAll() {
+  setStatus('warn', 'Conectando…');
+  try {
+    await getEtypes();
+    const [rawE, rawP] = await Promise.all([spGet('Envios'), spGet('Pedidos')]);
+    envios  = rawE.map(rowToEnvio);
+    pedidos = rawP.map(rowToPedido);
+    const hora = new Date().toLocaleTimeString('es-ES', { hour:'2-digit', minute:'2-digit' });
+    setStatus('ok', `Conectado · ${hora}`);
+    renderKPIs(); renderEnvios(); renderPedidos();
+    const loadE = document.getElementById('loadE');
+    const tableE = document.getElementById('tableE');
+    if (loadE) loadE.style.display = 'none';
+    if (tableE) tableE.style.display = '';
+  } catch(err) {
+    setStatus('err', 'Error de conexión');
+    const loadE = document.getElementById('loadE');
+    if (loadE) loadE.innerHTML = `<div style="color:#dc2626;padding:24px;text-align:center">⚠ ${err.message}<br><br><button class="btn-add" onclick="loadAll()">Reintentar</button></div>`;
+    console.error(err);
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// UTILIDADES
+// ═══════════════════════════════════════════════════════
+function setStatus(t, msg) {
+  const b = document.getElementById('statusBadge');
+  if (!b) return;
+  b.className = 'status-badge status-' + t;
+  b.textContent = msg;
+}
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function formatDate(d) {
+  if (!d) return '—';
+  try { return new Date(d).toLocaleDateString('es-ES', { day:'2-digit', month:'2-digit', year:'numeric' }); }
+  catch { return d; }
+}
+function etaClass(d) {
+  if (!d) return '';
+  const today = new Date(); today.setHours(0,0,0,0);
+  const diff = (new Date(d) - today) / 86400000;
+  return diff < 0 ? 'eta-late' : diff <= 3 ? 'eta-near' : '';
+}
+const BMAP = {
+  'Aéreo':      ['b-aereo',    '✈ Aéreo'],
+  'Marítimo':   ['b-maritimo', '⚓ Marítimo'],
+  'En tránsito':['b-transito', 'En tránsito'],
+  'En aduana':  ['b-aduana',   'En aduana'],
+  'Entregado':  ['b-entregado','Entregado'],
+  'Pendiente':  ['b-pendiente','Pendiente']
+};
+function badge(k) {
+  const [cls, lbl] = BMAP[k] || ['b-pendiente', k||'—'];
+  return `<span class="badge ${cls}">${lbl}</span>`;
+}
+function olc(ev, id) { if (ev.target.classList.contains('modal-overlay')) cm(id); }
+function cm(id) { document.getElementById(id).style.display = 'none'; }
+
+// ═══════════════════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════════════════
+function renderKPIs() {
+  const t = envios.filter(e => e.estado === 'En tránsito').length;
+  const a = envios.filter(e => e.estado === 'En aduana').length;
+  const k1 = document.getElementById('kpi1'); if(k1) k1.textContent = t;
+  const k2 = document.getElementById('kpi2'); if(k2) { k2.textContent = a; k2.className = 'kpi-val' + (a>0?' amber':''); }
+  const k3 = document.getElementById('kpi3'); if(k3) k3.textContent = pedidos.length;
+  const k4 = document.getElementById('kpi4'); if(k4) k4.textContent = envios.length;
+}
+
+const FILTERS_E = ['todos','Aéreo','Marítimo','En tránsito','En aduana','Entregado'];
+const FLBL = { todos:'Todos', 'Aéreo':'Aéreo', 'Marítimo':'Marítimo', 'En tránsito':'En tránsito', 'En aduana':'En aduana', 'Entregado':'Entregado' };
+
+function renderChips() {
+  const c = document.getElementById('chipsE');
+  if (c) c.innerHTML = FILTERS_E.map(f =>
+    `<button class="chip ${filterE===f?'active':''}" onclick="setFE('${f}')">${FLBL[f]||f}</button>`).join('');
+}
+function setFE(f) { filterE = f; renderChips(); renderEnvios(); }
+
+function renderEnvios() {
+  const q = (document.getElementById('searchE')?.value||'').toLowerCase();
+  const rows = envios.filter(e => {
+    const mq = !q || [e.title,e.origen,e.destino,e.proveedor,e.pcs].some(s=>s&&s.toLowerCase().includes(q));
+    const mf = filterE==='todos' || e.tipo===filterE || e.estado===filterE;
+    return mq && mf;
+  });
+  const tbody = document.getElementById('tbodyE');
+  const empty = document.getElementById('emptyE');
+  const table = document.getElementById('tableE');
+  if (!tbody) return;
+  if (!rows.length) { tbody.innerHTML=''; if(empty) empty.style.display=''; if(table) table.style.display='none'; return; }
+  if(empty) empty.style.display='none';
+  if(table) table.style.display='';
+  tbody.innerHTML = rows.map(e => `
+    <tr>
+      <td><strong style="font-weight:600">${esc(e.title)}</strong></td>
+      <td>${badge(e.tipo)}</td>
+      <td>${esc(e.origen)} → ${esc(e.destino)}</td>
+      <td>${esc(e.proveedor)||'—'}</td>
+      <td>${badge(e.estado)}</td>
+      <td><span class="${etaClass(e.eta)}">${formatDate(e.eta)}</span></td>
+      <td>${e.seguimiento?`<a href="${esc(e.seguimiento)}" target="_blank" class="link-tr">Ver tracking →</a>`:'—'}</td>
+      <td class="td-clip" title="${esc(e.pcs)}">${esc(e.pcs)||'—'}</td>
+      <td class="td-clip" title="${esc(e.notas)}">${esc(e.notas)||'—'}</td>
+      <td>
+        <button class="action-btn" onclick="openModalEnvio(${e.id})">Editar</button>
+        <button class="action-btn action-del" onclick="delEnvio(${e.id})">Borrar</button>
+      </td>
+    </tr>`).join('');
+}
+
+function renderPedidos() {
+  const q = (document.getElementById('searchP')?.value||'').toLowerCase();
+  const rows = pedidos.filter(p =>
+    !q || [p.title,p.cliente,p.producto,p.pedidoVenta,p.proveedor].some(s=>s&&s.toLowerCase().includes(q))
+  );
+  const tbody = document.getElementById('tbodyP');
+  const empty = document.getElementById('emptyP');
+  const table = document.getElementById('tableP');
+  const loadP = document.getElementById('loadP');
+  if (!tbody) return;
+  if(loadP) loadP.style.display='none';
+  if (!rows.length) { tbody.innerHTML=''; if(empty) empty.style.display=''; if(table) table.style.display='none'; return; }
+  if(empty) empty.style.display='none';
+  if(table) table.style.display='';
+  tbody.innerHTML = rows.map(p => {
+    const linked = envios.find(e => e.title === p.pedidoVenta);
+    return `
+      <tr>
+        <td><strong style="font-weight:600">${esc(p.title)}</strong></td>
+        <td>${esc(p.cliente)}</td>
+        <td>${esc(p.producto)}</td>
+        <td>${esc(p.proveedor)||'—'}</td>
+        <td>${linked?`<span style="color:#0078d4">${esc(p.pedidoVenta)}</span>`:(p.pedidoVenta?esc(p.pedidoVenta):'<span style="color:#9ca3af;font-size:12px">Sin asignar</span>')}</td>
+        <td><span class="${etaClass(p.etaCliente)}">${formatDate(p.etaCliente)}</span></td>
+        <td class="td-clip" title="${esc(p.notas)}">${esc(p.notas)||'—'}</td>
+        <td>
+          <button class="action-btn" onclick="openModalPedido(${p.id})">Editar</button>
+          <button class="action-btn action-del" onclick="delPedido(${p.id})">Borrar</button>
+        </td>
+      </tr>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+// MODALES
+// ═══════════════════════════════════════════════════════
+function openModalEnvio(id) {
+  editEId = id;
+  const e = id!==null ? envios.find(x=>x.id===id) : null;
+  document.getElementById('titleModalE').textContent = e ? 'Editar envío' : 'Nuevo envío';
+  document.getElementById('eTitle').value       = e?.title       || '';
+  document.getElementById('eTipo').value        = e?.tipo        || 'Aéreo';
+  document.getElementById('eEstado').value      = e?.estado      || 'En tránsito';
+  document.getElementById('eOrigen').value      = e?.origen      || '';
+  document.getElementById('eDestino').value     = e?.destino     || '';
+  document.getElementById('eProveedor').value   = e?.proveedor   || '';
+  document.getElementById('eETA').value         = e?.eta         || '';
+  document.getElementById('eSeguimiento').value = e?.seguimiento || '';
+  document.getElementById('ePCs').value         = e?.pcs         || '';
+  document.getElementById('eNotas').value       = e?.notas       || '';
+  document.getElementById('modalE').style.display = 'flex';
+}
+
+function openModalPedido(id) {
+  editPId = id;
+  const p = id!==null ? pedidos.find(x=>x.id===id) : null;
+  document.getElementById('titleModalP').textContent = p ? 'Editar pedido' : 'Nuevo pedido de cliente';
+  document.getElementById('pTitle').value      = p?.title      || '';
+  document.getElementById('pCliente').value    = p?.cliente    || '';
+  document.getElementById('pProducto').value   = p?.producto   || '';
+  document.getElementById('pProveedor').value  = p?.proveedor  || '';
+  document.getElementById('pETACliente').value = p?.etaCliente || '';
+  document.getElementById('pNotas').value      = p?.notas      || '';
+  const sel = document.getElementById('pPedidoVenta');
+  sel.innerHTML = '<option value="">— Sin asignar —</option>' +
+    envios.map(e=>`<option value="${esc(e.title)}" ${p?.pedidoVenta===e.title?'selected':''}>${esc(e.title)}</option>`).join('');
+  document.getElementById('modalP').style.display = 'flex';
+}
+
+// ═══════════════════════════════════════════════════════
+// CRUD
+// ═══════════════════════════════════════════════════════
+async function saveEnvio() {
+  const btn = document.getElementById('btnSaveE');
+  btn.disabled=true; btn.textContent='Guardando…';
+  const item = {
+    title:       document.getElementById('eTitle').value.trim(),
+    tipo:        document.getElementById('eTipo').value,
+    estado:      document.getElementById('eEstado').value,
+    origen:      document.getElementById('eOrigen').value.trim(),
+    destino:     document.getElementById('eDestino').value.trim(),
+    proveedor:   document.getElementById('eProveedor').value.trim(),
+    eta:         document.getElementById('eETA').value,
+    seguimiento: document.getElementById('eSeguimiento').value.trim(),
+    pcs:         document.getElementById('ePCs').value.trim(),
+    notas:       document.getElementById('eNotas').value.trim()
+  };
+  if (!item.title) { alert('El nombre del envío es obligatorio.'); btn.disabled=false; btn.textContent='Guardar'; return; }
+  try {
+    if (editEId!==null) {
+      await spUpdate('Envios', editEId, etypeE, envioToRow(item));
+      envios = envios.map(e=>e.id===editEId?{...item,id:editEId}:e);
+    } else {
+      const res = await spCreate('Envios', etypeE, envioToRow(item));
+      envios.unshift({...item, id:res.d.Id});
+    }
+    cm('modalE'); renderKPIs(); renderEnvios();
+    setStatus('ok','Guardado ✓'); setTimeout(()=>setStatus('ok','Conectado'),2000);
+  } catch(err) { alert('Error: '+err.message); }
+  btn.disabled=false; btn.textContent='Guardar';
+}
+
+async function savePedido() {
+  const btn = document.getElementById('btnSaveP');
+  btn.disabled=true; btn.textContent='Guardando…';
+  const item = {
+    title:       document.getElementById('pTitle').value.trim(),
+    cliente:     document.getElementById('pCliente').value.trim(),
+    producto:    document.getElementById('pProducto').value.trim(),
+    proveedor:   document.getElementById('pProveedor').value.trim(),
+    pedidoVenta: document.getElementById('pPedidoVenta').value,
+    etaCliente:  document.getElementById('pETACliente').value,
+    notas:       document.getElementById('pNotas').value.trim()
+  };
+  if (!item.title) { alert('El título es obligatorio.'); btn.disabled=false; btn.textContent='Guardar'; return; }
+  try {
+    if (editPId!==null) {
+      await spUpdate('Pedidos', editPId, etypeP, pedidoToRow(item));
+      pedidos = pedidos.map(p=>p.id===editPId?{...item,id:editPId}:p);
+    } else {
+      const res = await spCreate('Pedidos', etypeP, pedidoToRow(item));
+      pedidos.unshift({...item, id:res.d.Id});
+    }
+    cm('modalP'); renderKPIs(); renderPedidos();
+    setStatus('ok','Guardado ✓'); setTimeout(()=>setStatus('ok','Conectado'),2000);
+  } catch(err) { alert('Error: '+err.message); }
+  btn.disabled=false; btn.textContent='Guardar';
+}
+
+async function delEnvio(id) {
+  if (!confirm('¿Eliminar este envío?')) return;
+  try { await spDelete('Envios',id); envios=envios.filter(e=>e.id!==id); renderKPIs(); renderEnvios(); }
+  catch(err) { alert('Error: '+err.message); }
+}
+async function delPedido(id) {
+  if (!confirm('¿Eliminar este pedido?')) return;
+  try { await spDelete('Pedidos',id); pedidos=pedidos.filter(p=>p.id!==id); renderKPIs(); renderPedidos(); }
+  catch(err) { alert('Error: '+err.message); }
+}
+
+function switchTab(tab) {
+  document.getElementById('panelEnvios').style.display  = tab==='envios'  ?'':'none';
+  document.getElementById('panelPedidos').style.display = tab==='pedidos' ?'':'none';
+  document.getElementById('tabE').classList.toggle('active', tab==='envios');
+  document.getElementById('tabP').classList.toggle('active', tab==='pedidos');
+  if (tab==='pedidos') renderPedidos();
+}
+
+// Auto-refresco cada 60 segundos
+setInterval(()=>{ if(accessToken) loadAll(); }, 60000);
+
+// ═══════════════════════════════════════════════════════
+// ARRANQUE
+// ═══════════════════════════════════════════════════════
+render();
+</script>
+</body>
+</html>
