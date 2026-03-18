@@ -9,7 +9,6 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Segoe UI', system-ui, sans-serif; background: #F5F6F8; color: #1a1a1a; font-size: 14px; min-height: 100vh; }
 
-/* TOPBAR */
 .topbar { background: #fff; border-bottom: 1px solid #e5e7eb; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
 .logo { display: flex; align-items: center; gap: 10px; }
 .logo-icon { width: 34px; height: 34px; background: #0078d4; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
@@ -26,11 +25,9 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: #F5F6F8; colo
 .btn-sm { padding: 6px 12px; border: 1px solid #d1d5db; border-radius: 8px; background: #fff; font-size: 12px; color: #374151; cursor: pointer; }
 .btn-sm:hover { background: #f3f4f6; }
 
-/* MAIN */
 .main { max-width: 1400px; margin: 0 auto; padding: 24px; }
 
-/* KPIs */
-.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(155px,1fr)); gap: 12px; margin-bottom: 24px; }
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 12px; margin-bottom: 24px; }
 .kpi { background:#fff; border-radius:12px; border:1px solid #e5e7eb; padding:16px 20px; }
 .kpi-label { font-size:11px; font-weight:600; color:#6b7280; text-transform:uppercase; letter-spacing:.5px; margin-bottom:8px; }
 .kpi-val { font-size:32px; font-weight:700; color:#111; line-height:1; }
@@ -38,15 +35,13 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: #F5F6F8; colo
 .kpi-val.amber { color:#d97706; }
 .kpi-val.red   { color:#dc2626; }
 
-/* CARD */
 .card { background:#fff; border-radius:12px; border:1px solid #e5e7eb; overflow:hidden; }
 
-/* TABS */
 .tabs { display:flex; gap:4px; background:#f3f4f6; border-radius:8px; padding:3px; margin-bottom:20px; }
-.tab { flex:1; padding:8px 14px; border:none; background:none; border-radius:6px; font-size:13px; font-weight:500; color:#6b7280; cursor:pointer; text-align:center; transition:all .15s; }
+.tab { flex:1; padding:8px 14px; border:none; background:none; border-radius:6px; font-size:13px; font-weight:500; color:#6b7280; cursor:pointer; text-align:center; transition:all .15s; position:relative; }
 .tab.active { background:#fff; color:#111; box-shadow:0 1px 3px rgba(0,0,0,.1); }
+.tab-badge { position:absolute; top:4px; right:8px; background:#dc2626; color:#fff; font-size:10px; font-weight:700; padding:1px 5px; border-radius:10px; line-height:1.4; }
 
-/* TOOLBAR */
 .toolbar { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; padding:16px 20px; border-bottom:1px solid #f3f4f6; flex-wrap:wrap; }
 .search-input { padding:8px 12px; border:1px solid #d1d5db; border-radius:8px; font-size:13px; width:270px; background:#fafafa; color:#111; outline:none; font-family:inherit; }
 .search-input:focus { border-color:#0078d4; background:#fff; }
@@ -58,7 +53,6 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: #F5F6F8; colo
 .btn-add:hover { background:#006bb8; }
 .btn-add:disabled { background:#93c5fd; cursor:not-allowed; }
 
-/* TABLE */
 .table-wrap { overflow-x:auto; }
 table { width:100%; border-collapse:collapse; }
 thead { background:#f9fafb; }
@@ -66,9 +60,10 @@ th { padding:10px 14px; font-size:11px; font-weight:600; color:#6b7280; text-tra
 td { padding:11px 14px; border-bottom:1px solid #f3f4f6; vertical-align:middle; }
 tr:last-child td { border-bottom:none; }
 tr:hover td { background:#fafafa; }
-.td-clip { max-width:160px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+tr.row-vencida td { background:#fff5f5; }
+tr.row-vencida:hover td { background:#fee2e2; }
+.td-clip { max-width:180px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
-/* BADGES */
 .badge { display:inline-flex; align-items:center; font-size:11px; font-weight:600; padding:3px 9px; border-radius:20px; white-space:nowrap; }
 .b-aereo      { background:#eff6ff; color:#1d4ed8; }
 .b-maritimo   { background:#f0fdf4; color:#166534; }
@@ -76,25 +71,34 @@ tr:hover td { background:#fafafa; }
 .b-aduana     { background:#fff7ed; color:#9a3412; }
 .b-entregado  { background:#f0fdf4; color:#166534; }
 .b-pendiente  { background:#f9fafb; color:#4b5563; border:1px solid #e5e7eb; }
+.b-alta       { background:#fef2f2; color:#991b1b; }
+.b-media      { background:#fffbeb; color:#92400e; }
+.b-baja       { background:#f0fdf4; color:#166534; }
+.b-enproceso  { background:#eff6ff; color:#1d4ed8; }
+.b-terminado  { background:#f0fdf4; color:#166534; }
 
 .eta-near { color:#d97706; font-weight:600; }
 .eta-late  { color:#dc2626; font-weight:600; }
 .link-tr { color:#0078d4; text-decoration:none; font-size:12px; }
 .link-tr:hover { text-decoration:underline; }
 
-/* ACTION BUTTONS */
 .action-btn { padding:4px 10px; border-radius:6px; border:1px solid #e5e7eb; background:#fff; font-size:11px; font-weight:500; color:#374151; cursor:pointer; margin-right:4px; }
 .action-btn:hover { background:#f3f4f6; }
 .action-del { color:#dc2626; border-color:#fecaca; }
 .action-del:hover { background:#fef2f2; }
+.action-done { color:#059669; border-color:#a7f3d0; }
+.action-done:hover { background:#ecfdf5; }
 
-/* EMPTY / LOADING */
 .empty { text-align:center; padding:40px; color:#9ca3af; font-size:14px; }
 .loading { text-align:center; padding:40px; color:#6b7280; }
 .spin { display:inline-block; width:20px; height:20px; border:2px solid #e5e7eb; border-top-color:#0078d4; border-radius:50%; animation:spin .7s linear infinite; margin-bottom:8px; }
 @keyframes spin { to { transform:rotate(360deg); } }
 
-/* LOGIN SCREEN */
+/* ALERTA BANNER */
+.alert-banner { display:flex; align-items:center; gap:10px; padding:12px 20px; background:#fef2f2; border-bottom:1px solid #fecaca; font-size:13px; color:#991b1b; }
+.alert-banner strong { font-weight:600; }
+
+/* LOGIN */
 .login-screen { min-height:100vh; display:flex; align-items:center; justify-content:center; background:#F5F6F8; }
 .login-card { background:#fff; border-radius:16px; border:1px solid #e5e7eb; padding:40px 48px; text-align:center; max-width:420px; width:100%; }
 .login-icon { width:56px; height:56px; background:#0078d4; border-radius:14px; display:flex; align-items:center; justify-content:center; margin:0 auto 20px; }
@@ -102,9 +106,8 @@ tr:hover td { background:#fafafa; }
 .login-sub { font-size:14px; color:#6b7280; margin-bottom:28px; line-height:1.6; }
 .btn-login { width:100%; padding:12px; background:#0078d4; color:#fff; border:none; border-radius:10px; font-size:15px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; }
 .btn-login:hover { background:#006bb8; }
-.btn-login svg { width:20px; height:20px; }
 
-/* CONFIG SCREEN */
+/* CONFIG */
 .config-screen { min-height:100vh; display:flex; align-items:center; justify-content:center; background:#F5F6F8; padding:24px; }
 .config-card { background:#fff; border-radius:16px; border:1px solid #e5e7eb; padding:36px 40px; max-width:540px; width:100%; }
 .config-title { font-size:20px; font-weight:700; color:#111; margin-bottom:6px; }
@@ -152,8 +155,6 @@ tr:hover td { background:#fafafa; }
 </style>
 </head>
 <body>
-
-<!-- Pantallas dinámicas -->
 <div id="appRoot"></div>
 
 <!-- MODAL ENVÍO -->
@@ -165,14 +166,10 @@ tr:hover td { background:#fafafa; }
         <div class="mfg full">
           <label>Título del envío</label>
           <input id="eTitle" placeholder="Ej: Barco Mayo 2026 / DHL Hong Kong junio">
-          <div class="hint">Nombre para identificar este envío fácilmente</div>
         </div>
         <div class="mfg">
           <label>Tipo de envío</label>
-          <select id="eTipo">
-            <option value="Aéreo">✈ Aéreo</option>
-            <option value="Marítimo">⚓ Marítimo</option>
-          </select>
+          <select id="eTipo"><option value="Aéreo">✈ Aéreo</option><option value="Marítimo">⚓ Marítimo</option></select>
         </div>
         <div class="mfg">
           <label>Estado</label>
@@ -186,18 +183,14 @@ tr:hover td { background:#fafafa; }
         <div class="mfg"><label>Origen</label><input id="eOrigen" placeholder="Ej: Shanghai / Hong Kong"></div>
         <div class="mfg"><label>Destino</label><input id="eDestino" placeholder="Ej: Valencia / Madrid"></div>
         <div class="mfg"><label>Proveedor / Naviera</label><input id="eProveedor" placeholder="Ej: Maersk, DHL, FedEx…"></div>
-        <div class="mfg">
-          <label>ETA — Fecha estimada de llegada</label>
-          <input type="date" id="eETA">
-        </div>
+        <div class="mfg"><label>ETA — Fecha estimada de llegada</label><input type="date" id="eETA"></div>
         <div class="mfg full">
           <label>Seguimiento (enlace de tracking)</label>
           <input id="eSeguimiento" type="url" placeholder="https://www.track.maersk.com/…">
-          <div class="hint">URL de seguimiento en tiempo real del barco o avión</div>
         </div>
         <div class="mfg full">
           <label>PCs Asociados (órdenes de compra)</label>
-          <textarea id="ePCs" placeholder="Ej: OC-2024-441, OC-2024-445&#10;Indica las órdenes de compra que van en este envío"></textarea>
+          <textarea id="ePCs" placeholder="Ej: OC-2024-441, OC-2024-445"></textarea>
         </div>
         <div class="mfg full"><label>Notas</label><textarea id="eNotas" placeholder="Observaciones adicionales…"></textarea></div>
       </div>
@@ -215,22 +208,15 @@ tr:hover td { background:#fafafa; }
     <div class="modal-hd"><div class="modal-title" id="titleModalP">Nuevo pedido de cliente</div></div>
     <div class="modal-bd">
       <div class="form-grid">
-        <div class="mfg">
-          <label>Título (identificador)</label>
-          <input id="pTitle" placeholder="Ej: García mayo / PED-0001">
-        </div>
+        <div class="mfg"><label>Título</label><input id="pTitle" placeholder="Ej: García mayo / PED-0001"></div>
         <div class="mfg"><label>Cliente</label><input id="pCliente" placeholder="Nombre de la empresa"></div>
         <div class="mfg full"><label>Producto / Descripción</label><input id="pProducto" placeholder="Qué ha pedido el cliente"></div>
         <div class="mfg"><label>Proveedor</label><input id="pProveedor" placeholder="Proveedor del producto"></div>
         <div class="mfg">
           <label>Pedido de Venta (envío asociado)</label>
           <select id="pPedidoVenta"></select>
-          <div class="hint">¿En qué envío va esta mercancía?</div>
         </div>
-        <div class="mfg">
-          <label>ETA Cliente — Fecha compromiso</label>
-          <input type="date" id="pETACliente">
-        </div>
+        <div class="mfg"><label>ETA Cliente — Fecha compromiso</label><input type="date" id="pETACliente"></div>
         <div class="mfg full"><label>Notas</label><textarea id="pNotas" placeholder="Observaciones…"></textarea></div>
       </div>
     </div>
@@ -241,98 +227,96 @@ tr:hover td { background:#fafafa; }
   </div>
 </div>
 
+<!-- MODAL TAREA -->
+<div class="modal-overlay" id="modalT" style="display:none" onclick="olc(event,'modalT')">
+  <div class="modal">
+    <div class="modal-hd"><div class="modal-title" id="titleModalT">Nueva tarea</div></div>
+    <div class="modal-bd">
+      <div class="form-grid">
+        <div class="mfg full"><label>Título de la tarea</label><input id="tTitle" placeholder="Ej: Revisar documentos aduana barco mayo"></div>
+        <div class="mfg full">
+          <label>Descripción</label>
+          <textarea id="tDescripcion" placeholder="Detalle de lo que hay que hacer…"></textarea>
+        </div>
+        <div class="mfg"><label>Asignado a</label><input id="tAsignado" placeholder="Nombre del compañero"></div>
+        <div class="mfg"><label>Fecha límite</label><input type="date" id="tFechaLimite"></div>
+        <div class="mfg">
+          <label>Prioridad</label>
+          <select id="tPrioridad">
+            <option value="Alta">🔴 Alta</option>
+            <option value="Media">🟡 Media</option>
+            <option value="Baja">🟢 Baja</option>
+          </select>
+        </div>
+        <div class="mfg">
+          <label>Estado</label>
+          <select id="tEstado">
+            <option value="Pendiente">Pendiente</option>
+            <option value="En proceso">En proceso</option>
+            <option value="Terminado">Terminado</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn-cancel" onclick="cm('modalT')">Cancelar</button>
+      <button class="btn-save" id="btnSaveT" onclick="saveTarea()">Guardar</button>
+    </div>
+  </div>
+</div>
+
 <script>
-// ═══════════════════════════════════════════════════════
-// CONFIGURACIÓN — se guarda en localStorage
-// ═══════════════════════════════════════════════════════
 const CFG = {
   clientId: localStorage.getItem('lc_clientId') || '',
   tenantId: localStorage.getItem('lc_tenantId') || '',
   siteUrl:  localStorage.getItem('lc_siteUrl')  || ''
 };
 
-// Nombres internos de las columnas en SharePoint
-// Si SharePoint generó nombres distintos, ajústalos aquí
+// Nombres internos SharePoint
 const FE = {
-  title:       'Title',
-  tipo:        'Tipo_x0020_de_x0020_Envio',
-  origen:      'Origen',
-  destino:     'Destino',
-  proveedor:   'Proveedor',
-  estado:      'Estado',
-  eta:         'ETA',
-  seguimiento: 'Seguimiento',
-  pcs:         'PCs_x0020_Asociados',
-  notas:       'Notas'
+  title:'Title', tipo:'Tipo_x0020_de_x0020_Envio', origen:'Origen', destino:'Destino',
+  proveedor:'Proveedor', estado:'Estado', eta:'ETA', seguimiento:'Seguimiento',
+  pcs:'PCs_x0020_Asociados', notas:'Notas'
 };
 const FP = {
-  title:       'Title',
-  cliente:     'Cliente',
-  producto:    'Producto',
-  proveedor:   'Proveedor',
-  pedidoVenta: 'Pedido_x0020_de_x0020_Venta',
-  etaCliente:  'ETA_x0020_Cliente',
-  notas:       'Notas'
+  title:'Title', cliente:'Cliente', producto:'Producto', proveedor:'Proveedor',
+  pedidoVenta:'Pedido_x0020_de_x0020_Venta', etaCliente:'ETA_x0020_Cliente', notas:'Notas'
+};
+const FT = {
+  title:'Title', descripcion:'Descripcion', asignado:'Asignado',
+  fechaLimite:'Fecha_x0020_Limite', prioridad:'Prioridad', estado:'Estado'
 };
 
-// ═══════════════════════════════════════════════════════
-// ESTADO
-// ═══════════════════════════════════════════════════════
-let msalInstance = null;
-let accessToken  = null;
-let currentUser  = null;
-let envios   = [];
-let pedidos  = [];
-let editEId  = null;
-let editPId  = null;
-let filterE  = 'todos';
-let etypeE   = 'SP.Data.EnviosListItem';
-let etypeP   = 'SP.Data.PedidosListItem';
+let msalInstance = null, accessToken = null, currentUser = null;
+let envios = [], pedidos = [], tareas = [];
+let editEId = null, editPId = null, editTId = null;
+let filterE = 'todos', filterT = 'todos';
+let etypeE = 'SP.Data.EnviosListItem';
+let etypeP = 'SP.Data.PedidosListItem';
+let etypeT = 'SP.Data.Tareas_x0020_PendientesListItem';
 
-// ═══════════════════════════════════════════════════════
-// RENDER INICIAL
-// ═══════════════════════════════════════════════════════
 function render() {
-  if (!CFG.clientId || !CFG.tenantId || !CFG.siteUrl) {
-    showConfigScreen();
-  } else {
-    initMsal();
-  }
+  if (!CFG.clientId || !CFG.tenantId || !CFG.siteUrl) showConfigScreen();
+  else initMsal();
 }
 
-// ═══════════════════════════════════════════════════════
-// PANTALLA DE CONFIGURACIÓN
-// ═══════════════════════════════════════════════════════
+// ── CONFIG ─────────────────────────────────────────────
 function showConfigScreen(error) {
   document.getElementById('appRoot').innerHTML = `
     <div class="config-screen">
       <div class="config-card">
         <div class="config-title">Configuración inicial</div>
-        <div class="config-sub">Introduce los datos de tu tenant de Microsoft 365 para conectar LogControl con SharePoint.</div>
+        <div class="config-sub">Introduce los datos de tu tenant de Microsoft 365.</div>
         ${error ? `<div class="alert-err">⚠ ${error}</div>` : ''}
-        <div class="alert-info">
-          Necesitas registrar una app en Azure AD. <strong>Sigue las instrucciones del README</strong> o pide ayuda a tu administrador.
-        </div>
+        <div class="alert-info">Necesitas registrar una app en Azure AD (Microsoft Entra ID) y añadir la URL de GitHub Pages como redirect URI de tipo SPA.</div>
         <div class="cfg-section">
           <h3>Azure AD</h3>
-          <div class="fg">
-            <label>Client ID (ID de aplicación)</label>
-            <input id="cfgClientId" value="${CFG.clientId}" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
-            <div class="hint">Lo encuentras en Azure Portal → App registrations → tu app → Application (client) ID</div>
-          </div>
-          <div class="fg">
-            <label>Tenant ID (ID de directorio)</label>
-            <input id="cfgTenantId" value="${CFG.tenantId}" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
-            <div class="hint">Azure Portal → App registrations → tu app → Directory (tenant) ID</div>
-          </div>
+          <div class="fg"><label>Client ID</label><input id="cfgClientId" value="${CFG.clientId}" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"><div class="hint">Azure Portal → App registrations → tu app → Application (client) ID</div></div>
+          <div class="fg"><label>Tenant ID</label><input id="cfgTenantId" value="${CFG.tenantId}" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"><div class="hint">Azure Portal → App registrations → tu app → Directory (tenant) ID</div></div>
         </div>
         <div class="cfg-section">
           <h3>SharePoint</h3>
-          <div class="fg">
-            <label>URL del sitio SharePoint</label>
-            <input id="cfgSiteUrl" value="${CFG.siteUrl}" placeholder="https://tuempresa.sharepoint.com/sites/operaciones">
-            <div class="hint">La URL base de tu sitio, sin barra al final</div>
-          </div>
+          <div class="fg"><label>URL del sitio</label><input id="cfgSiteUrl" value="${CFG.siteUrl}" placeholder="https://tuempresa.sharepoint.com/sites/COMPRAS-LOGISTICA"><div class="hint">URL base del sitio, sin barra al final</div></div>
         </div>
         <button class="btn-primary" onclick="saveConfig()">Guardar y conectar</button>
       </div>
@@ -344,72 +328,44 @@ function saveConfig() {
   const tenantId = document.getElementById('cfgTenantId').value.trim();
   const siteUrl  = document.getElementById('cfgSiteUrl').value.trim().replace(/\/$/,'');
   if (!clientId || !tenantId || !siteUrl) { alert('Rellena todos los campos.'); return; }
-  CFG.clientId = clientId;
-  CFG.tenantId = tenantId;
-  CFG.siteUrl  = siteUrl;
+  CFG.clientId = clientId; CFG.tenantId = tenantId; CFG.siteUrl = siteUrl;
   localStorage.setItem('lc_clientId', clientId);
   localStorage.setItem('lc_tenantId', tenantId);
   localStorage.setItem('lc_siteUrl',  siteUrl);
   initMsal();
 }
 
-// ═══════════════════════════════════════════════════════
-// MSAL — AUTENTICACIÓN MICROSOFT
-// ═══════════════════════════════════════════════════════
+// ── MSAL ───────────────────────────────────────────────
 function initMsal() {
   msalInstance = new msal.PublicClientApplication({
-    auth: {
-      clientId:    CFG.clientId,
-      authority:   `https://login.microsoftonline.com/${CFG.tenantId}`,
-      redirectUri: window.location.origin + window.location.pathname
-    },
+    auth: { clientId: CFG.clientId, authority: `https://login.microsoftonline.com/${CFG.tenantId}`, redirectUri: window.location.origin + window.location.pathname },
     cache: { cacheLocation: 'localStorage', storeAuthStateInCookie: false }
   });
-
   msalInstance.handleRedirectPromise().then(response => {
-    if (response) {
-      accessToken = response.accessToken;
-      currentUser = response.account;
-      showApp();
-      loadAll();
-    } else {
+    if (response) { accessToken = response.accessToken; currentUser = response.account; showApp(); loadAll(); }
+    else {
       const accounts = msalInstance.getAllAccounts();
-      if (accounts.length > 0) {
-        currentUser = accounts[0];
-        acquireToken().then(() => { showApp(); loadAll(); }).catch(() => showLoginScreen());
-      } else {
-        showLoginScreen();
-      }
+      if (accounts.length > 0) { currentUser = accounts[0]; acquireToken().then(() => { showApp(); loadAll(); }).catch(() => showLoginScreen()); }
+      else showLoginScreen();
     }
-  }).catch(err => {
-    console.error(err);
-    showConfigScreen('Error de autenticación: ' + err.message);
-  });
+  }).catch(err => showConfigScreen('Error de autenticación: ' + err.message));
 }
 
 async function acquireToken() {
   const scopes = ['https://bjumper.sharepoint.com/.default'];
-  try {
-    const res = await msalInstance.acquireTokenSilent({ scopes, account: currentUser });
-    accessToken = res.accessToken;
-  } catch(e) {
-    const res = await msalInstance.acquireTokenPopup({ scopes });
-    accessToken = res.accessToken;
-    currentUser = res.account;
-  }
+  try { const r = await msalInstance.acquireTokenSilent({ scopes, account: currentUser }); accessToken = r.accessToken; }
+  catch(e) { const r = await msalInstance.acquireTokenPopup({ scopes }); accessToken = r.accessToken; currentUser = r.account; }
 }
 
 function showLoginScreen() {
   document.getElementById('appRoot').innerHTML = `
     <div class="login-screen">
       <div class="login-card">
-        <div class="login-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M3 17h18M3 12l9-9 9 9"/></svg>
-        </div>
+        <div class="login-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M3 17h18M3 12l9-9 9 9"/></svg></div>
         <div class="login-title">LogControl</div>
         <div class="login-sub">Panel de logística para envíos aéreos y marítimos.<br>Inicia sesión con tu cuenta de Microsoft.</div>
         <button class="btn-login" onclick="login()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="9" height="9"/><rect x="13" y="2" width="9" height="9"/><rect x="2" y="13" width="9" height="9"/><rect x="13" y="13" width="9" height="9"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" width="20" height="20"><rect x="2" y="2" width="9" height="9"/><rect x="13" y="2" width="9" height="9"/><rect x="2" y="13" width="9" height="9"/><rect x="13" y="13" width="9" height="9"/></svg>
           Iniciar sesión con Microsoft
         </button>
         <p style="font-size:11px;color:#9ca3af;margin-top:16px;cursor:pointer" onclick="showConfigScreen()">⚙ Cambiar configuración</p>
@@ -418,36 +374,24 @@ function showLoginScreen() {
 }
 
 async function login() {
-  try {
-    await msalInstance.loginRedirect({ scopes: ['https://bjumper.sharepoint.com/.default'] });
-  } catch(e) {
-    alert('Error al iniciar sesión: ' + e.message);
-  }
+  try { await msalInstance.loginRedirect({ scopes: ['https://bjumper.sharepoint.com/.default'] }); }
+  catch(e) { alert('Error: ' + e.message); }
 }
+function logout() { msalInstance.logoutRedirect(); }
 
-function logout() {
-  msalInstance.logoutRedirect();
-}
-
-// ═══════════════════════════════════════════════════════
-// APP PRINCIPAL
-// ═══════════════════════════════════════════════════════
+// ── APP ────────────────────────────────────────────────
 function showApp() {
   const name = currentUser?.name || currentUser?.username || '';
   document.getElementById('appRoot').innerHTML = `
     <div class="topbar">
       <div class="logo">
-        <div class="logo-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M3 17h18M3 12l9-9 9 9"/></svg>
-        </div>
-        <div>
-          <div class="logo-title">LogControl</div>
-          <div class="logo-sub">Panel de logística · Aéreo &amp; Marítimo</div>
-        </div>
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M3 17h18M3 12l9-9 9 9"/></svg></div>
+        <div><div class="logo-title">LogControl</div><div class="logo-sub">Panel de logística · Aéreo &amp; Marítimo</div></div>
       </div>
       <div class="top-right">
         <span class="status-badge status-warn" id="statusBadge">Conectando…</span>
         <span class="user-pill">👤 ${esc(name)}</span>
+        <button class="btn-sm" onclick="loadAll()">↻ Actualizar</button>
         <button class="btn-sm" onclick="logout()">Cerrar sesión</button>
         <button class="btn-sm" onclick="showConfigScreen()">⚙</button>
       </div>
@@ -455,13 +399,16 @@ function showApp() {
     <div class="main">
       <div class="kpi-grid">
         <div class="kpi"><div class="kpi-label">En tránsito</div><div class="kpi-val" id="kpi1">—</div><div class="kpi-sub">Envíos activos</div></div>
-        <div class="kpi"><div class="kpi-label">En aduana</div><div class="kpi-val" id="kpi2">—</div><div class="kpi-sub">Requieren seguimiento</div></div>
-        <div class="kpi"><div class="kpi-label">Pedidos registrados</div><div class="kpi-val" id="kpi3">—</div><div class="kpi-sub">De clientes</div></div>
-        <div class="kpi"><div class="kpi-label">Total envíos</div><div class="kpi-val" id="kpi4">—</div><div class="kpi-sub">En la lista</div></div>
+        <div class="kpi"><div class="kpi-label">En aduana</div><div class="kpi-val" id="kpi2">—</div><div class="kpi-sub">Requieren atención</div></div>
+        <div class="kpi"><div class="kpi-label">Envíos vencidos</div><div class="kpi-val" id="kpi3">—</div><div class="kpi-sub">ETA superada</div></div>
+        <div class="kpi"><div class="kpi-label">Pedidos vencidos</div><div class="kpi-val" id="kpi4">—</div><div class="kpi-sub">Fecha compromiso superada</div></div>
+        <div class="kpi"><div class="kpi-label">Tareas pendientes</div><div class="kpi-val" id="kpi5">—</div><div class="kpi-sub">Sin completar</div></div>
       </div>
+      <div id="alertBanner"></div>
       <div class="tabs">
         <button class="tab active" id="tabE" onclick="switchTab('envios')">✈ Envíos</button>
-        <button class="tab" id="tabP" onclick="switchTab('pedidos')">📦 Pedidos de clientes</button>
+        <button class="tab" id="tabP" onclick="switchTab('pedidos')">📦 Pedidos</button>
+        <button class="tab" id="tabT" onclick="switchTab('tareas')">✅ Tareas pendientes</button>
       </div>
       <div class="card">
         <!-- ENVÍOS -->
@@ -476,11 +423,7 @@ function showApp() {
           <div class="table-wrap">
             <div id="loadE" class="loading"><div class="spin"></div><br>Cargando envíos…</div>
             <table id="tableE" style="display:none">
-              <thead><tr>
-                <th>Nombre del envío</th><th>Tipo</th><th>Origen → Destino</th>
-                <th>Proveedor</th><th>Estado</th><th>ETA</th>
-                <th>Seguimiento</th><th>PCs Asociados</th><th>Notas</th><th>Acciones</th>
-              </tr></thead>
+              <thead><tr><th>Nombre del envío</th><th>Tipo</th><th>Origen → Destino</th><th>Proveedor</th><th>Estado</th><th>ETA</th><th>Seguimiento</th><th>PCs Asociados</th><th>Notas</th><th>Acciones</th></tr></thead>
               <tbody id="tbodyE"></tbody>
             </table>
             <div id="emptyE" class="empty" style="display:none">No hay envíos con ese filtro.</div>
@@ -489,22 +432,32 @@ function showApp() {
         <!-- PEDIDOS -->
         <div id="panelPedidos" style="display:none">
           <div class="toolbar">
-            <div>
-              <input class="search-input" type="text" placeholder="Buscar cliente, producto, pedido de venta…" oninput="renderPedidos()" id="searchP">
-            </div>
+            <div><input class="search-input" type="text" placeholder="Buscar cliente, producto, pedido de venta…" oninput="renderPedidos()" id="searchP"></div>
             <button class="btn-add" onclick="openModalPedido(null)">+ Nuevo pedido</button>
           </div>
           <div class="table-wrap">
-            <div id="loadP" class="loading" style="display:none"><div class="spin"></div><br>Cargando pedidos…</div>
             <table id="tableP" style="display:none">
-              <thead><tr>
-                <th>Título</th><th>Cliente</th><th>Producto</th>
-                <th>Proveedor</th><th>Pedido de Venta</th><th>ETA Cliente</th>
-                <th>Notas</th><th>Acciones</th>
-              </tr></thead>
+              <thead><tr><th>Título</th><th>Cliente</th><th>Producto</th><th>Proveedor</th><th>Pedido de Venta</th><th>ETA Cliente</th><th>Notas</th><th>Acciones</th></tr></thead>
               <tbody id="tbodyP"></tbody>
             </table>
             <div id="emptyP" class="empty" style="display:none">No hay pedidos registrados.</div>
+          </div>
+        </div>
+        <!-- TAREAS -->
+        <div id="panelTareas" style="display:none">
+          <div class="toolbar">
+            <div>
+              <input class="search-input" type="text" placeholder="Buscar tarea, asignado…" oninput="renderTareas()" id="searchT">
+              <div class="filter-chips" id="chipsT"></div>
+            </div>
+            <button class="btn-add" onclick="openModalTarea(null)">+ Nueva tarea</button>
+          </div>
+          <div class="table-wrap">
+            <table id="tableT" style="display:none">
+              <thead><tr><th>Tarea</th><th>Descripción</th><th>Asignado a</th><th>Fecha límite</th><th>Prioridad</th><th>Estado</th><th>Acciones</th></tr></thead>
+              <tbody id="tbodyT"></tbody>
+            </table>
+            <div id="emptyT" class="empty" style="display:none">No hay tareas pendientes.</div>
           </div>
         </div>
       </div>
@@ -512,237 +465,163 @@ function showApp() {
   renderChips();
 }
 
-// ═══════════════════════════════════════════════════════
-// SHAREPOINT REST API
-// ═══════════════════════════════════════════════════════
-async function spFetch(url, options = {}) {
+// ── SP API ─────────────────────────────────────────────
+async function spFetch(url, options={}) {
   await acquireToken();
-  const res = await fetch(url, {
-    ...options,
-    headers: {
-      'Accept': 'application/json;odata=verbose',
-      'Authorization': `Bearer ${accessToken}`,
-      ...(options.headers || {})
-    }
-  });
-  return res;
+  return fetch(url, { ...options, headers: { 'Accept':'application/json;odata=verbose', 'Authorization':`Bearer ${accessToken}`, ...(options.headers||{}) } });
 }
-
 async function getDigest() {
-  const r = await spFetch(`${CFG.siteUrl}/_api/contextinfo`, { method: 'POST', headers: { 'Content-Type': 'application/json;odata=verbose' } });
-  if (!r.ok) throw new Error('No se pudo obtener el digest de SharePoint.');
+  const r = await spFetch(`${CFG.siteUrl}/_api/contextinfo`, { method:'POST', headers:{'Content-Type':'application/json;odata=verbose'} });
+  if (!r.ok) throw new Error('No se pudo obtener digest.');
   return (await r.json()).d.GetContextWebInformation.FormDigestValue;
 }
-
 async function getEtypes() {
   try {
-    const [re, rp] = await Promise.all([
+    const [re,rp,rt] = await Promise.all([
       spFetch(`${CFG.siteUrl}/_api/web/lists/getbytitle('Envios')?$select=ListItemEntityTypeFullName`),
-      spFetch(`${CFG.siteUrl}/_api/web/lists/getbytitle('Pedidos')?$select=ListItemEntityTypeFullName`)
+      spFetch(`${CFG.siteUrl}/_api/web/lists/getbytitle('Pedidos')?$select=ListItemEntityTypeFullName`),
+      spFetch(`${CFG.siteUrl}/_api/web/lists/getbytitle('Tareas Pendientes')?$select=ListItemEntityTypeFullName`)
     ]);
     if (re.ok) etypeE = (await re.json()).d.ListItemEntityTypeFullName;
     if (rp.ok) etypeP = (await rp.json()).d.ListItemEntityTypeFullName;
+    if (rt.ok) etypeT = (await rt.json()).d.ListItemEntityTypeFullName;
   } catch(e) { console.warn('Entity types por defecto.'); }
 }
-
 async function spGet(list) {
   const r = await spFetch(`${CFG.siteUrl}/_api/web/lists/getbytitle('${list}')/items?$select=*&$top=500&$orderby=Id desc`);
-  if (!r.ok) throw new Error(`Error leyendo "${list}" (${r.status}). Comprueba que la lista existe.`);
+  if (!r.ok) throw new Error(`Error leyendo "${list}" (${r.status})`);
   return (await r.json()).d.results;
 }
-
 async function spCreate(list, etype, fields) {
   const dg = await getDigest();
   const r = await spFetch(`${CFG.siteUrl}/_api/web/lists/getbytitle('${list}')/items`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json;odata=verbose', 'X-RequestDigest': dg },
-    body: JSON.stringify({ __metadata: { type: etype }, ...fields })
+    method:'POST', headers:{'Content-Type':'application/json;odata=verbose','X-RequestDigest':dg},
+    body: JSON.stringify({ __metadata:{type:etype}, ...fields })
   });
-  if (!r.ok) { const t = await r.text(); throw new Error(`Error al crear: ${t}`); }
+  if (!r.ok) { const t=await r.text(); throw new Error(t); }
   return await r.json();
 }
-
 async function spUpdate(list, id, etype, fields) {
   const dg = await getDigest();
   const r = await spFetch(`${CFG.siteUrl}/_api/web/lists/getbytitle('${list}')/items(${id})`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json;odata=verbose', 'X-RequestDigest': dg, 'X-HTTP-Method': 'MERGE', 'If-Match': '*' },
-    body: JSON.stringify({ __metadata: { type: etype }, ...fields })
+    method:'POST', headers:{'Content-Type':'application/json;odata=verbose','X-RequestDigest':dg,'X-HTTP-Method':'MERGE','If-Match':'*'},
+    body: JSON.stringify({ __metadata:{type:etype}, ...fields })
   });
-  if (!r.ok && r.status !== 204) throw new Error(`Error al actualizar (${r.status})`);
+  if (!r.ok && r.status!==204) throw new Error(`Error al actualizar (${r.status})`);
 }
-
 async function spDelete(list, id) {
   const dg = await getDigest();
   const r = await spFetch(`${CFG.siteUrl}/_api/web/lists/getbytitle('${list}')/items(${id})`, {
-    method: 'POST',
-    headers: { 'X-RequestDigest': dg, 'X-HTTP-Method': 'DELETE', 'If-Match': '*' }
+    method:'POST', headers:{'X-RequestDigest':dg,'X-HTTP-Method':'DELETE','If-Match':'*'}
   });
-  if (!r.ok && r.status !== 204) throw new Error(`Error al eliminar (${r.status})`);
+  if (!r.ok && r.status!==204) throw new Error(`Error al eliminar (${r.status})`);
 }
 
-// ═══════════════════════════════════════════════════════
-// MAPPERS
-// ═══════════════════════════════════════════════════════
-function rowToEnvio(i) {
-  return {
-    id:          i.Id,
-    title:       i[FE.title]       || '',
-    tipo:        i[FE.tipo]        || '',
-    origen:      i[FE.origen]      || '',
-    destino:     i[FE.destino]     || '',
-    proveedor:   i[FE.proveedor]   || '',
-    estado:      i[FE.estado]      || '',
-    eta:         i[FE.eta]         ? i[FE.eta].split('T')[0] : '',
-    seguimiento: i[FE.seguimiento] || '',
-    pcs:         i[FE.pcs]         || '',
-    notas:       i[FE.notas]       || ''
-  };
-}
-function envioToRow(e) {
-  return {
-    [FE.title]:       e.title,
-    [FE.tipo]:        e.tipo,
-    [FE.origen]:      e.origen,
-    [FE.destino]:     e.destino,
-    [FE.proveedor]:   e.proveedor,
-    [FE.estado]:      e.estado,
-    [FE.eta]:         e.eta ? e.eta + 'T00:00:00Z' : null,
-    [FE.seguimiento]: e.seguimiento,
-    [FE.pcs]:         e.pcs,
-    [FE.notas]:       e.notas
-  };
-}
-function rowToPedido(i) {
-  return {
-    id:          i.Id,
-    title:       i[FP.title]       || '',
-    cliente:     i[FP.cliente]     || '',
-    producto:    i[FP.producto]    || '',
-    proveedor:   i[FP.proveedor]   || '',
-    pedidoVenta: i[FP.pedidoVenta] || '',
-    etaCliente:  i[FP.etaCliente]  ? i[FP.etaCliente].split('T')[0] : '',
-    notas:       i[FP.notas]       || ''
-  };
-}
-function pedidoToRow(p) {
-  return {
-    [FP.title]:       p.title,
-    [FP.cliente]:     p.cliente,
-    [FP.producto]:    p.producto,
-    [FP.proveedor]:   p.proveedor,
-    [FP.pedidoVenta]: p.pedidoVenta,
-    [FP.etaCliente]:  p.etaCliente ? p.etaCliente + 'T00:00:00Z' : null,
-    [FP.notas]:       p.notas
-  };
-}
+// ── MAPPERS ────────────────────────────────────────────
+function rowToEnvio(i) { return { id:i.Id, title:i[FE.title]||'', tipo:i[FE.tipo]||'', origen:i[FE.origen]||'', destino:i[FE.destino]||'', proveedor:i[FE.proveedor]||'', estado:i[FE.estado]||'', eta:i[FE.eta]?i[FE.eta].split('T')[0]:'', seguimiento:i[FE.seguimiento]||'', pcs:i[FE.pcs]||'', notas:i[FE.notas]||'' }; }
+function envioToRow(e) { return { [FE.title]:e.title,[FE.tipo]:e.tipo,[FE.origen]:e.origen,[FE.destino]:e.destino,[FE.proveedor]:e.proveedor,[FE.estado]:e.estado,[FE.eta]:e.eta?e.eta+'T00:00:00Z':null,[FE.seguimiento]:e.seguimiento,[FE.pcs]:e.pcs,[FE.notas]:e.notas }; }
+function rowToPedido(i) { return { id:i.Id, title:i[FP.title]||'', cliente:i[FP.cliente]||'', producto:i[FP.producto]||'', proveedor:i[FP.proveedor]||'', pedidoVenta:i[FP.pedidoVenta]||'', etaCliente:i[FP.etaCliente]?i[FP.etaCliente].split('T')[0]:'', notas:i[FP.notas]||'' }; }
+function pedidoToRow(p) { return { [FP.title]:p.title,[FP.cliente]:p.cliente,[FP.producto]:p.producto,[FP.proveedor]:p.proveedor,[FP.pedidoVenta]:p.pedidoVenta,[FP.etaCliente]:p.etaCliente?p.etaCliente+'T00:00:00Z':null,[FP.notas]:p.notas }; }
+function rowToTarea(i) { return { id:i.Id, title:i[FT.title]||'', descripcion:i[FT.descripcion]||'', asignado:i[FT.asignado]||'', fechaLimite:i[FT.fechaLimite]?i[FT.fechaLimite].split('T')[0]:'', prioridad:i[FT.prioridad]||'', estado:i[FT.estado]||'' }; }
+function tareaToRow(t) { return { [FT.title]:t.title,[FT.descripcion]:t.descripcion,[FT.asignado]:t.asignado,[FT.fechaLimite]:t.fechaLimite?t.fechaLimite+'T00:00:00Z':null,[FT.prioridad]:t.prioridad,[FT.estado]:t.estado }; }
 
-// ═══════════════════════════════════════════════════════
-// CARGA
-// ═══════════════════════════════════════════════════════
+// ── CARGA ──────────────────────────────────────────────
 async function loadAll() {
-  setStatus('warn', 'Conectando…');
+  setStatus('warn','Conectando…');
   try {
     await getEtypes();
-    const [rawE, rawP] = await Promise.all([spGet('Envios'), spGet('Pedidos')]);
+    const [rawE,rawP,rawT] = await Promise.all([spGet('Envios'),spGet('Pedidos'),spGet('Tareas Pendientes')]);
     envios  = rawE.map(rowToEnvio);
     pedidos = rawP.map(rowToPedido);
-    const hora = new Date().toLocaleTimeString('es-ES', { hour:'2-digit', minute:'2-digit' });
-    setStatus('ok', `Conectado · ${hora}`);
-    renderKPIs(); renderEnvios(); renderPedidos();
+    tareas  = rawT.map(rowToTarea);
+    const hora = new Date().toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
+    setStatus('ok',`Conectado · ${hora}`);
+    renderKPIs(); renderAlertBanner(); renderEnvios(); renderPedidos(); renderTareas();
     const loadE = document.getElementById('loadE');
     const tableE = document.getElementById('tableE');
-    if (loadE) loadE.style.display = 'none';
-    if (tableE) tableE.style.display = '';
+    if(loadE) loadE.style.display='none';
+    if(tableE) tableE.style.display='';
   } catch(err) {
-    setStatus('err', 'Error de conexión');
+    setStatus('err','Error de conexión');
     const loadE = document.getElementById('loadE');
-    if (loadE) loadE.innerHTML = `<div style="color:#dc2626;padding:24px;text-align:center">⚠ ${err.message}<br><br><button class="btn-add" onclick="loadAll()">Reintentar</button></div>`;
+    if(loadE) loadE.innerHTML=`<div style="color:#dc2626;padding:24px;text-align:center">⚠ ${err.message}<br><br><button class="btn-add" onclick="loadAll()">Reintentar</button></div>`;
     console.error(err);
   }
 }
 
-// ═══════════════════════════════════════════════════════
-// UTILIDADES
-// ═══════════════════════════════════════════════════════
-function setStatus(t, msg) {
-  const b = document.getElementById('statusBadge');
-  if (!b) return;
-  b.className = 'status-badge status-' + t;
-  b.textContent = msg;
-}
-function esc(s) {
-  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-function formatDate(d) {
-  if (!d) return '—';
-  try { return new Date(d).toLocaleDateString('es-ES', { day:'2-digit', month:'2-digit', year:'numeric' }); }
-  catch { return d; }
-}
-function etaClass(d) {
-  if (!d) return '';
-  const today = new Date(); today.setHours(0,0,0,0);
-  const diff = (new Date(d) - today) / 86400000;
-  return diff < 0 ? 'eta-late' : diff <= 3 ? 'eta-near' : '';
-}
-const BMAP = {
-  'Aéreo':      ['b-aereo',    '✈ Aéreo'],
-  'Marítimo':   ['b-maritimo', '⚓ Marítimo'],
-  'En tránsito':['b-transito', 'En tránsito'],
-  'En aduana':  ['b-aduana',   'En aduana'],
-  'Entregado':  ['b-entregado','Entregado'],
-  'Pendiente':  ['b-pendiente','Pendiente']
-};
-function badge(k) {
-  const [cls, lbl] = BMAP[k] || ['b-pendiente', k||'—'];
-  return `<span class="badge ${cls}">${lbl}</span>`;
-}
-function olc(ev, id) { if (ev.target.classList.contains('modal-overlay')) cm(id); }
-function cm(id) { document.getElementById(id).style.display = 'none'; }
-
-// ═══════════════════════════════════════════════════════
-// RENDER
-// ═══════════════════════════════════════════════════════
+// ── KPIs Y ALERTAS ─────────────────────────────────────
 function renderKPIs() {
-  const t = envios.filter(e => e.estado === 'En tránsito').length;
-  const a = envios.filter(e => e.estado === 'En aduana').length;
-  const k1 = document.getElementById('kpi1'); if(k1) k1.textContent = t;
-  const k2 = document.getElementById('kpi2'); if(k2) { k2.textContent = a; k2.className = 'kpi-val' + (a>0?' amber':''); }
-  const k3 = document.getElementById('kpi3'); if(k3) k3.textContent = pedidos.length;
-  const k4 = document.getElementById('kpi4'); if(k4) k4.textContent = envios.length;
+  const today = new Date(); today.setHours(0,0,0,0);
+  const transito = envios.filter(e=>e.estado==='En tránsito').length;
+  const aduana   = envios.filter(e=>e.estado==='En aduana').length;
+  const envVenc  = envios.filter(e=>e.eta && new Date(e.eta)<today && e.estado!=='Entregado').length;
+  const pedVenc  = pedidos.filter(p=>p.etaCliente && new Date(p.etaCliente)<today).length;
+  const tarPend  = tareas.filter(t=>t.estado!=='Terminado').length;
+
+  const k1=document.getElementById('kpi1'); if(k1) k1.textContent=transito;
+  const k2=document.getElementById('kpi2'); if(k2){k2.textContent=aduana;k2.className='kpi-val'+(aduana>0?' amber':'');}
+  const k3=document.getElementById('kpi3'); if(k3){k3.textContent=envVenc;k3.className='kpi-val'+(envVenc>0?' red':'');}
+  const k4=document.getElementById('kpi4'); if(k4){k4.textContent=pedVenc;k4.className='kpi-val'+(pedVenc>0?' red':'');}
+  const k5=document.getElementById('kpi5'); if(k5){k5.textContent=tarPend;k5.className='kpi-val'+(tarPend>0?' amber':'');}
+
+  // Badge en pestaña tareas
+  const tarVenc = tareas.filter(t=>t.fechaLimite && new Date(t.fechaLimite)<today && t.estado!=='Terminado').length;
+  const tabT = document.getElementById('tabT');
+  if(tabT) {
+    const existing = tabT.querySelector('.tab-badge');
+    if(existing) existing.remove();
+    if(tarVenc>0) tabT.insertAdjacentHTML('beforeend',`<span class="tab-badge">${tarVenc}</span>`);
+  }
 }
 
-const FILTERS_E = ['todos','Aéreo','Marítimo','En tránsito','En aduana','Entregado'];
-const FLBL = { todos:'Todos', 'Aéreo':'Aéreo', 'Marítimo':'Marítimo', 'En tránsito':'En tránsito', 'En aduana':'En aduana', 'Entregado':'Entregado' };
+function renderAlertBanner() {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const alerts = [];
+  const envVenc = envios.filter(e=>e.eta && new Date(e.eta)<today && e.estado!=='Entregado');
+  const pedVenc = pedidos.filter(p=>p.etaCliente && new Date(p.etaCliente)<today);
+  const tarVenc = tareas.filter(t=>t.fechaLimite && new Date(t.fechaLimite)<today && t.estado!=='Terminado');
+  if(envVenc.length) alerts.push(`<strong>${envVenc.length} envío(s)</strong> con ETA superada`);
+  if(pedVenc.length) alerts.push(`<strong>${pedVenc.length} pedido(s)</strong> con fecha de compromiso superada`);
+  if(tarVenc.length) alerts.push(`<strong>${tarVenc.length} tarea(s)</strong> vencida(s)`);
+  const banner = document.getElementById('alertBanner');
+  if(banner) banner.innerHTML = alerts.length ? `<div class="alert-banner">⚠ ${alerts.join(' · ')}</div>` : '';
+}
+
+// ── FILTROS ────────────────────────────────────────────
+const FE_OPT = ['todos','Aéreo','Marítimo','En tránsito','En aduana','Entregado'];
+const FT_OPT = ['todos','Pendiente','En proceso','Terminado','Alta','Media','Baja'];
+const FLBL = { todos:'Todos','Aéreo':'Aéreo','Marítimo':'Marítimo','En tránsito':'En tránsito','En aduana':'En aduana','Entregado':'Entregado','Pendiente':'Pendiente','En proceso':'En proceso','Terminado':'Terminado','Alta':'Alta','Media':'Media','Baja':'Baja' };
 
 function renderChips() {
-  const c = document.getElementById('chipsE');
-  if (c) c.innerHTML = FILTERS_E.map(f =>
-    `<button class="chip ${filterE===f?'active':''}" onclick="setFE('${f}')">${FLBL[f]||f}</button>`).join('');
+  const ce=document.getElementById('chipsE');
+  if(ce) ce.innerHTML=FE_OPT.map(f=>`<button class="chip ${filterE===f?'active':''}" onclick="setFE('${f}')">${FLBL[f]}</button>`).join('');
+  const ct=document.getElementById('chipsT');
+  if(ct) ct.innerHTML=FT_OPT.map(f=>`<button class="chip ${filterT===f?'active':''}" onclick="setFT('${f}')">${FLBL[f]}</button>`).join('');
 }
-function setFE(f) { filterE = f; renderChips(); renderEnvios(); }
+function setFE(f){filterE=f;renderChips();renderEnvios();}
+function setFT(f){filterT=f;renderChips();renderTareas();}
 
+// ── RENDER TABLAS ──────────────────────────────────────
 function renderEnvios() {
-  const q = (document.getElementById('searchE')?.value||'').toLowerCase();
-  const rows = envios.filter(e => {
-    const mq = !q || [e.title,e.origen,e.destino,e.proveedor,e.pcs].some(s=>s&&s.toLowerCase().includes(q));
-    const mf = filterE==='todos' || e.tipo===filterE || e.estado===filterE;
-    return mq && mf;
+  const today = new Date(); today.setHours(0,0,0,0);
+  const q=(document.getElementById('searchE')?.value||'').toLowerCase();
+  const rows=envios.filter(e=>{
+    const mq=!q||[e.title,e.origen,e.destino,e.proveedor,e.pcs].some(s=>s&&s.toLowerCase().includes(q));
+    const mf=filterE==='todos'||e.tipo===filterE||e.estado===filterE;
+    return mq&&mf;
   });
-  const tbody = document.getElementById('tbodyE');
-  const empty = document.getElementById('emptyE');
-  const table = document.getElementById('tableE');
-  if (!tbody) return;
-  if (!rows.length) { tbody.innerHTML=''; if(empty) empty.style.display=''; if(table) table.style.display='none'; return; }
-  if(empty) empty.style.display='none';
-  if(table) table.style.display='';
-  tbody.innerHTML = rows.map(e => `
-    <tr>
-      <td><strong style="font-weight:600">${esc(e.title)}</strong></td>
-      <td>${badge(e.tipo)}</td>
+  const tbody=document.getElementById('tbodyE'), empty=document.getElementById('emptyE'), table=document.getElementById('tableE');
+  if(!tbody) return;
+  if(!rows.length){tbody.innerHTML='';if(empty)empty.style.display='';if(table)table.style.display='none';return;}
+  if(empty)empty.style.display='none';if(table)table.style.display='';
+  tbody.innerHTML=rows.map(e=>{
+    const vencida=e.eta&&new Date(e.eta)<today&&e.estado!=='Entregado';
+    return `<tr class="${vencida?'row-vencida':''}">
+      <td><strong style="font-weight:600">${esc(e.title)}</strong>${vencida?'<span style="color:#dc2626;font-size:11px;margin-left:6px">⚠ Vencido</span>':''}</td>
+      <td>${badge(e.tipo,'tipo')}</td>
       <td>${esc(e.origen)} → ${esc(e.destino)}</td>
       <td>${esc(e.proveedor)||'—'}</td>
-      <td>${badge(e.estado)}</td>
+      <td>${badge(e.estado,'estado')}</td>
       <td><span class="${etaClass(e.eta)}">${formatDate(e.eta)}</span></td>
       <td>${e.seguimiento?`<a href="${esc(e.seguimiento)}" target="_blank" class="link-tr">Ver tracking →</a>`:'—'}</td>
       <td class="td-clip" title="${esc(e.pcs)}">${esc(e.pcs)||'—'}</td>
@@ -751,163 +630,195 @@ function renderEnvios() {
         <button class="action-btn" onclick="openModalEnvio(${e.id})">Editar</button>
         <button class="action-btn action-del" onclick="delEnvio(${e.id})">Borrar</button>
       </td>
-    </tr>`).join('');
-}
-
-function renderPedidos() {
-  const q = (document.getElementById('searchP')?.value||'').toLowerCase();
-  const rows = pedidos.filter(p =>
-    !q || [p.title,p.cliente,p.producto,p.pedidoVenta,p.proveedor].some(s=>s&&s.toLowerCase().includes(q))
-  );
-  const tbody = document.getElementById('tbodyP');
-  const empty = document.getElementById('emptyP');
-  const table = document.getElementById('tableP');
-  const loadP = document.getElementById('loadP');
-  if (!tbody) return;
-  if(loadP) loadP.style.display='none';
-  if (!rows.length) { tbody.innerHTML=''; if(empty) empty.style.display=''; if(table) table.style.display='none'; return; }
-  if(empty) empty.style.display='none';
-  if(table) table.style.display='';
-  tbody.innerHTML = rows.map(p => {
-    const linked = envios.find(e => e.title === p.pedidoVenta);
-    return `
-      <tr>
-        <td><strong style="font-weight:600">${esc(p.title)}</strong></td>
-        <td>${esc(p.cliente)}</td>
-        <td>${esc(p.producto)}</td>
-        <td>${esc(p.proveedor)||'—'}</td>
-        <td>${linked?`<span style="color:#0078d4">${esc(p.pedidoVenta)}</span>`:(p.pedidoVenta?esc(p.pedidoVenta):'<span style="color:#9ca3af;font-size:12px">Sin asignar</span>')}</td>
-        <td><span class="${etaClass(p.etaCliente)}">${formatDate(p.etaCliente)}</span></td>
-        <td class="td-clip" title="${esc(p.notas)}">${esc(p.notas)||'—'}</td>
-        <td>
-          <button class="action-btn" onclick="openModalPedido(${p.id})">Editar</button>
-          <button class="action-btn action-del" onclick="delPedido(${p.id})">Borrar</button>
-        </td>
-      </tr>`;
+    </tr>`;
   }).join('');
 }
 
-// ═══════════════════════════════════════════════════════
-// MODALES
-// ═══════════════════════════════════════════════════════
+function renderPedidos() {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const q=(document.getElementById('searchP')?.value||'').toLowerCase();
+  const rows=pedidos.filter(p=>!q||[p.title,p.cliente,p.producto,p.pedidoVenta,p.proveedor].some(s=>s&&s.toLowerCase().includes(q)));
+  const tbody=document.getElementById('tbodyP'),empty=document.getElementById('emptyP'),table=document.getElementById('tableP');
+  if(!tbody)return;
+  if(!rows.length){tbody.innerHTML='';if(empty)empty.style.display='';if(table)table.style.display='none';return;}
+  if(empty)empty.style.display='none';if(table)table.style.display='';
+  tbody.innerHTML=rows.map(p=>{
+    const linked=envios.find(e=>e.title===p.pedidoVenta);
+    const vencida=p.etaCliente&&new Date(p.etaCliente)<today;
+    return `<tr class="${vencida?'row-vencida':''}">
+      <td><strong style="font-weight:600">${esc(p.title)}</strong>${vencida?'<span style="color:#dc2626;font-size:11px;margin-left:6px">⚠ Vencido</span>':''}</td>
+      <td>${esc(p.cliente)}</td>
+      <td>${esc(p.producto)}</td>
+      <td>${esc(p.proveedor)||'—'}</td>
+      <td>${linked?`<span style="color:#0078d4">${esc(p.pedidoVenta)}</span>`:(p.pedidoVenta?esc(p.pedidoVenta):'<span style="color:#9ca3af;font-size:12px">Sin asignar</span>')}</td>
+      <td><span class="${etaClass(p.etaCliente)}">${formatDate(p.etaCliente)}</span></td>
+      <td class="td-clip" title="${esc(p.notas)}">${esc(p.notas)||'—'}</td>
+      <td>
+        <button class="action-btn" onclick="openModalPedido(${p.id})">Editar</button>
+        <button class="action-btn action-del" onclick="delPedido(${p.id})">Borrar</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function renderTareas() {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const q=(document.getElementById('searchT')?.value||'').toLowerCase();
+  const rows=tareas.filter(t=>{
+    const mq=!q||[t.title,t.asignado,t.descripcion].some(s=>s&&s.toLowerCase().includes(q));
+    const mf=filterT==='todos'||t.estado===filterT||t.prioridad===filterT;
+    return mq&&mf;
+  });
+  const tbody=document.getElementById('tbodyT'),empty=document.getElementById('emptyT'),table=document.getElementById('tableT');
+  if(!tbody)return;
+  if(!rows.length){tbody.innerHTML='';if(empty)empty.style.display='';if(table)table.style.display='none';return;}
+  if(empty)empty.style.display='none';if(table)table.style.display='';
+  tbody.innerHTML=rows.map(t=>{
+    const vencida=t.fechaLimite&&new Date(t.fechaLimite)<today&&t.estado!=='Terminado';
+    return `<tr class="${vencida?'row-vencida':''}">
+      <td><strong style="font-weight:600">${esc(t.title)}</strong>${vencida?'<span style="color:#dc2626;font-size:11px;margin-left:6px">⚠ Vencida</span>':''}</td>
+      <td class="td-clip" title="${esc(t.descripcion)}">${esc(t.descripcion)||'—'}</td>
+      <td>${esc(t.asignado)||'—'}</td>
+      <td><span class="${etaClass(t.fechaLimite)}">${formatDate(t.fechaLimite)}</span></td>
+      <td>${badge(t.prioridad,'prioridad')}</td>
+      <td>${badge(t.estado,'estadoT')}</td>
+      <td>
+        ${t.estado!=='Terminado'?`<button class="action-btn action-done" onclick="marcarTerminada(${t.id})">✓ Terminada</button>`:''}
+        <button class="action-btn" onclick="openModalTarea(${t.id})">Editar</button>
+        <button class="action-btn action-del" onclick="delTarea(${t.id})">Borrar</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// ── UTILS ──────────────────────────────────────────────
+function setStatus(t,msg){const b=document.getElementById('statusBadge');if(!b)return;b.className='status-badge status-'+t;b.textContent=msg;}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function formatDate(d){if(!d)return'—';try{return new Date(d).toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit',year:'numeric'});}catch{return d;}}
+function etaClass(d){if(!d)return'';const today=new Date();today.setHours(0,0,0,0);const diff=(new Date(d)-today)/86400000;return diff<0?'eta-late':diff<=3?'eta-near':'';}
+function olc(ev,id){if(ev.target.classList.contains('modal-overlay'))cm(id);}
+function cm(id){document.getElementById(id).style.display='none';}
+
+function badge(k, tipo) {
+  const maps = {
+    tipo:     { 'Aéreo':['b-aereo','✈ Aéreo'],'Marítimo':['b-maritimo','⚓ Marítimo'] },
+    estado:   { 'En tránsito':['b-transito','En tránsito'],'En aduana':['b-aduana','En aduana'],'Entregado':['b-entregado','Entregado'],'Pendiente':['b-pendiente','Pendiente'] },
+    prioridad:{ 'Alta':['b-alta','🔴 Alta'],'Media':['b-media','🟡 Media'],'Baja':['b-baja','🟢 Baja'] },
+    estadoT:  { 'Pendiente':['b-pendiente','Pendiente'],'En proceso':['b-enproceso','En proceso'],'Terminado':['b-terminado','Terminado'] }
+  };
+  const map = maps[tipo] || {};
+  const [cls,lbl] = map[k] || ['b-pendiente', k||'—'];
+  return `<span class="badge ${cls}">${lbl}</span>`;
+}
+
+// ── MODALES ────────────────────────────────────────────
 function openModalEnvio(id) {
-  editEId = id;
-  const e = id!==null ? envios.find(x=>x.id===id) : null;
-  document.getElementById('titleModalE').textContent = e ? 'Editar envío' : 'Nuevo envío';
-  document.getElementById('eTitle').value       = e?.title       || '';
-  document.getElementById('eTipo').value        = e?.tipo        || 'Aéreo';
-  document.getElementById('eEstado').value      = e?.estado      || 'En tránsito';
-  document.getElementById('eOrigen').value      = e?.origen      || '';
-  document.getElementById('eDestino').value     = e?.destino     || '';
-  document.getElementById('eProveedor').value   = e?.proveedor   || '';
-  document.getElementById('eETA').value         = e?.eta         || '';
-  document.getElementById('eSeguimiento').value = e?.seguimiento || '';
-  document.getElementById('ePCs').value         = e?.pcs         || '';
-  document.getElementById('eNotas').value       = e?.notas       || '';
-  document.getElementById('modalE').style.display = 'flex';
+  editEId=id;
+  const e=id!==null?envios.find(x=>x.id===id):null;
+  document.getElementById('titleModalE').textContent=e?'Editar envío':'Nuevo envío';
+  document.getElementById('eTitle').value=e?.title||'';
+  document.getElementById('eTipo').value=e?.tipo||'Aéreo';
+  document.getElementById('eEstado').value=e?.estado||'En tránsito';
+  document.getElementById('eOrigen').value=e?.origen||'';
+  document.getElementById('eDestino').value=e?.destino||'';
+  document.getElementById('eProveedor').value=e?.proveedor||'';
+  document.getElementById('eETA').value=e?.eta||'';
+  document.getElementById('eSeguimiento').value=e?.seguimiento||'';
+  document.getElementById('ePCs').value=e?.pcs||'';
+  document.getElementById('eNotas').value=e?.notas||'';
+  document.getElementById('modalE').style.display='flex';
 }
-
 function openModalPedido(id) {
-  editPId = id;
-  const p = id!==null ? pedidos.find(x=>x.id===id) : null;
-  document.getElementById('titleModalP').textContent = p ? 'Editar pedido' : 'Nuevo pedido de cliente';
-  document.getElementById('pTitle').value      = p?.title      || '';
-  document.getElementById('pCliente').value    = p?.cliente    || '';
-  document.getElementById('pProducto').value   = p?.producto   || '';
-  document.getElementById('pProveedor').value  = p?.proveedor  || '';
-  document.getElementById('pETACliente').value = p?.etaCliente || '';
-  document.getElementById('pNotas').value      = p?.notas      || '';
-  const sel = document.getElementById('pPedidoVenta');
-  sel.innerHTML = '<option value="">— Sin asignar —</option>' +
-    envios.map(e=>`<option value="${esc(e.title)}" ${p?.pedidoVenta===e.title?'selected':''}>${esc(e.title)}</option>`).join('');
-  document.getElementById('modalP').style.display = 'flex';
+  editPId=id;
+  const p=id!==null?pedidos.find(x=>x.id===id):null;
+  document.getElementById('titleModalP').textContent=p?'Editar pedido':'Nuevo pedido de cliente';
+  document.getElementById('pTitle').value=p?.title||'';
+  document.getElementById('pCliente').value=p?.cliente||'';
+  document.getElementById('pProducto').value=p?.producto||'';
+  document.getElementById('pProveedor').value=p?.proveedor||'';
+  document.getElementById('pETACliente').value=p?.etaCliente||'';
+  document.getElementById('pNotas').value=p?.notas||'';
+  const sel=document.getElementById('pPedidoVenta');
+  sel.innerHTML='<option value="">— Sin asignar —</option>'+envios.map(e=>`<option value="${esc(e.title)}" ${p?.pedidoVenta===e.title?'selected':''}>${esc(e.title)}</option>`).join('');
+  document.getElementById('modalP').style.display='flex';
+}
+function openModalTarea(id) {
+  editTId=id;
+  const t=id!==null?tareas.find(x=>x.id===id):null;
+  document.getElementById('titleModalT').textContent=t?'Editar tarea':'Nueva tarea';
+  document.getElementById('tTitle').value=t?.title||'';
+  document.getElementById('tDescripcion').value=t?.descripcion||'';
+  document.getElementById('tAsignado').value=t?.asignado||'';
+  document.getElementById('tFechaLimite').value=t?.fechaLimite||'';
+  document.getElementById('tPrioridad').value=t?.prioridad||'Alta';
+  document.getElementById('tEstado').value=t?.estado||'Pendiente';
+  document.getElementById('modalT').style.display='flex';
 }
 
-// ═══════════════════════════════════════════════════════
-// CRUD
-// ═══════════════════════════════════════════════════════
+// ── CRUD ───────────────────────────────────────────────
 async function saveEnvio() {
-  const btn = document.getElementById('btnSaveE');
-  btn.disabled=true; btn.textContent='Guardando…';
-  const item = {
-    title:       document.getElementById('eTitle').value.trim(),
-    tipo:        document.getElementById('eTipo').value,
-    estado:      document.getElementById('eEstado').value,
-    origen:      document.getElementById('eOrigen').value.trim(),
-    destino:     document.getElementById('eDestino').value.trim(),
-    proveedor:   document.getElementById('eProveedor').value.trim(),
-    eta:         document.getElementById('eETA').value,
-    seguimiento: document.getElementById('eSeguimiento').value.trim(),
-    pcs:         document.getElementById('ePCs').value.trim(),
-    notas:       document.getElementById('eNotas').value.trim()
-  };
-  if (!item.title) { alert('El nombre del envío es obligatorio.'); btn.disabled=false; btn.textContent='Guardar'; return; }
+  const btn=document.getElementById('btnSaveE');
+  btn.disabled=true;btn.textContent='Guardando…';
+  const item={title:document.getElementById('eTitle').value.trim(),tipo:document.getElementById('eTipo').value,estado:document.getElementById('eEstado').value,origen:document.getElementById('eOrigen').value.trim(),destino:document.getElementById('eDestino').value.trim(),proveedor:document.getElementById('eProveedor').value.trim(),eta:document.getElementById('eETA').value,seguimiento:document.getElementById('eSeguimiento').value.trim(),pcs:document.getElementById('ePCs').value.trim(),notas:document.getElementById('eNotas').value.trim()};
+  if(!item.title){alert('El nombre es obligatorio.');btn.disabled=false;btn.textContent='Guardar';return;}
   try {
-    if (editEId!==null) {
-      await spUpdate('Envios', editEId, etypeE, envioToRow(item));
-      envios = envios.map(e=>e.id===editEId?{...item,id:editEId}:e);
-    } else {
-      const res = await spCreate('Envios', etypeE, envioToRow(item));
-      envios.unshift({...item, id:res.d.Id});
-    }
-    cm('modalE'); renderKPIs(); renderEnvios();
-    setStatus('ok','Guardado ✓'); setTimeout(()=>setStatus('ok','Conectado'),2000);
-  } catch(err) { alert('Error: '+err.message); }
-  btn.disabled=false; btn.textContent='Guardar';
+    if(editEId!==null){await spUpdate('Envios',editEId,etypeE,envioToRow(item));envios=envios.map(e=>e.id===editEId?{...item,id:editEId}:e);}
+    else{const r=await spCreate('Envios',etypeE,envioToRow(item));envios.unshift({...item,id:r.d.Id});}
+    cm('modalE');renderKPIs();renderAlertBanner();renderEnvios();
+    setStatus('ok','Guardado ✓');setTimeout(()=>setStatus('ok','Conectado'),2000);
+  } catch(err){alert('Error: '+err.message);}
+  btn.disabled=false;btn.textContent='Guardar';
 }
-
 async function savePedido() {
-  const btn = document.getElementById('btnSaveP');
-  btn.disabled=true; btn.textContent='Guardando…';
-  const item = {
-    title:       document.getElementById('pTitle').value.trim(),
-    cliente:     document.getElementById('pCliente').value.trim(),
-    producto:    document.getElementById('pProducto').value.trim(),
-    proveedor:   document.getElementById('pProveedor').value.trim(),
-    pedidoVenta: document.getElementById('pPedidoVenta').value,
-    etaCliente:  document.getElementById('pETACliente').value,
-    notas:       document.getElementById('pNotas').value.trim()
-  };
-  if (!item.title) { alert('El título es obligatorio.'); btn.disabled=false; btn.textContent='Guardar'; return; }
+  const btn=document.getElementById('btnSaveP');
+  btn.disabled=true;btn.textContent='Guardando…';
+  const item={title:document.getElementById('pTitle').value.trim(),cliente:document.getElementById('pCliente').value.trim(),producto:document.getElementById('pProducto').value.trim(),proveedor:document.getElementById('pProveedor').value.trim(),pedidoVenta:document.getElementById('pPedidoVenta').value,etaCliente:document.getElementById('pETACliente').value,notas:document.getElementById('pNotas').value.trim()};
+  if(!item.title){alert('El título es obligatorio.');btn.disabled=false;btn.textContent='Guardar';return;}
   try {
-    if (editPId!==null) {
-      await spUpdate('Pedidos', editPId, etypeP, pedidoToRow(item));
-      pedidos = pedidos.map(p=>p.id===editPId?{...item,id:editPId}:p);
-    } else {
-      const res = await spCreate('Pedidos', etypeP, pedidoToRow(item));
-      pedidos.unshift({...item, id:res.d.Id});
-    }
-    cm('modalP'); renderKPIs(); renderPedidos();
-    setStatus('ok','Guardado ✓'); setTimeout(()=>setStatus('ok','Conectado'),2000);
-  } catch(err) { alert('Error: '+err.message); }
-  btn.disabled=false; btn.textContent='Guardar';
+    if(editPId!==null){await spUpdate('Pedidos',editPId,etypeP,pedidoToRow(item));pedidos=pedidos.map(p=>p.id===editPId?{...item,id:editPId}:p);}
+    else{const r=await spCreate('Pedidos',etypeP,pedidoToRow(item));pedidos.unshift({...item,id:r.d.Id});}
+    cm('modalP');renderKPIs();renderAlertBanner();renderPedidos();
+    setStatus('ok','Guardado ✓');setTimeout(()=>setStatus('ok','Conectado'),2000);
+  } catch(err){alert('Error: '+err.message);}
+  btn.disabled=false;btn.textContent='Guardar';
 }
-
-async function delEnvio(id) {
-  if (!confirm('¿Eliminar este envío?')) return;
-  try { await spDelete('Envios',id); envios=envios.filter(e=>e.id!==id); renderKPIs(); renderEnvios(); }
-  catch(err) { alert('Error: '+err.message); }
+async function saveTarea() {
+  const btn=document.getElementById('btnSaveT');
+  btn.disabled=true;btn.textContent='Guardando…';
+  const item={title:document.getElementById('tTitle').value.trim(),descripcion:document.getElementById('tDescripcion').value.trim(),asignado:document.getElementById('tAsignado').value.trim(),fechaLimite:document.getElementById('tFechaLimite').value,prioridad:document.getElementById('tPrioridad').value,estado:document.getElementById('tEstado').value};
+  if(!item.title){alert('El título es obligatorio.');btn.disabled=false;btn.textContent='Guardar';return;}
+  try {
+    if(editTId!==null){await spUpdate('Tareas Pendientes',editTId,etypeT,tareaToRow(item));tareas=tareas.map(t=>t.id===editTId?{...item,id:editTId}:t);}
+    else{const r=await spCreate('Tareas Pendientes',etypeT,tareaToRow(item));tareas.unshift({...item,id:r.d.Id});}
+    cm('modalT');renderKPIs();renderAlertBanner();renderTareas();
+    setStatus('ok','Guardado ✓');setTimeout(()=>setStatus('ok','Conectado'),2000);
+  } catch(err){alert('Error: '+err.message);}
+  btn.disabled=false;btn.textContent='Guardar';
 }
-async function delPedido(id) {
-  if (!confirm('¿Eliminar este pedido?')) return;
-  try { await spDelete('Pedidos',id); pedidos=pedidos.filter(p=>p.id!==id); renderKPIs(); renderPedidos(); }
-  catch(err) { alert('Error: '+err.message); }
+async function marcarTerminada(id) {
+  try {
+    await spUpdate('Tareas Pendientes',id,etypeT,{[FT.estado]:'Terminado'});
+    tareas=tareas.map(t=>t.id===id?{...t,estado:'Terminado'}:t);
+    renderKPIs();renderAlertBanner();renderTareas();
+  } catch(err){alert('Error: '+err.message);}
 }
+async function delEnvio(id){if(!confirm('¿Eliminar este envío?'))return;try{await spDelete('Envios',id);envios=envios.filter(e=>e.id!==id);renderKPIs();renderAlertBanner();renderEnvios();}catch(err){alert('Error: '+err.message);}}
+async function delPedido(id){if(!confirm('¿Eliminar este pedido?'))return;try{await spDelete('Pedidos',id);pedidos=pedidos.filter(p=>p.id!==id);renderKPIs();renderAlertBanner();renderPedidos();}catch(err){alert('Error: '+err.message);}}
+async function delTarea(id){if(!confirm('¿Eliminar esta tarea?'))return;try{await spDelete('Tareas Pendientes',id);tareas=tareas.filter(t=>t.id!==id);renderKPIs();renderAlertBanner();renderTareas();}catch(err){alert('Error: '+err.message);}}
 
 function switchTab(tab) {
-  document.getElementById('panelEnvios').style.display  = tab==='envios'  ?'':'none';
-  document.getElementById('panelPedidos').style.display = tab==='pedidos' ?'':'none';
-  document.getElementById('tabE').classList.toggle('active', tab==='envios');
-  document.getElementById('tabP').classList.toggle('active', tab==='pedidos');
-  if (tab==='pedidos') renderPedidos();
+  document.getElementById('panelEnvios').style.display  =tab==='envios' ?'':'none';
+  document.getElementById('panelPedidos').style.display =tab==='pedidos'?'':'none';
+  document.getElementById('panelTareas').style.display  =tab==='tareas' ?'':'none';
+  ['tabE','tabP','tabT'].forEach((id,i)=>{
+    const t=document.getElementById(id);
+    if(t) t.classList.toggle('active',['envios','pedidos','tareas'][i]===tab);
+  });
+  if(tab==='tareas') renderTareas();
+  if(tab==='pedidos') renderPedidos();
 }
 
-// Auto-refresco cada 60 segundos
-setInterval(()=>{ if(accessToken) loadAll(); }, 60000);
-
-// ═══════════════════════════════════════════════════════
-// ARRANQUE
-// ═══════════════════════════════════════════════════════
+setInterval(()=>{if(accessToken)loadAll();},60000);
 render();
 </script>
 </body>
