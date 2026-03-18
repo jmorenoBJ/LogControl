@@ -388,7 +388,7 @@ function initMsal() {
 }
 
 async function acquireToken() {
-  const scopes = [`${CFG.siteUrl}/.default`];
+  const scopes = ['https://bjumper.sharepoint.com/.default'];
   try {
     const res = await msalInstance.acquireTokenSilent({ scopes, account: currentUser });
     accessToken = res.accessToken;
@@ -419,7 +419,7 @@ function showLoginScreen() {
 
 async function login() {
   try {
-    await msalInstance.loginRedirect({ scopes: [`${CFG.siteUrl}/.default`] });
+    await msalInstance.loginRedirect({ scopes: ['https://bjumper.sharepoint.com/.default'] });
   } catch(e) {
     alert('Error al iniciar sesión: ' + e.message);
   }
