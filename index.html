@@ -315,7 +315,7 @@ function initMsal() {
 }
 
 async function acquireToken() {
-  const scopes=['https://${CFG.siteUrl.split('/').slice(0,3).join('/')}/.default'];
+  const spOrigin=CFG.siteUrl?new URL(CFG.siteUrl).origin:'https://login.microsoftonline.com'; const scopes=[spOrigin+'/.default'];
   try { const r=await msalInstance.acquireTokenSilent({scopes,account:currentUser}); accessToken=r.accessToken; }
   catch(e) { const r=await msalInstance.acquireTokenPopup({scopes}); accessToken=r.accessToken; currentUser=r.account; }
 }
@@ -334,7 +334,7 @@ function showLoginScreen() {
     </div></div>`;
 }
 
-async function login() { try { await msalInstance.loginRedirect({scopes:['https://${CFG.siteUrl.split('/').slice(0,3).join('/')}/.default']}); } catch(e) { alert('Error: '+e.message); } }
+async function login() { try { await msalInstance.loginRedirect({scopes:[CFG.siteUrl?new URL(CFG.siteUrl).origin+'/.default':'https://login.microsoftonline.com/.default']}); } catch(e) { alert('Error: '+e.message); } }
 function logout() { msalInstance.logoutRedirect(); }
 
 function showApp() {
