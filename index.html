@@ -281,7 +281,7 @@ function showConfigScreen(error) {
         <div class="fg"><label>Tenant ID</label><input id="cfgTenantId" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"><div class="hint">Azure Portal → App registrations → tu app → Directory (tenant) ID</div></div>
       </div>
       <div class="cfg-section"><h3>SharePoint</h3>
-        <div class="fg"><label>URL del sitio</label><input id="cfgSiteUrl" placeholder="https://bjumper.sharepoint.com/sites/COMPRAS-LOGISTICA"><div class="hint">URL base del sitio, sin barra al final</div></div>
+        <div class="fg"><label>URL del sitio</label><input id="cfgSiteUrl" placeholder="https://tuempresa.sharepoint.com/sites/tu-sitio"><div class="hint">URL base del sitio, sin barra al final</div></div>
       </div>
       <button class="btn-primary" onclick="saveConfig()">Guardar y conectar</button>
     </div></div>`;
@@ -315,7 +315,7 @@ function initMsal() {
 }
 
 async function acquireToken() {
-  const scopes=['https://bjumper.sharepoint.com/.default'];
+  const scopes=['https://${CFG.siteUrl.split('/').slice(0,3).join('/')}/.default'];
   try { const r=await msalInstance.acquireTokenSilent({scopes,account:currentUser}); accessToken=r.accessToken; }
   catch(e) { const r=await msalInstance.acquireTokenPopup({scopes}); accessToken=r.accessToken; currentUser=r.account; }
 }
@@ -334,7 +334,7 @@ function showLoginScreen() {
     </div></div>`;
 }
 
-async function login() { try { await msalInstance.loginRedirect({scopes:['https://bjumper.sharepoint.com/.default']}); } catch(e) { alert('Error: '+e.message); } }
+async function login() { try { await msalInstance.loginRedirect({scopes:['https://${CFG.siteUrl.split('/').slice(0,3).join('/')}/.default']}); } catch(e) { alert('Error: '+e.message); } }
 function logout() { msalInstance.logoutRedirect(); }
 
 function showApp() {
