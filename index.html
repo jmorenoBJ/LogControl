@@ -185,7 +185,7 @@ tr.row-vencida:hover td { background:#fee2e2; }
     <div class="modal-bd">
       <div class="form-grid">
         <div class="mfg full"><label>Título del envío</label><input id="eTitle" placeholder="Ej: Barco Mayo 2026 / DHL Hong Kong junio"></div>
-        <div class="mfg"><label>Tipo de envío</label><select id="eTipo"><option value="Aéreo">✈ Aéreo</option><option value="Marítimo">⚓ Marítimo</option></select></div>
+        <div class="mfg"><label>Tipo de envío</label><select id="eTipo"><option value="Aéreo">✈ Aéreo</option><option value="Marítimo">⚓ Marítimo</option><option value="Terrestre">🚛 Terrestre</option></select></div>
         <div class="mfg"><label>Estado</label><select id="eEstado"><option value="En tránsito">En tránsito</option><option value="En aduana">En aduana</option><option value="Entregado">Entregado</option><option value="Pendiente">Pendiente</option></select></div>
         <div class="mfg"><label>Origen</label><input id="eOrigen" placeholder="Ej: Shanghai / Hong Kong"></div>
         <div class="mfg"><label>Destino</label><input id="eDestino" placeholder="Ej: Valencia / Madrid"></div>
@@ -514,9 +514,9 @@ function renderAlertBanner() {
   if(banner)banner.innerHTML=alerts.length?`<div class="alert-banner">⚠ ${alerts.join(' · ')}</div>`:'';
 }
 
-const FE_OPT=['todos','Aéreo','Marítimo','En tránsito','En aduana','Entregado'];
+const FE_OPT=['todos','Aéreo','Marítimo','Terrestre','En tránsito','En aduana','Entregado'];
 const FT_OPT=['todos','Pendiente','En proceso','Terminado','Alta','Media','Baja'];
-const FLBL={todos:'Todos','Aéreo':'Aéreo','Marítimo':'Marítimo','En tránsito':'En tránsito','En aduana':'En aduana','Entregado':'Entregado','Pendiente':'Pendiente','En proceso':'En proceso','Terminado':'Terminado','Alta':'Alta','Media':'Media','Baja':'Baja'};
+const FLBL={todos:'Todos','Aéreo':'Aéreo','Marítimo':'Marítimo','Terrestre':'Terrestre','En tránsito':'En tránsito','En aduana':'En aduana','Entregado':'Entregado','Pendiente':'Pendiente','En proceso':'En proceso','Terminado':'Terminado','Alta':'Alta','Media':'Media','Baja':'Baja'};
 function renderChips(){
   const ce=document.getElementById('chipsE');if(ce)ce.innerHTML=FE_OPT.map(f=>`<button class="chip ${filterE===f?'active':''}" onclick="setFE('${f}')">${FLBL[f]}</button>`).join('');
   const ct=document.getElementById('chipsT');if(ct)ct.innerHTML=FT_OPT.map(f=>`<button class="chip ${filterT===f?'active':''}" onclick="setFT('${f}')">${FLBL[f]}</button>`).join('');
@@ -554,7 +554,7 @@ function renderEnvios() {
   if(empty)empty.style.display='none';if(table)table.style.display='';
   tbody.innerHTML=rows.map(e=>{
     const vencida=e.eta&&new Date(e.eta)<today&&e.estado!=='Entregado';
-    const bTipo=e.tipo==='Aéreo'?`<span class="badge b-aereo">✈ Aéreo</span>`:`<span class="badge b-maritimo">⚓ Marítimo</span>`;
+    const bTipo=e.tipo==='Aéreo'?'<span class="badge b-aereo">✈ Aéreo</span>':e.tipo==='Terrestre'?'<span class="badge b-terrestre">🚛 Terrestre</span>':'<span class="badge b-maritimo">⚓ Marítimo</span>';
     const bEst={'En tránsito':'b-transito','En aduana':'b-aduana','Entregado':'b-entregado','Pendiente':'b-pendiente'}[e.estado]||'b-pendiente';
     return `<tr class="${vencida?'row-vencida':''}">
       <td><strong style="font-weight:600">${esc(e.title)}</strong>${vencida?'<span style="color:#dc2626;font-size:11px;margin-left:6px">⚠ Vencido</span>':''}</td>
