@@ -55,19 +55,23 @@ tr:last-child td { border-bottom:none; }
 tr:hover td { background:#fafafa; }
 tr.row-vencida td { background:#fff5f5; }
 tr.row-vencida:hover td { background:#fee2e2; }
-.td-clip { max-width:180px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.td-clip { max-width:150px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .badge { display:inline-flex; align-items:center; font-size:11px; font-weight:600; padding:3px 9px; border-radius:20px; white-space:nowrap; }
-.b-aereo      { background:#eff6ff; color:#1d4ed8; }
-.b-maritimo   { background:#f0fdf4; color:#166534; }
-.b-transito   { background:#fffbeb; color:#92400e; }
-.b-aduana     { background:#fff7ed; color:#9a3412; }
-.b-entregado  { background:#f0fdf4; color:#166534; }
-.b-pendiente  { background:#f9fafb; color:#4b5563; border:1px solid #e5e7eb; }
-.b-alta       { background:#fef2f2; color:#991b1b; }
-.b-media      { background:#fffbeb; color:#92400e; }
-.b-baja       { background:#f0fdf4; color:#166534; }
-.b-enproceso  { background:#eff6ff; color:#1d4ed8; }
-.b-terminado  { background:#f0fdf4; color:#166534; }
+.b-aereo       { background:#eff6ff; color:#1d4ed8; }
+.b-maritimo    { background:#f0fdf4; color:#166534; }
+.b-transito    { background:#fffbeb; color:#92400e; }
+.b-aduana      { background:#fff7ed; color:#9a3412; }
+.b-entregado   { background:#f0fdf4; color:#166534; }
+.b-pendiente   { background:#f9fafb; color:#4b5563; border:1px solid #e5e7eb; }
+.b-alta        { background:#fef2f2; color:#991b1b; }
+.b-media       { background:#fffbeb; color:#92400e; }
+.b-baja        { background:#f0fdf4; color:#166534; }
+.b-enproceso   { background:#eff6ff; color:#1d4ed8; }
+.b-terminado   { background:#f0fdf4; color:#166534; }
+.b-finalizado  { background:#f0fdf4; color:#166534; }
+.b-recibido    { background:#eff6ff; color:#1d4ed8; }
+.b-norecibido  { background:#fef2f2; color:#991b1b; }
+.b-rotura      { background:#fff7ed; color:#9a3412; }
 .eta-near { color:#d97706; font-weight:600; }
 .eta-late  { color:#dc2626; font-weight:600; }
 .link-tr { color:#0078d4; text-decoration:none; font-size:12px; }
@@ -78,11 +82,14 @@ tr.row-vencida:hover td { background:#fee2e2; }
 .action-del:hover { background:#fef2f2; }
 .action-done { color:#059669; border-color:#a7f3d0; }
 .action-done:hover { background:#ecfdf5; }
+.action-view { color:#0078d4; border-color:#bfdbfe; }
+.action-view:hover { background:#eff6ff; }
 .empty { text-align:center; padding:40px; color:#9ca3af; font-size:14px; }
 .loading { text-align:center; padding:40px; color:#6b7280; }
 .spin { display:inline-block; width:20px; height:20px; border:2px solid #e5e7eb; border-top-color:#0078d4; border-radius:50%; animation:spin .7s linear infinite; margin-bottom:8px; }
 @keyframes spin { to { transform:rotate(360deg); } }
-.alert-banner { display:flex; align-items:center; gap:10px; padding:12px 20px; background:#fef2f2; border-bottom:1px solid #fecaca; font-size:13px; color:#991b1b; margin-bottom:16px; border-radius:8px; }
+.alert-banner { display:flex; align-items:center; gap:10px; padding:12px 16px; background:#fef2f2; border:1px solid #fecaca; font-size:13px; color:#991b1b; margin-bottom:16px; border-radius:8px; }
+/* LOGIN */
 .login-screen { min-height:100vh; display:flex; align-items:center; justify-content:center; background:#F5F6F8; }
 .login-card { background:#fff; border-radius:16px; border:1px solid #e5e7eb; padding:40px 48px; text-align:center; max-width:420px; width:100%; }
 .login-icon { width:56px; height:56px; background:#0078d4; border-radius:14px; display:flex; align-items:center; justify-content:center; margin:0 auto 20px; }
@@ -90,6 +97,7 @@ tr.row-vencida:hover td { background:#fee2e2; }
 .login-sub { font-size:14px; color:#6b7280; margin-bottom:28px; line-height:1.6; }
 .btn-login { width:100%; padding:12px; background:#0078d4; color:#fff; border:none; border-radius:10px; font-size:15px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; }
 .btn-login:hover { background:#006bb8; }
+/* CONFIG */
 .config-screen { min-height:100vh; display:flex; align-items:center; justify-content:center; background:#F5F6F8; padding:24px; }
 .config-card { background:#fff; border-radius:16px; border:1px solid #e5e7eb; padding:36px 40px; max-width:540px; width:100%; }
 .config-title { font-size:20px; font-weight:700; color:#111; margin-bottom:6px; }
@@ -105,12 +113,25 @@ tr.row-vencida:hover td { background:#fee2e2; }
 .btn-primary:hover { background:#006bb8; }
 .alert-info { background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; padding:10px 14px; border-radius:8px; font-size:13px; margin-bottom:20px; line-height:1.6; }
 .alert-err  { background:#fef2f2; color:#991b1b; border:1px solid #fecaca; padding:10px 14px; border-radius:8px; font-size:13px; margin-bottom:16px; }
+/* MODAL */
 .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,.45); display:flex; align-items:center; justify-content:center; z-index:200; padding:16px; }
 .modal { background:#fff; border-radius:14px; width:100%; max-width:580px; max-height:90vh; overflow-y:auto; box-shadow:0 20px 60px rgba(0,0,0,.2); }
-.modal-hd { padding:20px 24px 16px; border-bottom:1px solid #f3f4f6; }
+.modal-hd { padding:20px 24px 16px; border-bottom:1px solid #f3f4f6; display:flex; align-items:center; justify-content:space-between; }
 .modal-title { font-size:17px; font-weight:700; color:#111; }
+.modal-close { background:none; border:none; font-size:20px; color:#9ca3af; cursor:pointer; line-height:1; }
+.modal-close:hover { color:#374151; }
 .modal-bd { padding:20px 24px; }
 .modal-ft { padding:14px 24px 20px; display:flex; justify-content:flex-end; gap:8px; border-top:1px solid #f3f4f6; }
+/* VIEW MODAL */
+.view-modal { max-width:620px; }
+.view-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.view-field { display:flex; flex-direction:column; gap:4px; }
+.view-field.full { grid-column:1/-1; }
+.view-label { font-size:10px; font-weight:700; color:#9ca3af; text-transform:uppercase; letter-spacing:.5px; }
+.view-value { font-size:14px; color:#111; line-height:1.5; word-break:break-word; }
+.view-value.empty { color:#9ca3af; font-style:italic; }
+.view-sep { grid-column:1/-1; border:none; border-top:1px solid #f3f4f6; margin:4px 0; }
+/* FORM */
 .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
 .mfg { display:flex; flex-direction:column; gap:5px; }
 .mfg.full { grid-column:1/-1; }
@@ -124,16 +145,43 @@ tr.row-vencida:hover td { background:#fee2e2; }
 .btn-save { padding:8px 18px; background:#0078d4; color:#fff; border:none; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; }
 .btn-save:hover { background:#006bb8; }
 .btn-save:disabled { background:#93c5fd; cursor:not-allowed; }
-@media(max-width:600px){ .main{padding:16px;} .form-grid{grid-template-columns:1fr;} .mfg.full{grid-column:1;} .search-input{width:100%;} .login-card,.config-card{padding:28px 24px;} }
+@media(max-width:600px){ .main{padding:16px;} .form-grid,.view-grid{grid-template-columns:1fr;} .mfg.full,.view-field.full{grid-column:1;} .search-input{width:100%;} .login-card,.config-card{padding:28px 24px;} }
 </style>
 </head>
 <body>
 <div id="appRoot"></div>
 
-<!-- MODAL ENVÍO -->
+<!-- MODAL VER ENVÍO -->
+<div class="modal-overlay" id="viewModalE" style="display:none" onclick="olc(event,'viewModalE')">
+  <div class="modal view-modal">
+    <div class="modal-hd"><div class="modal-title" id="viewTitleE">Detalle del envío</div><button class="modal-close" onclick="cm('viewModalE')">×</button></div>
+    <div class="modal-bd"><div class="view-grid" id="viewBodyE"></div></div>
+    <div class="modal-ft"><button class="btn-cancel" onclick="cm('viewModalE')">Cerrar</button></div>
+  </div>
+</div>
+
+<!-- MODAL VER PEDIDO -->
+<div class="modal-overlay" id="viewModalP" style="display:none" onclick="olc(event,'viewModalP')">
+  <div class="modal view-modal">
+    <div class="modal-hd"><div class="modal-title" id="viewTitleP">Detalle del pedido</div><button class="modal-close" onclick="cm('viewModalP')">×</button></div>
+    <div class="modal-bd"><div class="view-grid" id="viewBodyP"></div></div>
+    <div class="modal-ft"><button class="btn-cancel" onclick="cm('viewModalP')">Cerrar</button></div>
+  </div>
+</div>
+
+<!-- MODAL VER TAREA -->
+<div class="modal-overlay" id="viewModalT" style="display:none" onclick="olc(event,'viewModalT')">
+  <div class="modal view-modal">
+    <div class="modal-hd"><div class="modal-title" id="viewTitleT">Detalle de la tarea</div><button class="modal-close" onclick="cm('viewModalT')">×</button></div>
+    <div class="modal-bd"><div class="view-grid" id="viewBodyT"></div></div>
+    <div class="modal-ft"><button class="btn-cancel" onclick="cm('viewModalT')">Cerrar</button></div>
+  </div>
+</div>
+
+<!-- MODAL EDITAR ENVÍO -->
 <div class="modal-overlay" id="modalE" style="display:none" onclick="olc(event,'modalE')">
   <div class="modal">
-    <div class="modal-hd"><div class="modal-title" id="titleModalE">Nuevo envío</div></div>
+    <div class="modal-hd"><div class="modal-title" id="titleModalE">Nuevo envío</div><button class="modal-close" onclick="cm('modalE')">×</button></div>
     <div class="modal-bd">
       <div class="form-grid">
         <div class="mfg full"><label>Título del envío</label><input id="eTitle" placeholder="Ej: Barco Mayo 2026 / DHL Hong Kong junio"></div>
@@ -148,39 +196,39 @@ tr.row-vencida:hover td { background:#fee2e2; }
         <div class="mfg full"><label>Notas</label><textarea id="eNotas" placeholder="Observaciones adicionales…"></textarea></div>
       </div>
     </div>
-    <div class="modal-ft">
-      <button class="btn-cancel" onclick="cm('modalE')">Cancelar</button>
-      <button class="btn-save" id="btnSaveE" onclick="saveEnvio()">Guardar</button>
-    </div>
+    <div class="modal-ft"><button class="btn-cancel" onclick="cm('modalE')">Cancelar</button><button class="btn-save" id="btnSaveE" onclick="saveEnvio()">Guardar</button></div>
   </div>
 </div>
 
-<!-- MODAL PEDIDO -->
+<!-- MODAL EDITAR PEDIDO -->
 <div class="modal-overlay" id="modalP" style="display:none" onclick="olc(event,'modalP')">
   <div class="modal">
-    <div class="modal-hd"><div class="modal-title" id="titleModalP">Nuevo pedido de cliente</div></div>
+    <div class="modal-hd"><div class="modal-title" id="titleModalP">Nuevo pedido de cliente</div><button class="modal-close" onclick="cm('modalP')">×</button></div>
     <div class="modal-bd">
       <div class="form-grid">
         <div class="mfg"><label>Título</label><input id="pTitle" placeholder="Ej: García mayo / PED-0001"></div>
         <div class="mfg"><label>Cliente</label><input id="pCliente" placeholder="Nombre de la empresa"></div>
         <div class="mfg full"><label>Producto / Descripción</label><input id="pProducto" placeholder="Qué ha pedido el cliente"></div>
         <div class="mfg"><label>Proveedor</label><input id="pProveedor" placeholder="Proveedor del producto"></div>
-        <div class="mfg"><label>Pedido de Venta (envío asociado)</label><select id="pPedidoVenta"></select></div>
+        <div class="mfg"><label>Envío asociado</label><select id="pEnvioAsociado"></select></div>
         <div class="mfg"><label>ETA Cliente — Fecha compromiso</label><input type="date" id="pETA"></div>
+        <div class="mfg"><label>Estado</label><select id="pEstado">
+          <option value="Finalizado">Finalizado</option>
+          <option value="Recibido - En fabricación">Recibido - En fabricación</option>
+          <option value="No Recibido - En Transito">No Recibido - En Transito</option>
+          <option value="No Recibido - Rotura de Stock">No Recibido - Rotura de Stock</option>
+        </select></div>
         <div class="mfg full"><label>Notas</label><textarea id="pNotas" placeholder="Observaciones…"></textarea></div>
       </div>
     </div>
-    <div class="modal-ft">
-      <button class="btn-cancel" onclick="cm('modalP')">Cancelar</button>
-      <button class="btn-save" id="btnSaveP" onclick="savePedido()">Guardar</button>
-    </div>
+    <div class="modal-ft"><button class="btn-cancel" onclick="cm('modalP')">Cancelar</button><button class="btn-save" id="btnSaveP" onclick="savePedido()">Guardar</button></div>
   </div>
 </div>
 
-<!-- MODAL TAREA -->
+<!-- MODAL EDITAR TAREA -->
 <div class="modal-overlay" id="modalT" style="display:none" onclick="olc(event,'modalT')">
   <div class="modal">
-    <div class="modal-hd"><div class="modal-title" id="titleModalT">Nueva tarea</div></div>
+    <div class="modal-hd"><div class="modal-title" id="titleModalT">Nueva tarea</div><button class="modal-close" onclick="cm('modalT')">×</button></div>
     <div class="modal-bd">
       <div class="form-grid">
         <div class="mfg full"><label>Título de la tarea</label><input id="tTitle" placeholder="Ej: Revisar documentos aduana barco mayo"></div>
@@ -191,58 +239,30 @@ tr.row-vencida:hover td { background:#fee2e2; }
         <div class="mfg"><label>Estado</label><select id="tEstado"><option value="Pendiente">Pendiente</option><option value="En proceso">En proceso</option><option value="Terminado">Terminado</option></select></div>
       </div>
     </div>
-    <div class="modal-ft">
-      <button class="btn-cancel" onclick="cm('modalT')">Cancelar</button>
-      <button class="btn-save" id="btnSaveT" onclick="saveTarea()">Guardar</button>
-    </div>
+    <div class="modal-ft"><button class="btn-cancel" onclick="cm('modalT')">Cancelar</button><button class="btn-save" id="btnSaveT" onclick="saveTarea()">Guardar</button></div>
   </div>
 </div>
 
 <script>
+// Config — never prefilled, always from localStorage only
 const CFG = {
   clientId: localStorage.getItem('lc_clientId') || '',
   tenantId: localStorage.getItem('lc_tenantId') || '',
   siteUrl:  localStorage.getItem('lc_siteUrl')  || ''
 };
 
-// Nombres internos REALES de SharePoint
-const FE = {
-  title:       'Title',
-  tipo:        'TipodeEnv_x00ed_o',
-  origen:      'Origen',
-  destino:     'Destino',
-  proveedor:   'Proveedor',
-  estado:      'Estado',
-  eta:         'ETA',
-  seguimiento: 'Seguimiento',
-  pcs:         'PCsAsociados',
-  notas:       'Notas'
-};
-const FP = {
-  title:       'Title',
-  cliente:     'Cliente',
-  producto:    'Producto',
-  proveedor:   'Proveedor',
-  pedidoVenta: 'PedidodeVenta',
-  eta:         'ETA',
-  notas:       'Notas'
-};
-const FT = {
-  title:       'Title',
-  descripcion: 'Descripci_x00f3_n',
-  asignado:    'Asignado',
-  fechaLimite: 'FechaLimite',
-  prioridad:   'Prioridad',
-  estado:      'Estado'
-};
+// Real SharePoint internal column names
+const FE = { title:'Title', tipo:'TipodeEnv_x00ed_o', origen:'Origen', destino:'Destino', proveedor:'Proveedor', estado:'Estado', eta:'ETA', seguimiento:'Seguimiento', pcs:'PCsAsociados', notas:'Notas' };
+const FP = { title:'Title', cliente:'Cliente', producto:'Producto', proveedor:'Proveedor', envioAsociado:'PedidodeVenta', eta:'ETA', estado:'Estado', notas:'Notas' };
+const FT = { title:'Title', descripcion:'Descripci_x00f3_n', asignado:'Asignado', fechaLimite:'FechaLimite', prioridad:'Prioridad', estado:'Estado' };
 
-let msalInstance = null, accessToken = null, currentUser = null;
-let envios = [], pedidos = [], tareas = [];
-let editEId = null, editPId = null, editTId = null;
-let filterE = 'todos', filterT = 'todos';
-let etypeE = 'SP.Data.EnviosListItem';
-let etypeP = 'SP.Data.PedidosListItem';
-let etypeT = 'SP.Data.Tareas_x0020_PendientesListItem';
+let msalInstance=null, accessToken=null, currentUser=null;
+let envios=[], pedidos=[], tareas=[];
+let editEId=null, editPId=null, editTId=null;
+let filterE='todos', filterT='todos';
+let etypeE='SP.Data.EnviosListItem';
+let etypeP='SP.Data.PedidosListItem';
+let etypeT='SP.Data.Tareas_x0020_PendientesListItem';
 
 function render() {
   if (!CFG.clientId || !CFG.tenantId || !CFG.siteUrl) showConfigScreen();
@@ -252,56 +272,56 @@ function render() {
 function showConfigScreen(error) {
   document.getElementById('appRoot').innerHTML = `
     <div class="config-screen"><div class="config-card">
-      <div class="config-title">Configuración inicial</div>
-      <div class="config-sub">Introduce los datos de tu tenant de Microsoft 365.</div>
+      <div class="config-title">Configuración de LogControl</div>
+      <div class="config-sub">Introduce los datos de conexión de tu tenant de Microsoft 365.</div>
       ${error ? `<div class="alert-err">⚠ ${error}</div>` : ''}
       <div class="alert-info">Necesitas registrar una app en Azure AD (Microsoft Entra ID) y añadir la URL de GitHub Pages como redirect URI de tipo SPA.</div>
       <div class="cfg-section"><h3>Azure AD</h3>
-        <div class="fg"><label>Client ID</label><input id="cfgClientId" value="${CFG.clientId}" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"><div class="hint">Azure Portal → App registrations → tu app → Application (client) ID</div></div>
-        <div class="fg"><label>Tenant ID</label><input id="cfgTenantId" value="${CFG.tenantId}" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"><div class="hint">Azure Portal → App registrations → tu app → Directory (tenant) ID</div></div>
+        <div class="fg"><label>Client ID</label><input id="cfgClientId" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"><div class="hint">Azure Portal → App registrations → tu app → Application (client) ID</div></div>
+        <div class="fg"><label>Tenant ID</label><input id="cfgTenantId" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"><div class="hint">Azure Portal → App registrations → tu app → Directory (tenant) ID</div></div>
       </div>
       <div class="cfg-section"><h3>SharePoint</h3>
-        <div class="fg"><label>URL del sitio</label><input id="cfgSiteUrl" value="${CFG.siteUrl}" placeholder="https://bjumper.sharepoint.com/sites/COMPRAS-LOGISTICA"><div class="hint">URL base del sitio, sin barra al final</div></div>
+        <div class="fg"><label>URL del sitio</label><input id="cfgSiteUrl" placeholder="https://bjumper.sharepoint.com/sites/COMPRAS-LOGISTICA"><div class="hint">URL base del sitio, sin barra al final</div></div>
       </div>
       <button class="btn-primary" onclick="saveConfig()">Guardar y conectar</button>
     </div></div>`;
 }
 
 function saveConfig() {
-  const clientId = document.getElementById('cfgClientId').value.trim();
-  const tenantId = document.getElementById('cfgTenantId').value.trim();
-  const siteUrl  = document.getElementById('cfgSiteUrl').value.trim().replace(/\/$/,'');
-  if (!clientId || !tenantId || !siteUrl) { alert('Rellena todos los campos.'); return; }
-  CFG.clientId = clientId; CFG.tenantId = tenantId; CFG.siteUrl = siteUrl;
-  localStorage.setItem('lc_clientId', clientId);
-  localStorage.setItem('lc_tenantId', tenantId);
-  localStorage.setItem('lc_siteUrl',  siteUrl);
+  const clientId=document.getElementById('cfgClientId').value.trim();
+  const tenantId=document.getElementById('cfgTenantId').value.trim();
+  const siteUrl=document.getElementById('cfgSiteUrl').value.trim().replace(/\/$/,'');
+  if (!clientId||!tenantId||!siteUrl) { alert('Rellena todos los campos.'); return; }
+  CFG.clientId=clientId; CFG.tenantId=tenantId; CFG.siteUrl=siteUrl;
+  localStorage.setItem('lc_clientId',clientId);
+  localStorage.setItem('lc_tenantId',tenantId);
+  localStorage.setItem('lc_siteUrl',siteUrl);
   initMsal();
 }
 
 function initMsal() {
   msalInstance = new msal.PublicClientApplication({
-    auth: { clientId: CFG.clientId, authority: `https://login.microsoftonline.com/${CFG.tenantId}`, redirectUri: window.location.origin + window.location.pathname },
-    cache: { cacheLocation: 'localStorage', storeAuthStateInCookie: false }
+    auth: { clientId:CFG.clientId, authority:`https://login.microsoftonline.com/${CFG.tenantId}`, redirectUri:window.location.origin+window.location.pathname },
+    cache: { cacheLocation:'localStorage', storeAuthStateInCookie:false }
   });
   msalInstance.handleRedirectPromise().then(response => {
-    if (response) { accessToken = response.accessToken; currentUser = response.account; showApp(); loadAll(); }
+    if (response) { accessToken=response.accessToken; currentUser=response.account; showApp(); loadAll(); }
     else {
-      const accounts = msalInstance.getAllAccounts();
-      if (accounts.length > 0) { currentUser = accounts[0]; acquireToken().then(() => { showApp(); loadAll(); }).catch(() => showLoginScreen()); }
+      const accounts=msalInstance.getAllAccounts();
+      if (accounts.length>0) { currentUser=accounts[0]; acquireToken().then(()=>{showApp();loadAll();}).catch(()=>showLoginScreen()); }
       else showLoginScreen();
     }
-  }).catch(err => showConfigScreen('Error de autenticación: ' + err.message));
+  }).catch(err=>showConfigScreen('Error de autenticación: '+err.message));
 }
 
 async function acquireToken() {
-  const scopes = ['https://bjumper.sharepoint.com/.default'];
-  try { const r = await msalInstance.acquireTokenSilent({ scopes, account: currentUser }); accessToken = r.accessToken; }
-  catch(e) { const r = await msalInstance.acquireTokenPopup({ scopes }); accessToken = r.accessToken; currentUser = r.account; }
+  const scopes=['https://bjumper.sharepoint.com/.default'];
+  try { const r=await msalInstance.acquireTokenSilent({scopes,account:currentUser}); accessToken=r.accessToken; }
+  catch(e) { const r=await msalInstance.acquireTokenPopup({scopes}); accessToken=r.accessToken; currentUser=r.account; }
 }
 
 function showLoginScreen() {
-  document.getElementById('appRoot').innerHTML = `
+  document.getElementById('appRoot').innerHTML=`
     <div class="login-screen"><div class="login-card">
       <div class="login-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M3 17h18M3 12l9-9 9 9"/></svg></div>
       <div class="login-title">LogControl</div>
@@ -314,15 +334,12 @@ function showLoginScreen() {
     </div></div>`;
 }
 
-async function login() {
-  try { await msalInstance.loginRedirect({ scopes: ['https://bjumper.sharepoint.com/.default'] }); }
-  catch(e) { alert('Error: ' + e.message); }
-}
+async function login() { try { await msalInstance.loginRedirect({scopes:['https://bjumper.sharepoint.com/.default']}); } catch(e) { alert('Error: '+e.message); } }
 function logout() { msalInstance.logoutRedirect(); }
 
 function showApp() {
-  const name = currentUser?.name || currentUser?.username || '';
-  document.getElementById('appRoot').innerHTML = `
+  const name=currentUser?.name||currentUser?.username||'';
+  document.getElementById('appRoot').innerHTML=`
     <div class="topbar">
       <div class="logo">
         <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M3 17h18M3 12l9-9 9 9"/></svg></div>
@@ -353,10 +370,7 @@ function showApp() {
       <div class="card">
         <div id="panelEnvios">
           <div class="toolbar">
-            <div>
-              <input class="search-input" type="text" placeholder="Buscar nombre, origen, destino, PCs…" oninput="renderEnvios()" id="searchE">
-              <div class="filter-chips" id="chipsE"></div>
-            </div>
+            <div><input class="search-input" type="text" placeholder="Buscar nombre, origen, destino, PCs…" oninput="renderEnvios()" id="searchE"><div class="filter-chips" id="chipsE"></div></div>
             <button class="btn-add" onclick="openModalEnvio(null)">+ Nuevo envío</button>
           </div>
           <div class="table-wrap">
@@ -370,12 +384,12 @@ function showApp() {
         </div>
         <div id="panelPedidos" style="display:none">
           <div class="toolbar">
-            <div><input class="search-input" type="text" placeholder="Buscar cliente, producto, pedido de venta…" oninput="renderPedidos()" id="searchP"></div>
+            <div><input class="search-input" type="text" placeholder="Buscar cliente, producto, envío asociado…" oninput="renderPedidos()" id="searchP"></div>
             <button class="btn-add" onclick="openModalPedido(null)">+ Nuevo pedido</button>
           </div>
           <div class="table-wrap">
             <table id="tableP" style="display:none">
-              <thead><tr><th>Título</th><th>Cliente</th><th>Producto</th><th>Proveedor</th><th>Pedido de Venta</th><th>ETA Cliente</th><th>Notas</th><th>Acciones</th></tr></thead>
+              <thead><tr><th>Título</th><th>Cliente</th><th>Producto</th><th>Proveedor</th><th>Envío asociado</th><th>ETA Cliente</th><th>Estado</th><th>Notas</th><th>Acciones</th></tr></thead>
               <tbody id="tbodyP"></tbody>
             </table>
             <div id="emptyP" class="empty" style="display:none">No hay pedidos registrados.</div>
@@ -383,10 +397,7 @@ function showApp() {
         </div>
         <div id="panelTareas" style="display:none">
           <div class="toolbar">
-            <div>
-              <input class="search-input" type="text" placeholder="Buscar tarea, asignado…" oninput="renderTareas()" id="searchT">
-              <div class="filter-chips" id="chipsT"></div>
-            </div>
+            <div><input class="search-input" type="text" placeholder="Buscar tarea, asignado…" oninput="renderTareas()" id="searchT"><div class="filter-chips" id="chipsT"></div></div>
             <button class="btn-add" onclick="openModalTarea(null)">+ Nueva tarea</button>
           </div>
           <div class="table-wrap">
@@ -402,129 +413,135 @@ function showApp() {
   renderChips();
 }
 
-async function spFetch(url, options={}) {
+// SP API
+async function spFetch(url,options={}) {
   await acquireToken();
-  return fetch(url, { ...options, headers: { 'Accept':'application/json;odata=verbose', 'Authorization':`Bearer ${accessToken}`, ...(options.headers||{}) } });
+  return fetch(url,{...options,headers:{'Accept':'application/json;odata=verbose','Authorization':`Bearer ${accessToken}`,...(options.headers||{})}});
 }
 async function getDigest() {
-  const r = await spFetch(`${CFG.siteUrl}/_api/contextinfo`, { method:'POST', headers:{'Content-Type':'application/json;odata=verbose'} });
-  if (!r.ok) throw new Error('No se pudo obtener digest.');
+  const r=await spFetch(`${CFG.siteUrl}/_api/contextinfo`,{method:'POST',headers:{'Content-Type':'application/json;odata=verbose'}});
+  if(!r.ok) throw new Error('No se pudo obtener digest.');
   return (await r.json()).d.GetContextWebInformation.FormDigestValue;
 }
 async function getEtypes() {
   try {
-    const [re,rp,rt] = await Promise.all([
+    const [re,rp,rt]=await Promise.all([
       spFetch(`${CFG.siteUrl}/_api/web/lists/getbytitle('Envios')?$select=ListItemEntityTypeFullName`),
       spFetch(`${CFG.siteUrl}/_api/web/lists/getbytitle('Pedidos')?$select=ListItemEntityTypeFullName`),
       spFetch(`${CFG.siteUrl}/_api/web/lists/getbytitle('Tareas Pendientes')?$select=ListItemEntityTypeFullName`)
     ]);
-    if (re.ok) etypeE = (await re.json()).d.ListItemEntityTypeFullName;
-    if (rp.ok) etypeP = (await rp.json()).d.ListItemEntityTypeFullName;
-    if (rt.ok) etypeT = (await rt.json()).d.ListItemEntityTypeFullName;
-  } catch(e) { console.warn('Entity types por defecto.'); }
+    if(re.ok) etypeE=(await re.json()).d.ListItemEntityTypeFullName;
+    if(rp.ok) etypeP=(await rp.json()).d.ListItemEntityTypeFullName;
+    if(rt.ok) etypeT=(await rt.json()).d.ListItemEntityTypeFullName;
+  } catch(e){console.warn('Entity types por defecto.');}
 }
 async function spGet(list) {
-  const r = await spFetch(`${CFG.siteUrl}/_api/web/lists/getbytitle('${list}')/items?$select=*&$top=500&$orderby=Id desc`);
-  if (!r.ok) throw new Error(`Error leyendo "${list}" (${r.status})`);
+  const r=await spFetch(`${CFG.siteUrl}/_api/web/lists/getbytitle('${list}')/items?$select=*&$top=500&$orderby=Id desc`);
+  if(!r.ok) throw new Error(`Error leyendo "${list}" (${r.status})`);
   return (await r.json()).d.results;
 }
-async function spCreate(list, etype, fields) {
-  const dg = await getDigest();
-  const r = await spFetch(`${CFG.siteUrl}/_api/web/lists/getbytitle('${list}')/items`, {
-    method:'POST', headers:{'Content-Type':'application/json;odata=verbose','X-RequestDigest':dg},
-    body: JSON.stringify({ __metadata:{type:etype}, ...fields })
-  });
-  if (!r.ok) { const t=await r.text(); throw new Error(t); }
+async function spCreate(list,etype,fields) {
+  const dg=await getDigest();
+  const r=await spFetch(`${CFG.siteUrl}/_api/web/lists/getbytitle('${list}')/items`,{method:'POST',headers:{'Content-Type':'application/json;odata=verbose','X-RequestDigest':dg},body:JSON.stringify({__metadata:{type:etype},...fields})});
+  if(!r.ok){const t=await r.text();throw new Error(t);}
   return await r.json();
 }
-async function spUpdate(list, id, etype, fields) {
-  const dg = await getDigest();
-  const r = await spFetch(`${CFG.siteUrl}/_api/web/lists/getbytitle('${list}')/items(${id})`, {
-    method:'POST', headers:{'Content-Type':'application/json;odata=verbose','X-RequestDigest':dg,'X-HTTP-Method':'MERGE','If-Match':'*'},
-    body: JSON.stringify({ __metadata:{type:etype}, ...fields })
-  });
-  if (!r.ok && r.status!==204) throw new Error(`Error al actualizar (${r.status})`);
+async function spUpdate(list,id,etype,fields) {
+  const dg=await getDigest();
+  const r=await spFetch(`${CFG.siteUrl}/_api/web/lists/getbytitle('${list}')/items(${id})`,{method:'POST',headers:{'Content-Type':'application/json;odata=verbose','X-RequestDigest':dg,'X-HTTP-Method':'MERGE','If-Match':'*'},body:JSON.stringify({__metadata:{type:etype},...fields})});
+  if(!r.ok&&r.status!==204) throw new Error(`Error al actualizar (${r.status})`);
 }
-async function spDelete(list, id) {
-  const dg = await getDigest();
-  const r = await spFetch(`${CFG.siteUrl}/_api/web/lists/getbytitle('${list}')/items(${id})`, {
-    method:'POST', headers:{'X-RequestDigest':dg,'X-HTTP-Method':'DELETE','If-Match':'*'}
-  });
-  if (!r.ok && r.status!==204) throw new Error(`Error al eliminar (${r.status})`);
+async function spDelete(list,id) {
+  const dg=await getDigest();
+  const r=await spFetch(`${CFG.siteUrl}/_api/web/lists/getbytitle('${list}')/items(${id})`,{method:'POST',headers:{'X-RequestDigest':dg,'X-HTTP-Method':'DELETE','If-Match':'*'}});
+  if(!r.ok&&r.status!==204) throw new Error(`Error al eliminar (${r.status})`);
 }
 
-function rowToEnvio(i) { return { id:i.Id, title:i[FE.title]||'', tipo:i[FE.tipo]||'', origen:i[FE.origen]||'', destino:i[FE.destino]||'', proveedor:i[FE.proveedor]||'', estado:i[FE.estado]||'', eta:i[FE.eta]?i[FE.eta].split('T')[0]:'', seguimiento:i[FE.seguimiento]||'', pcs:i[FE.pcs]||'', notas:i[FE.notas]||'' }; }
-function envioToRow(e) { return { [FE.title]:e.title, [FE.tipo]:e.tipo, [FE.origen]:e.origen, [FE.destino]:e.destino, [FE.proveedor]:e.proveedor, [FE.estado]:e.estado, [FE.eta]:e.eta?e.eta+'T00:00:00Z':null, [FE.seguimiento]:e.seguimiento, [FE.pcs]:e.pcs, [FE.notas]:e.notas }; }
-function rowToPedido(i) { return { id:i.Id, title:i[FP.title]||'', cliente:i[FP.cliente]||'', producto:i[FP.producto]||'', proveedor:i[FP.proveedor]||'', pedidoVenta:i[FP.pedidoVenta]||'', eta:i[FP.eta]?i[FP.eta].split('T')[0]:'', notas:i[FP.notas]||'' }; }
-function pedidoToRow(p) { return { [FP.title]:p.title, [FP.cliente]:p.cliente, [FP.producto]:p.producto, [FP.proveedor]:p.proveedor, [FP.pedidoVenta]:p.pedidoVenta, [FP.eta]:p.eta?p.eta+'T00:00:00Z':null, [FP.notas]:p.notas }; }
-function rowToTarea(i) { return { id:i.Id, title:i[FT.title]||'', descripcion:i[FT.descripcion]||'', asignado:i[FT.asignado]||'', fechaLimite:i[FT.fechaLimite]?i[FT.fechaLimite].split('T')[0]:'', prioridad:i[FT.prioridad]||'', estado:i[FT.estado]||'' }; }
-function tareaToRow(t) { return { [FT.title]:t.title, [FT.descripcion]:t.descripcion, [FT.asignado]:t.asignado, [FT.fechaLimite]:t.fechaLimite?t.fechaLimite+'T00:00:00Z':null, [FT.prioridad]:t.prioridad, [FT.estado]:t.estado }; }
+// Mappers
+function rowToEnvio(i){return{id:i.Id,title:i[FE.title]||'',tipo:i[FE.tipo]||'',origen:i[FE.origen]||'',destino:i[FE.destino]||'',proveedor:i[FE.proveedor]||'',estado:i[FE.estado]||'',eta:i[FE.eta]?i[FE.eta].split('T')[0]:'',seguimiento:i[FE.seguimiento]||'',pcs:i[FE.pcs]||'',notas:i[FE.notas]||''};}
+function envioToRow(e){return{[FE.title]:e.title,[FE.tipo]:e.tipo,[FE.origen]:e.origen,[FE.destino]:e.destino,[FE.proveedor]:e.proveedor,[FE.estado]:e.estado,[FE.eta]:e.eta?e.eta+'T00:00:00Z':null,[FE.seguimiento]:e.seguimiento,[FE.pcs]:e.pcs,[FE.notas]:e.notas};}
+function rowToPedido(i){return{id:i.Id,title:i[FP.title]||'',cliente:i[FP.cliente]||'',producto:i[FP.producto]||'',proveedor:i[FP.proveedor]||'',envioAsociado:i[FP.envioAsociado]||'',eta:i[FP.eta]?i[FP.eta].split('T')[0]:'',estado:i[FP.estado]||'',notas:i[FP.notas]||''};}
+function pedidoToRow(p){return{[FP.title]:p.title,[FP.cliente]:p.cliente,[FP.producto]:p.producto,[FP.proveedor]:p.proveedor,[FP.envioAsociado]:p.envioAsociado,[FP.eta]:p.eta?p.eta+'T00:00:00Z':null,[FP.estado]:p.estado,[FP.notas]:p.notas};}
+function rowToTarea(i){return{id:i.Id,title:i[FT.title]||'',descripcion:i[FT.descripcion]||'',asignado:i[FT.asignado]||'',fechaLimite:i[FT.fechaLimite]?i[FT.fechaLimite].split('T')[0]:'',prioridad:i[FT.prioridad]||'',estado:i[FT.estado]||''};}
+function tareaToRow(t){return{[FT.title]:t.title,[FT.descripcion]:t.descripcion,[FT.asignado]:t.asignado,[FT.fechaLimite]:t.fechaLimite?t.fechaLimite+'T00:00:00Z':null,[FT.prioridad]:t.prioridad,[FT.estado]:t.estado};}
 
 async function loadAll() {
   setStatus('warn','Conectando…');
   try {
     await getEtypes();
-    const [rawE,rawP,rawT] = await Promise.all([spGet('Envios'),spGet('Pedidos'),spGet('Tareas Pendientes')]);
-    envios  = rawE.map(rowToEnvio);
-    pedidos = rawP.map(rowToPedido);
-    tareas  = rawT.map(rowToTarea);
-    const hora = new Date().toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
+    const [rawE,rawP,rawT]=await Promise.all([spGet('Envios'),spGet('Pedidos'),spGet('Tareas Pendientes')]);
+    envios=rawE.map(rowToEnvio); pedidos=rawP.map(rowToPedido); tareas=rawT.map(rowToTarea);
+    const hora=new Date().toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
     setStatus('ok',`Conectado · ${hora}`);
-    renderKPIs(); renderAlertBanner(); renderEnvios(); renderPedidos(); renderTareas();
-    const loadE=document.getElementById('loadE'), tableE=document.getElementById('tableE');
-    if(loadE) loadE.style.display='none';
-    if(tableE) tableE.style.display='';
+    renderKPIs();renderAlertBanner();renderEnvios();renderPedidos();renderTareas();
+    const loadE=document.getElementById('loadE'),tableE=document.getElementById('tableE');
+    if(loadE)loadE.style.display='none'; if(tableE)tableE.style.display='';
   } catch(err) {
     setStatus('err','Error de conexión');
     const loadE=document.getElementById('loadE');
-    if(loadE) loadE.innerHTML=`<div style="color:#dc2626;padding:24px;text-align:center">⚠ ${err.message}<br><br><button class="btn-add" onclick="loadAll()">Reintentar</button></div>`;
+    if(loadE)loadE.innerHTML=`<div style="color:#dc2626;padding:24px;text-align:center">⚠ ${err.message}<br><br><button class="btn-add" onclick="loadAll()">Reintentar</button></div>`;
     console.error(err);
   }
 }
 
 function renderKPIs() {
-  const today=new Date(); today.setHours(0,0,0,0);
+  const today=new Date();today.setHours(0,0,0,0);
   const transito=envios.filter(e=>e.estado==='En tránsito').length;
   const aduana=envios.filter(e=>e.estado==='En aduana').length;
   const envVenc=envios.filter(e=>e.eta&&new Date(e.eta)<today&&e.estado!=='Entregado').length;
-  const pedVenc=pedidos.filter(p=>p.eta&&new Date(p.eta)<today).length;
+  const pedVenc=pedidos.filter(p=>p.eta&&new Date(p.eta)<today&&p.estado!=='Finalizado').length;
   const tarPend=tareas.filter(t=>t.estado!=='Terminado').length;
-  const k1=document.getElementById('kpi1'); if(k1) k1.textContent=transito;
-  const k2=document.getElementById('kpi2'); if(k2){k2.textContent=aduana;k2.className='kpi-val'+(aduana>0?' amber':'');}
-  const k3=document.getElementById('kpi3'); if(k3){k3.textContent=envVenc;k3.className='kpi-val'+(envVenc>0?' red':'');}
-  const k4=document.getElementById('kpi4'); if(k4){k4.textContent=pedVenc;k4.className='kpi-val'+(pedVenc>0?' red':'');}
-  const k5=document.getElementById('kpi5'); if(k5){k5.textContent=tarPend;k5.className='kpi-val'+(tarPend>0?' amber':'');}
+  const k1=document.getElementById('kpi1');if(k1)k1.textContent=transito;
+  const k2=document.getElementById('kpi2');if(k2){k2.textContent=aduana;k2.className='kpi-val'+(aduana>0?' amber':'');}
+  const k3=document.getElementById('kpi3');if(k3){k3.textContent=envVenc;k3.className='kpi-val'+(envVenc>0?' red':'');}
+  const k4=document.getElementById('kpi4');if(k4){k4.textContent=pedVenc;k4.className='kpi-val'+(pedVenc>0?' red':'');}
+  const k5=document.getElementById('kpi5');if(k5){k5.textContent=tarPend;k5.className='kpi-val'+(tarPend>0?' amber':'');}
   const tarVenc=tareas.filter(t=>t.fechaLimite&&new Date(t.fechaLimite)<today&&t.estado!=='Terminado').length;
   const tabT=document.getElementById('tabT');
   if(tabT){const ex=tabT.querySelector('.tab-badge');if(ex)ex.remove();if(tarVenc>0)tabT.insertAdjacentHTML('beforeend',`<span class="tab-badge">${tarVenc}</span>`);}
 }
 
 function renderAlertBanner() {
-  const today=new Date(); today.setHours(0,0,0,0);
+  const today=new Date();today.setHours(0,0,0,0);
   const alerts=[];
   const envVenc=envios.filter(e=>e.eta&&new Date(e.eta)<today&&e.estado!=='Entregado');
-  const pedVenc=pedidos.filter(p=>p.eta&&new Date(p.eta)<today);
+  const pedVenc=pedidos.filter(p=>p.eta&&new Date(p.eta)<today&&p.estado!=='Finalizado');
   const tarVenc=tareas.filter(t=>t.fechaLimite&&new Date(t.fechaLimite)<today&&t.estado!=='Terminado');
-  if(envVenc.length) alerts.push(`<strong>${envVenc.length} envío(s)</strong> con ETA superada`);
-  if(pedVenc.length) alerts.push(`<strong>${pedVenc.length} pedido(s)</strong> con fecha de compromiso superada`);
-  if(tarVenc.length) alerts.push(`<strong>${tarVenc.length} tarea(s)</strong> vencida(s)`);
+  if(envVenc.length)alerts.push(`<strong>${envVenc.length} envío(s)</strong> con ETA superada`);
+  if(pedVenc.length)alerts.push(`<strong>${pedVenc.length} pedido(s)</strong> con fecha de compromiso superada`);
+  if(tarVenc.length)alerts.push(`<strong>${tarVenc.length} tarea(s)</strong> vencida(s)`);
   const banner=document.getElementById('alertBanner');
-  if(banner) banner.innerHTML=alerts.length?`<div class="alert-banner">⚠ ${alerts.join(' · ')}</div>`:'';
+  if(banner)banner.innerHTML=alerts.length?`<div class="alert-banner">⚠ ${alerts.join(' · ')}</div>`:'';
 }
 
 const FE_OPT=['todos','Aéreo','Marítimo','En tránsito','En aduana','Entregado'];
 const FT_OPT=['todos','Pendiente','En proceso','Terminado','Alta','Media','Baja'];
 const FLBL={todos:'Todos','Aéreo':'Aéreo','Marítimo':'Marítimo','En tránsito':'En tránsito','En aduana':'En aduana','Entregado':'Entregado','Pendiente':'Pendiente','En proceso':'En proceso','Terminado':'Terminado','Alta':'Alta','Media':'Media','Baja':'Baja'};
-
-function renderChips() {
-  const ce=document.getElementById('chipsE'); if(ce) ce.innerHTML=FE_OPT.map(f=>`<button class="chip ${filterE===f?'active':''}" onclick="setFE('${f}')">${FLBL[f]}</button>`).join('');
-  const ct=document.getElementById('chipsT'); if(ct) ct.innerHTML=FT_OPT.map(f=>`<button class="chip ${filterT===f?'active':''}" onclick="setFT('${f}')">${FLBL[f]}</button>`).join('');
+function renderChips(){
+  const ce=document.getElementById('chipsE');if(ce)ce.innerHTML=FE_OPT.map(f=>`<button class="chip ${filterE===f?'active':''}" onclick="setFE('${f}')">${FLBL[f]}</button>`).join('');
+  const ct=document.getElementById('chipsT');if(ct)ct.innerHTML=FT_OPT.map(f=>`<button class="chip ${filterT===f?'active':''}" onclick="setFT('${f}')">${FLBL[f]}</button>`).join('');
 }
 function setFE(f){filterE=f;renderChips();renderEnvios();}
 function setFT(f){filterT=f;renderChips();renderTareas();}
 
+function badgePedidoEstado(k) {
+  const map={
+    'Finalizado':['b-finalizado','Finalizado'],
+    'Recibido - En fabricación':['b-recibido','Recibido · Fabricación'],
+    'No Recibido - En Transito':['b-norecibido','No Recibido · Tránsito'],
+    'No Recibido - Rotura de Stock':['b-rotura','Rotura de Stock']
+  };
+  const [cls,lbl]=map[k]||['b-pendiente',k||'—'];
+  return `<span class="badge ${cls}">${lbl}</span>`;
+}
+
+function vf(label,value,full){
+  const empty=!value||value==='—';
+  return `<div class="view-field${full?' full':''}"><div class="view-label">${label}</div><div class="view-value${empty?' empty':''}">${empty?'Sin rellenar':esc(value)}</div></div>`;
+}
+
 function renderEnvios() {
-  const today=new Date(); today.setHours(0,0,0,0);
+  const today=new Date();today.setHours(0,0,0,0);
   const q=(document.getElementById('searchE')?.value||'').toLowerCase();
   const rows=envios.filter(e=>{
     const mq=!q||[e.title,e.origen,e.destino,e.proveedor,e.pcs].some(s=>s&&s.toLowerCase().includes(q));
@@ -537,47 +554,58 @@ function renderEnvios() {
   if(empty)empty.style.display='none';if(table)table.style.display='';
   tbody.innerHTML=rows.map(e=>{
     const vencida=e.eta&&new Date(e.eta)<today&&e.estado!=='Entregado';
+    const bTipo=e.tipo==='Aéreo'?`<span class="badge b-aereo">✈ Aéreo</span>`:`<span class="badge b-maritimo">⚓ Marítimo</span>`;
+    const bEst={'En tránsito':'b-transito','En aduana':'b-aduana','Entregado':'b-entregado','Pendiente':'b-pendiente'}[e.estado]||'b-pendiente';
     return `<tr class="${vencida?'row-vencida':''}">
       <td><strong style="font-weight:600">${esc(e.title)}</strong>${vencida?'<span style="color:#dc2626;font-size:11px;margin-left:6px">⚠ Vencido</span>':''}</td>
-      <td>${badge(e.tipo,'tipo')}</td>
+      <td>${bTipo}</td>
       <td>${esc(e.origen)} → ${esc(e.destino)}</td>
       <td>${esc(e.proveedor)||'—'}</td>
-      <td>${badge(e.estado,'estado')}</td>
+      <td><span class="badge ${bEst}">${e.estado||'—'}</span></td>
       <td><span class="${etaClass(e.eta)}">${formatDate(e.eta)}</span></td>
       <td>${e.seguimiento?`<a href="${esc(e.seguimiento)}" target="_blank" class="link-tr">Ver tracking →</a>`:'—'}</td>
       <td class="td-clip" title="${esc(e.pcs)}">${esc(e.pcs)||'—'}</td>
       <td class="td-clip" title="${esc(e.notas)}">${esc(e.notas)||'—'}</td>
-      <td><button class="action-btn" onclick="openModalEnvio(${e.id})">Editar</button><button class="action-btn action-del" onclick="delEnvio(${e.id})">Borrar</button></td>
+      <td>
+        <button class="action-btn action-view" onclick="viewEnvio(${e.id})">👁 Ver</button>
+        <button class="action-btn" onclick="openModalEnvio(${e.id})">Editar</button>
+        <button class="action-btn action-del" onclick="delEnvio(${e.id})">Borrar</button>
+      </td>
     </tr>`;
   }).join('');
 }
 
 function renderPedidos() {
-  const today=new Date(); today.setHours(0,0,0,0);
+  const today=new Date();today.setHours(0,0,0,0);
   const q=(document.getElementById('searchP')?.value||'').toLowerCase();
-  const rows=pedidos.filter(p=>!q||[p.title,p.cliente,p.producto,p.pedidoVenta,p.proveedor].some(s=>s&&s.toLowerCase().includes(q)));
+  const rows=pedidos.filter(p=>!q||[p.title,p.cliente,p.producto,p.envioAsociado,p.proveedor].some(s=>s&&s.toLowerCase().includes(q)));
   const tbody=document.getElementById('tbodyP'),empty=document.getElementById('emptyP'),table=document.getElementById('tableP');
   if(!tbody)return;
   if(!rows.length){tbody.innerHTML='';if(empty)empty.style.display='';if(table)table.style.display='none';return;}
   if(empty)empty.style.display='none';if(table)table.style.display='';
   tbody.innerHTML=rows.map(p=>{
-    const linked=envios.find(e=>e.title===p.pedidoVenta);
-    const vencida=p.eta&&new Date(p.eta)<today;
+    const linked=envios.find(e=>e.title===p.envioAsociado);
+    const vencida=p.eta&&new Date(p.eta)<today&&p.estado!=='Finalizado';
     return `<tr class="${vencida?'row-vencida':''}">
       <td><strong style="font-weight:600">${esc(p.title)}</strong>${vencida?'<span style="color:#dc2626;font-size:11px;margin-left:6px">⚠ Vencido</span>':''}</td>
       <td>${esc(p.cliente)}</td>
-      <td>${esc(p.producto)}</td>
+      <td class="td-clip" title="${esc(p.producto)}">${esc(p.producto)}</td>
       <td>${esc(p.proveedor)||'—'}</td>
-      <td>${linked?`<span style="color:#0078d4">${esc(p.pedidoVenta)}</span>`:(p.pedidoVenta?esc(p.pedidoVenta):'<span style="color:#9ca3af;font-size:12px">Sin asignar</span>')}</td>
+      <td>${linked?`<span style="color:#0078d4">${esc(p.envioAsociado)}</span>`:(p.envioAsociado?esc(p.envioAsociado):'<span style="color:#9ca3af;font-size:12px">Sin asignar</span>')}</td>
       <td><span class="${etaClass(p.eta)}">${formatDate(p.eta)}</span></td>
+      <td>${badgePedidoEstado(p.estado)}</td>
       <td class="td-clip" title="${esc(p.notas)}">${esc(p.notas)||'—'}</td>
-      <td><button class="action-btn" onclick="openModalPedido(${p.id})">Editar</button><button class="action-btn action-del" onclick="delPedido(${p.id})">Borrar</button></td>
+      <td>
+        <button class="action-btn action-view" onclick="viewPedido(${p.id})">👁 Ver</button>
+        <button class="action-btn" onclick="openModalPedido(${p.id})">Editar</button>
+        <button class="action-btn action-del" onclick="delPedido(${p.id})">Borrar</button>
+      </td>
     </tr>`;
   }).join('');
 }
 
 function renderTareas() {
-  const today=new Date(); today.setHours(0,0,0,0);
+  const today=new Date();today.setHours(0,0,0,0);
   const q=(document.getElementById('searchT')?.value||'').toLowerCase();
   const rows=tareas.filter(t=>{
     const mq=!q||[t.title,t.asignado,t.descripcion].some(s=>s&&s.toLowerCase().includes(q));
@@ -590,15 +618,18 @@ function renderTareas() {
   if(empty)empty.style.display='none';if(table)table.style.display='';
   tbody.innerHTML=rows.map(t=>{
     const vencida=t.fechaLimite&&new Date(t.fechaLimite)<today&&t.estado!=='Terminado';
+    const bPri={'Alta':'b-alta','Media':'b-media','Baja':'b-baja'}[t.prioridad]||'b-pendiente';
+    const bEst={'Pendiente':'b-pendiente','En proceso':'b-enproceso','Terminado':'b-terminado'}[t.estado]||'b-pendiente';
     return `<tr class="${vencida?'row-vencida':''}">
       <td><strong style="font-weight:600">${esc(t.title)}</strong>${vencida?'<span style="color:#dc2626;font-size:11px;margin-left:6px">⚠ Vencida</span>':''}</td>
       <td class="td-clip" title="${esc(t.descripcion)}">${esc(t.descripcion)||'—'}</td>
       <td>${esc(t.asignado)||'—'}</td>
       <td><span class="${etaClass(t.fechaLimite)}">${formatDate(t.fechaLimite)}</span></td>
-      <td>${badge(t.prioridad,'prioridad')}</td>
-      <td>${badge(t.estado,'estadoT')}</td>
+      <td><span class="badge ${bPri}">${t.prioridad||'—'}</span></td>
+      <td><span class="badge ${bEst}">${t.estado||'—'}</span></td>
       <td>
-        ${t.estado!=='Terminado'?`<button class="action-btn action-done" onclick="marcarTerminada(${t.id})">✓ Terminada</button>`:''}
+        <button class="action-btn action-view" onclick="viewTarea(${t.id})">👁 Ver</button>
+        ${t.estado!=='Terminado'?`<button class="action-btn action-done" onclick="marcarTerminada(${t.id})">✓ Hecha</button>`:''}
         <button class="action-btn" onclick="openModalTarea(${t.id})">Editar</button>
         <button class="action-btn action-del" onclick="delTarea(${t.id})">Borrar</button>
       </td>
@@ -606,24 +637,42 @@ function renderTareas() {
   }).join('');
 }
 
-function setStatus(t,msg){const b=document.getElementById('statusBadge');if(!b)return;b.className='status-badge status-'+t;b.textContent=msg;}
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function formatDate(d){if(!d)return'—';try{return new Date(d).toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit',year:'numeric'});}catch{return d;}}
-function etaClass(d){if(!d)return'';const today=new Date();today.setHours(0,0,0,0);const diff=(new Date(d)-today)/86400000;return diff<0?'eta-late':diff<=3?'eta-near':'';}
-function olc(ev,id){if(ev.target.classList.contains('modal-overlay'))cm(id);}
-function cm(id){document.getElementById(id).style.display='none';}
-
-function badge(k,tipo) {
-  const maps={
-    tipo:     {'Aéreo':['b-aereo','✈ Aéreo'],'Marítimo':['b-maritimo','⚓ Marítimo']},
-    estado:   {'En tránsito':['b-transito','En tránsito'],'En aduana':['b-aduana','En aduana'],'Entregado':['b-entregado','Entregado'],'Pendiente':['b-pendiente','Pendiente']},
-    prioridad:{'Alta':['b-alta','🔴 Alta'],'Media':['b-media','🟡 Media'],'Baja':['b-baja','🟢 Baja']},
-    estadoT:  {'Pendiente':['b-pendiente','Pendiente'],'En proceso':['b-enproceso','En proceso'],'Terminado':['b-terminado','Terminado']}
-  };
-  const [cls,lbl]=(maps[tipo]||{})[k]||['b-pendiente',k||'—'];
-  return `<span class="badge ${cls}">${lbl}</span>`;
+// VIEW modals
+function viewEnvio(id) {
+  const e=envios.find(x=>x.id===id);if(!e)return;
+  document.getElementById('viewTitleE').textContent=e.title||'Detalle del envío';
+  document.getElementById('viewBodyE').innerHTML=`
+    ${vf('Tipo de envío',e.tipo)} ${vf('Estado',e.estado)}
+    ${vf('Origen',e.origen)} ${vf('Destino',e.destino)}
+    ${vf('Proveedor / Naviera',e.proveedor)} ${vf('ETA',formatDate(e.eta))}
+    <hr class="view-sep">
+    ${vf('PCs Asociados',e.pcs,true)}
+    ${e.seguimiento?`<div class="view-field full"><div class="view-label">Seguimiento</div><div class="view-value"><a href="${esc(e.seguimiento)}" target="_blank" class="link-tr">Ver tracking en tiempo real →</a></div></div>`:''}
+    ${vf('Notas',e.notas,true)}`;
+  document.getElementById('viewModalE').style.display='flex';
+}
+function viewPedido(id) {
+  const p=pedidos.find(x=>x.id===id);if(!p)return;
+  document.getElementById('viewTitleP').textContent=p.title||'Detalle del pedido';
+  document.getElementById('viewBodyP').innerHTML=`
+    ${vf('Cliente',p.cliente)} ${vf('Proveedor',p.proveedor)}
+    ${vf('Producto',p.producto,true)}
+    ${vf('Envío asociado',p.envioAsociado)} ${vf('ETA Cliente',formatDate(p.eta))}
+    ${vf('Estado',p.estado,true)}
+    ${vf('Notas',p.notas,true)}`;
+  document.getElementById('viewModalP').style.display='flex';
+}
+function viewTarea(id) {
+  const t=tareas.find(x=>x.id===id);if(!t)return;
+  document.getElementById('viewTitleT').textContent=t.title||'Detalle de la tarea';
+  document.getElementById('viewBodyT').innerHTML=`
+    ${vf('Asignado a',t.asignado)} ${vf('Fecha límite',formatDate(t.fechaLimite))}
+    ${vf('Prioridad',t.prioridad)} ${vf('Estado',t.estado)}
+    ${vf('Descripción',t.descripcion,true)}`;
+  document.getElementById('viewModalT').style.display='flex';
 }
 
+// Edit modals
 function openModalEnvio(id) {
   editEId=id;
   const e=id!==null?envios.find(x=>x.id===id):null;
@@ -640,7 +689,6 @@ function openModalEnvio(id) {
   document.getElementById('eNotas').value=e?.notas||'';
   document.getElementById('modalE').style.display='flex';
 }
-
 function openModalPedido(id) {
   editPId=id;
   const p=id!==null?pedidos.find(x=>x.id===id):null;
@@ -650,12 +698,12 @@ function openModalPedido(id) {
   document.getElementById('pProducto').value=p?.producto||'';
   document.getElementById('pProveedor').value=p?.proveedor||'';
   document.getElementById('pETA').value=p?.eta||'';
+  document.getElementById('pEstado').value=p?.estado||'No Recibido - En Transito';
   document.getElementById('pNotas').value=p?.notas||'';
-  const sel=document.getElementById('pPedidoVenta');
-  sel.innerHTML='<option value="">— Sin asignar —</option>'+envios.map(e=>`<option value="${esc(e.title)}" ${p?.pedidoVenta===e.title?'selected':''}>${esc(e.title)}</option>`).join('');
+  const sel=document.getElementById('pEnvioAsociado');
+  sel.innerHTML='<option value="">— Sin asignar —</option>'+envios.map(e=>`<option value="${esc(e.title)}" ${p?.envioAsociado===e.title?'selected':''}>${esc(e.title)}</option>`).join('');
   document.getElementById('modalP').style.display='flex';
 }
-
 function openModalTarea(id) {
   editTId=id;
   const t=id!==null?tareas.find(x=>x.id===id):null;
@@ -669,9 +717,9 @@ function openModalTarea(id) {
   document.getElementById('modalT').style.display='flex';
 }
 
+// CRUD
 async function saveEnvio() {
-  const btn=document.getElementById('btnSaveE');
-  btn.disabled=true;btn.textContent='Guardando…';
+  const btn=document.getElementById('btnSaveE');btn.disabled=true;btn.textContent='Guardando…';
   const item={title:document.getElementById('eTitle').value.trim(),tipo:document.getElementById('eTipo').value,estado:document.getElementById('eEstado').value,origen:document.getElementById('eOrigen').value.trim(),destino:document.getElementById('eDestino').value.trim(),proveedor:document.getElementById('eProveedor').value.trim(),eta:document.getElementById('eETA').value,seguimiento:document.getElementById('eSeguimiento').value.trim(),pcs:document.getElementById('ePCs').value.trim(),notas:document.getElementById('eNotas').value.trim()};
   if(!item.title){alert('El nombre es obligatorio.');btn.disabled=false;btn.textContent='Guardar';return;}
   try {
@@ -682,11 +730,9 @@ async function saveEnvio() {
   } catch(err){alert('Error: '+err.message);}
   btn.disabled=false;btn.textContent='Guardar';
 }
-
 async function savePedido() {
-  const btn=document.getElementById('btnSaveP');
-  btn.disabled=true;btn.textContent='Guardando…';
-  const item={title:document.getElementById('pTitle').value.trim(),cliente:document.getElementById('pCliente').value.trim(),producto:document.getElementById('pProducto').value.trim(),proveedor:document.getElementById('pProveedor').value.trim(),pedidoVenta:document.getElementById('pPedidoVenta').value,eta:document.getElementById('pETA').value,notas:document.getElementById('pNotas').value.trim()};
+  const btn=document.getElementById('btnSaveP');btn.disabled=true;btn.textContent='Guardando…';
+  const item={title:document.getElementById('pTitle').value.trim(),cliente:document.getElementById('pCliente').value.trim(),producto:document.getElementById('pProducto').value.trim(),proveedor:document.getElementById('pProveedor').value.trim(),envioAsociado:document.getElementById('pEnvioAsociado').value,eta:document.getElementById('pETA').value,estado:document.getElementById('pEstado').value,notas:document.getElementById('pNotas').value.trim()};
   if(!item.title){alert('El título es obligatorio.');btn.disabled=false;btn.textContent='Guardar';return;}
   try {
     if(editPId!==null){await spUpdate('Pedidos',editPId,etypeP,pedidoToRow(item));pedidos=pedidos.map(p=>p.id===editPId?{...item,id:editPId}:p);}
@@ -696,10 +742,8 @@ async function savePedido() {
   } catch(err){alert('Error: '+err.message);}
   btn.disabled=false;btn.textContent='Guardar';
 }
-
 async function saveTarea() {
-  const btn=document.getElementById('btnSaveT');
-  btn.disabled=true;btn.textContent='Guardando…';
+  const btn=document.getElementById('btnSaveT');btn.disabled=true;btn.textContent='Guardando…';
   const item={title:document.getElementById('tTitle').value.trim(),descripcion:document.getElementById('tDescripcion').value.trim(),asignado:document.getElementById('tAsignado').value.trim(),fechaLimite:document.getElementById('tFechaLimite').value,prioridad:document.getElementById('tPrioridad').value,estado:document.getElementById('tEstado').value};
   if(!item.title){alert('El título es obligatorio.');btn.disabled=false;btn.textContent='Guardar';return;}
   try {
@@ -710,27 +754,29 @@ async function saveTarea() {
   } catch(err){alert('Error: '+err.message);}
   btn.disabled=false;btn.textContent='Guardar';
 }
-
 async function marcarTerminada(id) {
-  try {
-    await spUpdate('Tareas Pendientes',id,etypeT,{[FT.estado]:'Terminado'});
-    tareas=tareas.map(t=>t.id===id?{...t,estado:'Terminado'}:t);
-    renderKPIs();renderAlertBanner();renderTareas();
-  } catch(err){alert('Error: '+err.message);}
+  try{await spUpdate('Tareas Pendientes',id,etypeT,{[FT.estado]:'Terminado'});tareas=tareas.map(t=>t.id===id?{...t,estado:'Terminado'}:t);renderKPIs();renderAlertBanner();renderTareas();}
+  catch(err){alert('Error: '+err.message);}
 }
-
 async function delEnvio(id){if(!confirm('¿Eliminar este envío?'))return;try{await spDelete('Envios',id);envios=envios.filter(e=>e.id!==id);renderKPIs();renderAlertBanner();renderEnvios();}catch(err){alert('Error: '+err.message);}}
 async function delPedido(id){if(!confirm('¿Eliminar este pedido?'))return;try{await spDelete('Pedidos',id);pedidos=pedidos.filter(p=>p.id!==id);renderKPIs();renderAlertBanner();renderPedidos();}catch(err){alert('Error: '+err.message);}}
 async function delTarea(id){if(!confirm('¿Eliminar esta tarea?'))return;try{await spDelete('Tareas Pendientes',id);tareas=tareas.filter(t=>t.id!==id);renderKPIs();renderAlertBanner();renderTareas();}catch(err){alert('Error: '+err.message);}}
 
-function switchTab(tab) {
-  document.getElementById('panelEnvios').style.display  =tab==='envios' ?'':'none';
-  document.getElementById('panelPedidos').style.display =tab==='pedidos'?'':'none';
-  document.getElementById('panelTareas').style.display  =tab==='tareas' ?'':'none';
+function switchTab(tab){
+  document.getElementById('panelEnvios').style.display=tab==='envios'?'':'none';
+  document.getElementById('panelPedidos').style.display=tab==='pedidos'?'':'none';
+  document.getElementById('panelTareas').style.display=tab==='tareas'?'':'none';
   ['tabE','tabP','tabT'].forEach((id,i)=>{const t=document.getElementById(id);if(t)t.classList.toggle('active',['envios','pedidos','tareas'][i]===tab);});
-  if(tab==='pedidos') renderPedidos();
-  if(tab==='tareas') renderTareas();
+  if(tab==='pedidos')renderPedidos();
+  if(tab==='tareas')renderTareas();
 }
+
+function setStatus(t,msg){const b=document.getElementById('statusBadge');if(!b)return;b.className='status-badge status-'+t;b.textContent=msg;}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function formatDate(d){if(!d)return'—';try{return new Date(d).toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit',year:'numeric'});}catch{return d;}}
+function etaClass(d){if(!d)return'';const today=new Date();today.setHours(0,0,0,0);const diff=(new Date(d)-today)/86400000;return diff<0?'eta-late':diff<=3?'eta-near':'';}
+function olc(ev,id){if(ev.target.classList.contains('modal-overlay'))cm(id);}
+function cm(id){document.getElementById(id).style.display='none';}
 
 setInterval(()=>{if(accessToken)loadAll();},60000);
 render();
