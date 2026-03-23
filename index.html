@@ -259,7 +259,7 @@ const FT = { title:'Title', descripcion:'Descripci_x00f3_n', asignado:'Asignado'
 let msalInstance=null, accessToken=null, currentUser=null;
 let envios=[], pedidos=[], tareas=[];
 let editEId=null, editPId=null, editTId=null;
-let filterE='todos', filterT='todos';
+let filterE='activos', filterT='todos', filterP='todos';
 let etypeE='SP.Data.EnviosListItem';
 let etypeP='SP.Data.PedidosListItem';
 let etypeT='SP.Data.Tareas_x0020_PendientesListItem';
@@ -384,7 +384,7 @@ function showApp() {
         </div>
         <div id="panelPedidos" style="display:none">
           <div class="toolbar">
-            <div><input class="search-input" type="text" placeholder="Buscar cliente, producto, envío asociado…" oninput="renderPedidos()" id="searchP"></div>
+            <div><input class="search-input" type="text" placeholder="Buscar cliente, producto, envío asociado…" oninput="renderPedidos()" id="searchP"><div class="filter-chips" id="chipsP"></div></div>
             <button class="btn-add" onclick="openModalPedido(null)">+ Nuevo pedido</button>
           </div>
           <div class="table-wrap">
@@ -514,14 +514,17 @@ function renderAlertBanner() {
   if(banner)banner.innerHTML=alerts.length?`<div class="alert-banner">⚠ ${alerts.join(' · ')}</div>`:'';
 }
 
-const FE_OPT=['todos','Aéreo','Marítimo','Terrestre','En tránsito','En aduana','Entregado'];
+const FE_OPT=['activos','todos','Aéreo','Marítimo','Terrestre','En tránsito','En aduana','Entregado'];
+const FP_OPT=['todos','Finalizado','Recibido - En fabricación','No Recibido - En Transito','No Recibido - Rotura de Stock'];
 const FT_OPT=['todos','Pendiente','En proceso','Terminado','Alta','Media','Baja'];
-const FLBL={todos:'Todos','Aéreo':'Aéreo','Marítimo':'Marítimo','Terrestre':'Terrestre','En tránsito':'En tránsito','En aduana':'En aduana','Entregado':'Entregado','Pendiente':'Pendiente','En proceso':'En proceso','Terminado':'Terminado','Alta':'Alta','Media':'Media','Baja':'Baja'};
+const FLBL={todos:'Todos',activos:'Activos','Aéreo':'Aéreo','Marítimo':'Marítimo','Terrestre':'Terrestre','En tránsito':'En tránsito','En aduana':'En aduana','Entregado':'Entregado','Pendiente':'Pendiente','En proceso':'En proceso','Terminado':'Terminado','Alta':'Alta','Media':'Media','Baja':'Baja','Finalizado':'Finalizado','Recibido - En fabricación':'Rec. Fabricación','No Recibido - En Transito':'No Rec. Tránsito','No Recibido - Rotura de Stock':'Rotura Stock'};
 function renderChips(){
   const ce=document.getElementById('chipsE');if(ce)ce.innerHTML=FE_OPT.map(f=>`<button class="chip ${filterE===f?'active':''}" onclick="setFE('${f}')">${FLBL[f]}</button>`).join('');
+  const cp=document.getElementById('chipsP');if(cp)cp.innerHTML=FP_OPT.map(f=>`<button class="chip ${filterP===f?'active':''}" onclick="setFP('${f}')">${FLBL[f]||f}</button>`).join('');
   const ct=document.getElementById('chipsT');if(ct)ct.innerHTML=FT_OPT.map(f=>`<button class="chip ${filterT===f?'active':''}" onclick="setFT('${f}')">${FLBL[f]}</button>`).join('');
 }
 function setFE(f){filterE=f;renderChips();renderEnvios();}
+function setFP(f){filterP=f;renderChips();renderPedidos();}
 function setFT(f){filterT=f;renderChips();renderTareas();}
 
 function badgePedidoEstado(k) {
@@ -545,7 +548,7 @@ function renderEnvios() {
   const q=(document.getElementById('searchE')?.value||'').toLowerCase();
   const rows=envios.filter(e=>{
     const mq=!q||[e.title,e.origen,e.destino,e.proveedor,e.pcs].some(s=>s&&s.toLowerCase().includes(q));
-    const mf=filterE==='todos'||e.tipo===filterE||e.estado===filterE;
+    const mf=filterE==='todos'||(filterE==='activos'&&e.estado!=='Entregado')||e.tipo===filterE||e.estado===filterE;
     return mq&&mf;
   });
   const tbody=document.getElementById('tbodyE'),empty=document.getElementById('emptyE'),table=document.getElementById('tableE');
@@ -578,7 +581,7 @@ function renderEnvios() {
 function renderPedidos() {
   const today=new Date();today.setHours(0,0,0,0);
   const q=(document.getElementById('searchP')?.value||'').toLowerCase();
-  const rows=pedidos.filter(p=>!q||[p.title,p.cliente,p.producto,p.envioAsociado,p.proveedor].some(s=>s&&s.toLowerCase().includes(q)));
+  const rows=pedidos.filter(p=>{const mq=!q||[p.title,p.cliente,p.producto,p.envioAsociado,p.proveedor].some(s=>s&&s.toLowerCase().includes(q));const mf=filterP==='todos'||p.estado===filterP;return mq&&mf;});
   const tbody=document.getElementById('tbodyP'),empty=document.getElementById('emptyP'),table=document.getElementById('tableP');
   if(!tbody)return;
   if(!rows.length){tbody.innerHTML='';if(empty)empty.style.display='';if(table)table.style.display='none';return;}
