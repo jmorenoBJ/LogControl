@@ -492,6 +492,7 @@ const CFG = {
     fileName2: "REPARACIONES REE desde 2020.xls",
     repairSheet: "REPARACIONES REE",
     repairSNCol: "Nº SERIE",
+    repairEquipoCol: "EQUIPO",
     repairCols: [
         "Nº CASO", "CECO (OT)", "REFERENCIA\nREPARACION", "FECHA DE ENVIO",
         "EQUIPO", "FECHA RECEPCION", "OPL", "GARANTIA",
@@ -721,7 +722,12 @@ async function search() {
 
     // Buscar reparaciones (puede haber varias)
     if (repairs) {
-        const repMatches = repairs.filter(r => matchesSN(r[CFG.repairSNCol], raw));
+        const repMatches = repairs.filter(r => {
+            const equipo = String(r[CFG.repairEquipoCol] ?? "").trim();
+            const nserie = String(r[CFG.repairSNCol] ?? "").trim();
+            const full   = equipo + nserie; // e.g. "GPS" + "2508006" = "GPS2508006"
+            return matchesSN(full, raw);
+        });
         if (repMatches.length > 0) renderRepairs(repMatches);
     }
 
