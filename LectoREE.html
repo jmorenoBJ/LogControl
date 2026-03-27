@@ -334,7 +334,7 @@ const CFG = {
     tenantId: "709f022e-4ae7-45d8-93ce-3070ff919136",
     siteHost: "bjumper.sharepoint.com",
     sitePath: "/sites/COMPRAS-LOGISTICA",
-    itemId:   "B8E49041-4979-4AF5-8C2F-47C5D138C7A8",
+    filePath: "/Documentos compartidos/Seguimiento de N de serie GPS-RX-TX.xls",
     sheets: {
         "GPS NUEVO": [
             "NUMEROS DE SERIE",
@@ -411,7 +411,7 @@ async function loadExcel(force = false) {
 
     try {
         const token = await getToken();
-        const url   = `https://graph.microsoft.com/v1.0/sites/${CFG.siteHost}:${CFG.sitePath}:/drive/items/${CFG.itemId}/content`;
+        const url   = `https://graph.microsoft.com/v1.0/sites/${CFG.siteHost}:${CFG.sitePath}:/drive/root:${CFG.filePath}:/content`;
         const res   = await fetch(url, { headers: { Authorization: "Bearer " + token } });
 
         if (!res.ok) throw new Error(`HTTP ${res.status} — ${(await res.text()).substring(0, 200)}`);
