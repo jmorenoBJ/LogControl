@@ -414,19 +414,24 @@ async function loadExcel(force = false) {
 
     try {
         const token = await getToken();
+        const headers = { Authorization: "Bearer " + token };
 
-        // Paso 1: buscar fichero por nombre en todo el drive
-        const searchUrl = `https://graph.microsoft.com/v1.0/sites/${CFG.siteHost}:${CFG.sitePath}:/drive/search(q='${encodeURIComponent(CFG.fileName)}')`;
-        const searchRes = await fetch(searchUrl, { headers: { Authorization: "Bearer " + token } });
+        // Paso 1: resolver el ID real del sitio
+        const siteRes = await fetch(`https://graph.microsoft.com/v1.0/sites/${CFG.siteHost}:${CFG.sitePath}`, { headers });
+        if (!siteRes.ok) throw new Error(`Site HTTP ${siteRes.status} — ${(await siteRes.text()).substring(0, 300)}`);
+        const siteData = await siteRes.json();
+        const siteId = siteData.id;
+
+        // Paso 2: buscar fichero por nombre en el drive del sitio
+        const searchRes = await fetch(`https://graph.microsoft.com/v1.0/sites/${siteId}/drive/search(q='${encodeURIComponent(CFG.fileName)}')`, { headers });
         if (!searchRes.ok) throw new Error(`Búsqueda HTTP ${searchRes.status} — ${(await searchRes.text()).substring(0, 300)}`);
         const searchData = await searchRes.json();
         const fileItem = (searchData.value || []).find(f => f.name === CFG.fileName);
-        if (!fileItem) throw new Error(`Fichero "${CFG.fileName}" no encontrado en SharePoint`);
+        if (!fileItem) throw new Error(`Fichero "${CFG.fileName}" no encontrado`);
 
-        // Paso 2: descargar por ID
-        const url = `https://graph.microsoft.com/v1.0/sites/${CFG.siteHost}:${CFG.sitePath}:/drive/items/${fileItem.id}/content`;
-        const res = await fetch(url, { headers: { Authorization: "Bearer " + token } });
-        if (!res.ok) throw new Error(`HTTP ${res.status} — ${(await res.text()).substring(0, 300)}`);
+        // Paso 3: descargar por ID
+        const res = await fetch(`https://graph.microsoft.com/v1.0/sites/${siteId}/drive/items/${fileItem.id}/content`, { headers });
+        if (!res.ok) throw new Error(`Descarga HTTP ${res.status} — ${(await res.text()).substring(0, 300)}`);
 
         const workbook = XLSX.read(await res.arrayBuffer(), { type: "array", cellDates: true });
 
