@@ -442,6 +442,15 @@ async function loadExcel(force = false) {
         }
 
         cacheTime = new Date();
+
+        // DEBUG — muestra pestañas y columnas reales del Excel
+        let dbg = "PESTAÑAS Y COLUMNAS ENCONTRADAS:\n";
+        for (const [sn, rows] of Object.entries(excelCache)) {
+            dbg += `\n[${sn}] (${rows.length} filas)\n`;
+            if (rows.length > 0) dbg += "  Columnas: " + Object.keys(rows[0]).map(k => JSON.stringify(k)).join(", ");
+        }
+        alert(dbg);
+
         hideLoading();
         updateCacheInfo();
         return excelCache;
