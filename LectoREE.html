@@ -349,6 +349,60 @@
 
         .scanner-hint { font-size: 12px; color: #6b7280; text-align: center; }
 
+        /* ── REPAIRS SECTION ── */
+        .repairs-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 8px;
+            padding: 12px 20px;
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            border-radius: 12px 12px 0 0;
+            border-bottom: none;
+        }
+        .repairs-header h3 {
+            font-size: 13px;
+            font-weight: 700;
+            color: #92400e;
+        }
+        .repairs-icon {
+            width: 28px; height: 28px;
+            background: #fef3c7;
+            border: 1px solid #fde68a;
+            border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px;
+        }
+        .repairs-count {
+            margin-left: auto;
+            font-size: 11px;
+            font-weight: 600;
+            color: #d97706;
+            background: #fef3c7;
+            padding: 2px 8px;
+            border-radius: 20px;
+            border: 1px solid #fde68a;
+        }
+        .repair-card {
+            background: #fff;
+            border: 1px solid #fde68a;
+            border-top: none;
+        }
+        .repair-card:last-child { border-radius: 0 0 12px 12px; }
+        .repair-separator {
+            height: 3px;
+            background: repeating-linear-gradient(90deg, #fde68a 0, #fde68a 8px, transparent 8px, transparent 16px);
+        }
+        .repair-card .fields-grid { border-top: 1px solid #fef3c7; }
+        .repair-num {
+            font-size: 11px;
+            font-weight: 700;
+            color: #d97706;
+            padding: 8px 20px 0;
+            font-family: 'Roboto Mono', monospace;
+        }
+
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(8px); }
             to   { opacity: 1; transform: translateY(0); }
@@ -415,6 +469,7 @@
         </div>
 
         <div id="result-section"></div>
+        <div id="repair-section" style="display:none;"></div>
 
         <div id="not-found">
             <div class="code">404</div>
@@ -433,7 +488,17 @@ const CFG = {
     tenantId: "709f022e-4ae7-45d8-93ce-3070ff919136",
     siteHost: "bjumper.sharepoint.com",
     sitePath: "/sites/COMPRAS-LOGISTICA",
-    fileName: "Seguimiento de N de serie GPS-RX-TX.xls",
+    fileName:  "Seguimiento de N de serie GPS-RX-TX.xls",
+    fileName2: "REPARACIONES REE desde 2020.xls",
+    repairSheet: "REPARACIONES REE",
+    repairSNCol: "Nº SERIE",
+    repairCols: [
+        "Nº CASO", "CECO (OT)", "REFERENCIA\nREPARACION", "FECHA DE ENVIO",
+        "EQUIPO", "FECHA RECEPCION", "OPL", "GARANTIA",
+        "AVERIA SEGÚN CLIENTE", "AVERIA SEGÚN TELECOCABLE",
+        "FIRMWARE EQUIPO", "RECEPTOR TRIMBLE FIRMWARE APLIC.", "RECEPTOR TRIMBLE FECHA",
+        "FECHA DE REPARACION", "PERSONA QUE LO ENVIA", "Para quien?"
+    ],
     sheets: {
         "P3690 GPS NUEVO": [
             "NUMEROS\nDE SERIE",
@@ -477,8 +542,9 @@ const msalApp = new msal.PublicClientApplication({
     cache: { cacheLocation: "sessionStorage" }
 });
 
-let excelCache = null;
-let cacheTime  = null;
+let excelCache  = null;
+let repairCache = null;
+let cacheTime   = null;
 
 async function login() {
     try {
@@ -510,7 +576,8 @@ function onLoggedIn() {
     input.focus();
     input.addEventListener("keydown", e => { if (e.key === "Enter") search(); });
 
-    loadExcel(); // precarga en background
+    loadExcel();  // precarga en background
+    loadRepairs(); // precarga reparaciones
 }
 
 // ── EXCEL ──────────────────────────────────────────────────
@@ -561,6 +628,44 @@ async function loadExcel(force = false) {
     }
 }
 
+// ── EXCEL REPARACIONES ────────────────────────────────────
+async function loadRepairs(force = false) {
+    if (repairCache && !force) return repairCache;
+    try {
+        const token = await getToken();
+        const headers = { Authorization: "Bearer " + token };
+
+        const siteRes = await fetch(`https://graph.microsoft.com/v1.0/sites/${CFG.siteHost}:${CFG.sitePath}`, { headers });
+        if (!siteRes.ok) return null;
+        const siteId = (await siteRes.json()).id;
+
+        const searchRes = await fetch(`https://graph.microsoft.com/v1.0/sites/${siteId}/drive/search(q='${encodeURIComponent(CFG.fileName2)}')`, { headers });
+        if (!searchRes.ok) return null;
+        const searchData = await searchRes.json();
+        const fileItem = (searchData.value || []).find(f => f.name === CFG.fileName2);
+        if (!fileItem) return null;
+
+        const res = await fetch(`https://graph.microsoft.com/v1.0/sites/${siteId}/drive/items/${fileItem.id}/content`, { headers });
+        if (!res.ok) return null;
+
+        const workbook = XLSX.read(await res.arrayBuffer(), { type: "array", cellDates: true });
+        const ws = workbook.Sheets[CFG.repairSheet];
+        if (!ws) return null;
+
+        repairCache = XLSX.utils.sheet_to_json(ws, { defval: "" });
+
+        // DEBUG — quitar tras confirmar columnas
+        if (repairCache.length > 0) {
+            console.log("REPARACIONES columnas:", Object.keys(repairCache[0]).join(" | "));
+        }
+
+        return repairCache;
+    } catch (e) {
+        console.warn("No se pudo cargar el fichero de reparaciones:", e.message);
+        return null;
+    }
+}
+
 // ── BÚSQUEDA ───────────────────────────────────────────────
 
 // Dado "RX2511001-RX2511100" y query "RX2511005", devuelve true
@@ -600,18 +705,29 @@ async function search() {
 
     document.getElementById("result-section").style.display = "none";
     document.getElementById("not-found").style.display      = "none";
+    const rs = document.getElementById("repair-section"); if(rs) { rs.style.display="none"; rs.innerHTML=""; }
 
-    const data = await loadExcel();
+    const [data, repairs] = await Promise.all([loadExcel(), loadRepairs()]);
     if (!data) return;
 
+    let found = false;
+
+    // Buscar en fichero de fabricación
     for (const [sheetName, rows] of Object.entries(data)) {
         const colSN = CFG.sheets[sheetName][0];
         const match = rows.find(r => matchesSN(r[colSN], raw));
-        if (match) { renderResult(match, sheetName); return; }
+        if (match) { renderResult(match, sheetName); found = true; break; }
     }
 
-    document.getElementById("not-found").style.display = "block";
-    document.getElementById("not-found").classList.add("fade-in");
+    // Buscar reparaciones (puede haber varias)
+    if (repairs) {
+        const repMatches = repairs.filter(r => matchesSN(r[CFG.repairSNCol], raw));
+        if (repMatches.length > 0) renderRepairs(repMatches);
+    }
+
+    if (!found && document.getElementById("repair-section")?.style.display !== "block") {
+        document.getElementById("not-found").style.display = "block";
+    }
 }
 
 // ── RENDER ─────────────────────────────────────────────────
@@ -645,12 +761,52 @@ function renderResult(row, sheetName) {
     s.style.display = "block";
 }
 
+// ── RENDER REPARACIONES ────────────────────────────────────
+function renderRepairs(rows) {
+    const s = document.getElementById("repair-section");
+
+    const cards = rows.map((row, i) => {
+        const fields = CFG.repairCols.map(col => {
+            let value = row[col];
+            if (value instanceof Date) {
+                value = value.toLocaleDateString("es-ES", { day:"2-digit", month:"2-digit", year:"numeric" });
+            } else {
+                value = String(value ?? "").trim();
+            }
+            const wide = ["AVERIA SEGÚN CLIENTE","AVERIA SEGÚN TELECOCABLE"].includes(col);
+            const label = col.replace(/\n/g, " ");
+            return `<div class="field ${wide ? "wide" : ""}">
+                        <div class="field-label">${esc(label)}</div>
+                        <div class="field-value ${!value ? "empty" : ""}">${value ? esc(value) : "—"}</div>
+                    </div>`;
+        }).join("");
+
+        return `${i > 0 ? '<div class="repair-separator"></div>' : ''}
+                <div class="repair-card">
+                    ${rows.length > 1 ? `<div class="repair-num">REPARACIÓN ${i+1} de ${rows.length}</div>` : ''}
+                    <div class="fields-grid">${fields}</div>
+                </div>`;
+    }).join("");
+
+    s.innerHTML = `
+        <div class="fade-in">
+            <div class="repairs-header">
+                <div class="repairs-icon">🔧</div>
+                <h3>HISTORIAL DE REPARACIONES</h3>
+                <div class="repairs-count">${rows.length} ${rows.length === 1 ? "reparación" : "reparaciones"}</div>
+            </div>
+            ${cards}
+        </div>`;
+    s.style.display = "block";
+}
+
 // ── HELPERS ────────────────────────────────────────────────
 function showLoading(msg) {
     document.getElementById("loading-msg").textContent      = msg;
     document.getElementById("loading").style.display        = "block";
     document.getElementById("result-section").style.display = "none";
     document.getElementById("not-found").style.display      = "none";
+    const rs = document.getElementById("repair-section"); if(rs) { rs.style.display="none"; rs.innerHTML=""; }
 }
 
 function hideLoading() { document.getElementById("loading").style.display = "none"; }
@@ -661,7 +817,7 @@ function updateCacheInfo() {
         `DATOS CARGADOS: ${cacheTime.toLocaleTimeString("es-ES")} &nbsp;|&nbsp; <a href="#" onclick="reload(event)">ACTUALIZAR</a>`;
 }
 
-function reload(e) { e.preventDefault(); excelCache = null; loadExcel(true); }
+function reload(e) { e.preventDefault(); excelCache = null; repairCache = null; loadExcel(true); loadRepairs(true); }
 
 function esc(s) {
     return String(s)
