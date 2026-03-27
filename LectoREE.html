@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LectoREE — Bjumper</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/msal.js/2.39.0/msal-browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg:      #080b0f;
+            --surface: #0d1117;
+            --border:  #1c2333;
+            --accent:  #00d4ff;
+            --accent2: #ff6b35;
+            --text:    #dde8f0;
+            --muted:   #3d5068;
+            --success: #00ff99;
+            --error:   #ff3b5c;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Barlow', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* HEADER */
+        header {
+            width: 100%;
+            padding: 1.2rem 2.5rem;
+            border-bottom: 1px solid var(--border);
+            background: var(--surface);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .hex {
+            width: 32px; height: 32px;
+            background: var(--accent);
+            clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+            flex-shrink: 0;
+        }
+
+        header h1 {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1rem;
+            letter-spacing: 0.2em;
+            color: var(--accent);
+        }
+
+        .status {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.12em;
+            color: var(--muted);
+        }
+
+        .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); }
+        .dot.on { background: var(--success); animation: blink 2s infinite; }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+        /* MAIN */
+        main {
+            width: 100%;
+            max-width: 820px;
+            padding: 3rem 2rem 4rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* LOGIN */
+        #login-section {
+            margin-top: 6rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .login-icon {
+            width: 64px; height: 64px;
+            background: var(--accent);
+            clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+            opacity: 0.15;
+        }
+
+        #login-section h2 {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1rem;
+            letter-spacing: 0.15em;
+        }
+
+        #login-section p { font-size: 0.82rem; color: var(--muted); letter-spacing: 0.05em; }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.85rem 2.2rem;
+            border: 1px solid var(--accent);
+            background: var(--accent);
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.78rem;
+            letter-spacing: 0.15em;
+            cursor: pointer;
+            text-transform: uppercase;
+            color: #000;
+            transition: all 0.18s;
+        }
+        .btn-primary:hover { background: transparent; color: var(--accent); }
+
+        /* SEARCH */
+        .search-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.14em;
+            color: var(--muted);
+            margin-bottom: 0.7rem;
+        }
+
+        .search-row {
+            display: flex;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .search-row:focus-within {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 1px var(--accent), 0 0 24px rgba(0,212,255,0.08);
+        }
+
+        #serial-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            padding: 1.1rem 1.5rem;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.5rem;
+            color: var(--text);
+            letter-spacing: 0.1em;
+        }
+        #serial-input::placeholder { color: var(--muted); font-size: 1rem; letter-spacing: 0.05em; }
+
+        #search-btn {
+            background: var(--accent);
+            border: none;
+            padding: 0 2rem;
+            color: #000;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            cursor: pointer;
+            transition: background 0.18s;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+        #search-btn:hover { background: #00b5d8; }
+
+        /* LOADING */
+        #loading { display: none; text-align: center; padding: 3rem 1rem; }
+
+        .spinner {
+            width: 36px; height: 36px;
+            border: 2px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.75s linear infinite;
+            margin: 0 auto 1.2rem;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        #loading-msg {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--muted);
+            letter-spacing: 0.12em;
+        }
+
+        /* RESULT */
+        #result-section { display: none; }
+
+        .result-header {
+            display: flex;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 0.8rem 1.2rem;
+            padding-bottom: 1.2rem;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 1.5rem;
+        }
+
+        .result-sn {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 2rem;
+            color: var(--accent);
+            word-break: break-all;
+        }
+
+        .badge {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem;
+            padding: 0.28rem 0.8rem;
+            border: 1px solid var(--accent2);
+            color: var(--accent2);
+            letter-spacing: 0.1em;
+        }
+
+        .fields-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1px;
+            background: var(--border);
+        }
+
+        .field { background: var(--surface); padding: 1rem 1.25rem; }
+        .field.wide { grid-column: 1 / -1; }
+
+        .field-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.6rem;
+            color: var(--muted);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 0.4rem;
+        }
+
+        .field-value { font-size: 0.92rem; color: var(--text); }
+        .field-value.empty { color: var(--muted); font-style: italic; font-size: 0.8rem; }
+
+        /* NOT FOUND */
+        #not-found {
+            display: none;
+            text-align: center;
+            padding: 3rem;
+            border: 1px dashed var(--border);
+        }
+        #not-found .code {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 3.5rem;
+            color: var(--error);
+            opacity: 0.35;
+        }
+        #not-found p { color: var(--muted); font-size: 0.85rem; margin-top: 0.75rem; }
+
+        /* CACHE INFO */
+        .cache-info {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.62rem;
+            color: var(--muted);
+            letter-spacing: 0.08em;
+        }
+        .cache-info a { color: var(--accent); text-decoration: none; }
+        .cache-info a:hover { text-decoration: underline; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in { animation: fadeUp 0.3s ease forwards; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="hex"></div>
+    <h1>LECTORE&nbsp;E &nbsp;//&nbsp; BJUMPER</h1>
+    <div class="status">
+        <div class="dot" id="dot"></div>
+        <span id="status-text">DESCONECTADO</span>
+    </div>
+</header>
+
+<main>
+
+    <!-- LOGIN -->
+    <div id="login-section">
+        <div class="login-icon"></div>
+        <h2>AUTENTICACIÓN REQUERIDA</h2>
+        <p>Usa tu cuenta corporativa de Bjumper para acceder</p>
+        <button class="btn-primary" onclick="login()">⬡ &nbsp;INICIAR SESIÓN</button>
+    </div>
+
+    <!-- APP -->
+    <div id="app-section" style="display:none;">
+
+        <div>
+            <div class="search-label">// Introduce o escanea el número de serie</div>
+            <div class="search-row">
+                <input type="text" id="serial-input" placeholder="Nº DE SERIE..." autocomplete="off" />
+                <button id="search-btn" onclick="search()">BUSCAR</button>
+            </div>
+        </div>
+
+        <div id="loading">
+            <div class="spinner"></div>
+            <p id="loading-msg">CARGANDO DATOS...</p>
+        </div>
+
+        <div id="result-section"></div>
+
+        <div id="not-found">
+            <div class="code">404</div>
+            <p>Número de serie no encontrado en ninguna pestaña</p>
+        </div>
+
+        <div class="cache-info" id="cache-info"></div>
+
+    </div>
+</main>
+
+<script>
+// ── CONFIGURACIÓN ──────────────────────────────────────────
+const CFG = {
+    clientId: "d589d2d8-ab17-4602-a539-bfa628f5d64b",
+    tenantId: "709f022e-4ae7-45d8-93ce-3070ff919136",
+    siteHost: "bjumper.sharepoint.com",
+    sitePath: "/sites/COMPRAS-LOGISTICA",
+    itemId:   "B8E49041-4979-4AF5-8C2F-47C5D138C7A8",
+    sheets: {
+        "GPS NUEVO": [
+            "NUMEROS DE SERIE",
+            "NUMERO DE ORDEN",
+            "TOTAL UNIDADES",
+            "FECHA DE SALIDA",
+            "FABRICADO PARA",
+            "FIRMWARE EQUIPO RECEPTOR",
+            "TRIMBLE FIRMWARE",
+            "APLIC.RECEPTOR",
+            "TRIMBLE FECHA",
+            "OBSERVACIONES"
+        ],
+        "RX y TX": [
+            "NUMEROS DE SERIE",
+            "NUMERO DE OBRA DE PRODUCCION",
+            "TOTAL UNIDADES",
+            "FECHA DE SALIDA",
+            "FABRICADO PARA",
+            "OBSERVACIONES"
+        ]
+    }
+};
+
+const SCOPES = ["https://graph.microsoft.com/Files.Read"];
+
+// ── MSAL ───────────────────────────────────────────────────
+const msalApp = new msal.PublicClientApplication({
+    auth: {
+        clientId:    CFG.clientId,
+        authority:   `https://login.microsoftonline.com/${CFG.tenantId}`,
+        redirectUri: window.location.origin + window.location.pathname
+    },
+    cache: { cacheLocation: "sessionStorage" }
+});
+
+let excelCache = null;
+let cacheTime  = null;
+
+async function login() {
+    try {
+        await msalApp.loginPopup({ scopes: SCOPES });
+        onLoggedIn();
+    } catch (e) {
+        alert("Error al iniciar sesión:\n" + e.message);
+    }
+}
+
+async function getToken() {
+    const account = msalApp.getAllAccounts()[0];
+    if (!account) throw new Error("Sesión expirada. Recarga la página.");
+    const res = await msalApp.acquireTokenSilent({ scopes: SCOPES, account });
+    return res.accessToken;
+}
+
+function onLoggedIn() {
+    document.getElementById("login-section").style.display = "none";
+    document.getElementById("app-section").style.display   = "block";
+    document.getElementById("dot").classList.add("on");
+    document.getElementById("status-text").textContent     = "CONECTADO";
+
+    const input = document.getElementById("serial-input");
+    input.focus();
+    input.addEventListener("keydown", e => { if (e.key === "Enter") search(); });
+
+    loadExcel(); // precarga en background
+}
+
+// ── EXCEL ──────────────────────────────────────────────────
+async function loadExcel(force = false) {
+    if (excelCache && !force) return excelCache;
+
+    showLoading("DESCARGANDO DATOS DE SHAREPOINT...");
+
+    try {
+        const token = await getToken();
+        const url   = `https://graph.microsoft.com/v1.0/sites/${CFG.siteHost}:${CFG.sitePath}:/drive/items/${CFG.itemId}/content`;
+        const res   = await fetch(url, { headers: { Authorization: "Bearer " + token } });
+
+        if (!res.ok) throw new Error(`HTTP ${res.status} — ${(await res.text()).substring(0, 200)}`);
+
+        const workbook = XLSX.read(await res.arrayBuffer(), { type: "array", cellDates: true });
+
+        excelCache = {};
+        for (const sheetName of Object.keys(CFG.sheets)) {
+            const ws = workbook.Sheets[sheetName];
+            if (ws) excelCache[sheetName] = XLSX.utils.sheet_to_json(ws, { defval: "" });
+        }
+
+        cacheTime = new Date();
+        hideLoading();
+        updateCacheInfo();
+        return excelCache;
+
+    } catch (e) {
+        hideLoading();
+        alert("Error al leer el Excel:\n" + e.message);
+        return null;
+    }
+}
+
+// ── BÚSQUEDA ───────────────────────────────────────────────
+async function search() {
+    const raw = document.getElementById("serial-input").value.trim();
+    if (!raw) return;
+
+    document.getElementById("result-section").style.display = "none";
+    document.getElementById("not-found").style.display      = "none";
+
+    const data = await loadExcel();
+    if (!data) return;
+
+    for (const [sheetName, rows] of Object.entries(data)) {
+        const colSN = CFG.sheets[sheetName][0];
+        const match = rows.find(r =>
+            String(r[colSN] ?? "").trim().toLowerCase() === raw.toLowerCase()
+        );
+        if (match) { renderResult(match, sheetName); return; }
+    }
+
+    document.getElementById("not-found").style.display = "block";
+    document.getElementById("not-found").classList.add("fade-in");
+}
+
+// ── RENDER ─────────────────────────────────────────────────
+function renderResult(row, sheetName) {
+    const cols    = CFG.sheets[sheetName];
+    const snValue = String(row[cols[0]] ?? "").trim();
+
+    const fields = cols.slice(1).map(col => {
+        let value = row[col];
+        if (value instanceof Date) {
+            value = value.toLocaleDateString("es-ES", { day: "2-digit", month: "2-digit", year: "numeric" });
+        } else {
+            value = String(value ?? "").trim();
+        }
+        const wide = col === "OBSERVACIONES";
+        return `<div class="field ${wide ? "wide" : ""}">
+                    <div class="field-label">${esc(col)}</div>
+                    <div class="field-value ${!value ? "empty" : ""}">${value ? esc(value) : "—"}</div>
+                </div>`;
+    }).join("");
+
+    const s = document.getElementById("result-section");
+    s.innerHTML = `
+        <div class="fade-in">
+            <div class="result-header">
+                <div class="result-sn">${esc(snValue)}</div>
+                <div class="badge">${esc(sheetName)}</div>
+            </div>
+            <div class="fields-grid">${fields}</div>
+        </div>`;
+    s.style.display = "block";
+}
+
+// ── HELPERS ────────────────────────────────────────────────
+function showLoading(msg) {
+    document.getElementById("loading-msg").textContent      = msg;
+    document.getElementById("loading").style.display        = "block";
+    document.getElementById("result-section").style.display = "none";
+    document.getElementById("not-found").style.display      = "none";
+}
+
+function hideLoading() { document.getElementById("loading").style.display = "none"; }
+
+function updateCacheInfo() {
+    if (!cacheTime) return;
+    document.getElementById("cache-info").innerHTML =
+        `DATOS CARGADOS: ${cacheTime.toLocaleTimeString("es-ES")} &nbsp;|&nbsp; <a href="#" onclick="reload(event)">ACTUALIZAR</a>`;
+}
+
+function reload(e) { e.preventDefault(); excelCache = null; loadExcel(true); }
+
+function esc(s) {
+    return String(s)
+        .replace(/&/g,"&amp;").replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+
+// ── INIT ───────────────────────────────────────────────────
+msalApp.handleRedirectPromise().then(() => {
+    if (msalApp.getAllAccounts().length > 0) onLoggedIn();
+});
+</script>
+</body>
+</html>
