@@ -6,145 +6,152 @@
     <title>LectoREE — Bjumper</title>
     <script src="https://cdn.jsdelivr.net/npm/@azure/msal-browser@2.39.0/lib/msal-browser.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Mono&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg:      #080b0f;
-            --surface: #0d1117;
-            --border:  #1c2333;
-            --accent:  #00d4ff;
-            --accent2: #ff6b35;
-            --text:    #dde8f0;
-            --muted:   #3d5068;
-            --success: #00ff99;
-            --error:   #ff3b5c;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: 'Barlow', sans-serif;
+            font-family: 'Roboto', 'Segoe UI', system-ui, sans-serif;
+            background: #F5F6F8;
+            color: #1a1a1a;
+            font-size: 14px;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
         }
 
-        /* HEADER */
-        header {
-            width: 100%;
-            padding: 1.2rem 2.5rem;
-            border-bottom: 1px solid var(--border);
-            background: var(--surface);
+        /* ── TOPBAR ── */
+        .topbar {
+            background: #034068;
+            border-bottom: 3px solid #09B4E8;
+            padding: 12px 24px;
             display: flex;
             align-items: center;
-            gap: 1rem;
+            justify-content: space-between;
             position: sticky;
             top: 0;
-            z-index: 10;
+            z-index: 50;
         }
 
-        .hex {
-            width: 32px; height: 32px;
-            background: var(--accent);
-            clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
-            flex-shrink: 0;
+        .logo { display: flex; align-items: center; gap: 10px; }
+
+        .logo-icon {
+            width: 34px; height: 34px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px;
         }
 
-        header h1 {
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 1rem;
-            letter-spacing: 0.2em;
-            color: var(--accent);
+        .logo-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -0.3px;
         }
 
-        .status {
-            margin-left: auto;
+        .logo-sub {
+            font-size: 11px;
+            color: #a8d8f0;
+            margin-top: 1px;
+        }
+
+        .status-badge {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 0.65rem;
-            letter-spacing: 0.12em;
-            color: var(--muted);
+            gap: 6px;
+            font-size: 12px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            border: 1px solid;
+            white-space: nowrap;
         }
+        .status-badge::before {
+            content: '';
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            display: inline-block;
+            background: currentColor;
+        }
+        .status-ok   { color: #059669; background: #ecfdf5; border-color: #a7f3d0; }
+        .status-off  { color: #6b7280; background: #f9fafb; border-color: #e5e7eb; }
 
-        .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); }
-        .dot.on { background: var(--success); animation: blink 2s infinite; }
-        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
-
-        /* MAIN */
-        main {
-            width: 100%;
-            max-width: 820px;
-            padding: 3rem 2rem 4rem;
+        /* ── MAIN ── */
+        .main {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 32px 24px;
             display: flex;
             flex-direction: column;
-            gap: 2rem;
+            gap: 20px;
         }
 
-        /* LOGIN */
+        /* ── LOGIN ── */
         #login-section {
-            margin-top: 6rem;
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 56px 32px;
             text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 2rem;
-        }
-
-        .login-icon {
-            width: 64px; height: 64px;
-            background: var(--accent);
-            clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
-            opacity: 0.15;
+            gap: 16px;
+            margin-top: 40px;
         }
 
         #login-section h2 {
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 1rem;
-            letter-spacing: 0.15em;
+            font-size: 18px;
+            font-weight: 700;
+            color: #034068;
         }
 
-        #login-section p { font-size: 0.82rem; color: var(--muted); letter-spacing: 0.05em; }
+        #login-section p {
+            font-size: 13px;
+            color: #6b7280;
+        }
 
         .btn-primary {
             display: inline-flex;
             align-items: center;
-            gap: 0.6rem;
-            padding: 0.85rem 2.2rem;
-            border: 1px solid var(--accent);
-            background: var(--accent);
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 0.78rem;
-            letter-spacing: 0.15em;
+            gap: 8px;
+            padding: 10px 24px;
+            background: #034068;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
             cursor: pointer;
-            text-transform: uppercase;
-            color: #000;
-            transition: all 0.18s;
+            transition: background 0.15s;
         }
-        .btn-primary:hover { background: transparent; color: var(--accent); }
+        .btn-primary:hover { background: #023050; }
 
-        /* SEARCH */
+        /* ── SEARCH ── */
+        .search-card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
         .search-label {
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 0.65rem;
-            letter-spacing: 0.14em;
-            color: var(--muted);
-            margin-bottom: 0.7rem;
+            font-size: 11px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            margin-bottom: 10px;
         }
 
         .search-row {
             display: flex;
-            border: 1px solid var(--border);
-            background: var(--surface);
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            overflow: hidden;
             transition: border-color 0.2s, box-shadow 0.2s;
         }
         .search-row:focus-within {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 1px var(--accent), 0 0 24px rgba(0,212,255,0.08);
+            border-color: #09B4E8;
+            box-shadow: 0 0 0 3px rgba(9,180,232,0.12);
         }
 
         #serial-input {
@@ -152,144 +159,158 @@
             background: transparent;
             border: none;
             outline: none;
-            padding: 1.1rem 1.5rem;
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 1.5rem;
-            color: var(--text);
-            letter-spacing: 0.1em;
+            padding: 12px 16px;
+            font-size: 20px;
+            font-weight: 600;
+            color: #034068;
+            letter-spacing: 0.05em;
+            font-family: 'Roboto Mono', monospace;
         }
-        #serial-input::placeholder { color: var(--muted); font-size: 1rem; letter-spacing: 0.05em; }
+        #serial-input::placeholder { color: #d1d5db; font-size: 16px; font-weight: 400; }
 
         #search-btn {
-            background: var(--accent);
+            background: #034068;
             border: none;
-            padding: 0 2rem;
-            color: #000;
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 0.75rem;
-            letter-spacing: 0.15em;
+            padding: 0 24px;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
             cursor: pointer;
-            transition: background 0.18s;
-            text-transform: uppercase;
+            transition: background 0.15s;
             white-space: nowrap;
+            letter-spacing: .3px;
         }
-        #search-btn:hover { background: #00b5d8; }
+        #search-btn:hover { background: #023050; }
 
-        /* LOADING */
-        #loading { display: none; text-align: center; padding: 3rem 1rem; }
+        /* ── LOADING ── */
+        #loading { display: none; text-align: center; padding: 32px; }
 
         .spinner {
-            width: 36px; height: 36px;
-            border: 2px solid var(--border);
-            border-top-color: var(--accent);
+            width: 28px; height: 28px;
+            border: 2px solid #e5e7eb;
+            border-top-color: #09B4E8;
             border-radius: 50%;
-            animation: spin 0.75s linear infinite;
-            margin: 0 auto 1.2rem;
+            animation: spin 0.7s linear infinite;
+            margin: 0 auto 12px;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        #loading-msg {
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 0.7rem;
-            color: var(--muted);
-            letter-spacing: 0.12em;
-        }
+        #loading-msg { font-size: 13px; color: #6b7280; }
 
-        /* RESULT */
+        /* ── RESULT ── */
         #result-section { display: none; }
 
+        .result-card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
         .result-header {
+            background: #034068;
+            padding: 16px 20px;
             display: flex;
-            align-items: baseline;
+            align-items: center;
             flex-wrap: wrap;
-            gap: 0.8rem 1.2rem;
-            padding-bottom: 1.2rem;
-            border-bottom: 1px solid var(--border);
-            margin-bottom: 1.5rem;
+            gap: 10px;
         }
 
         .result-sn {
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 2rem;
-            color: var(--accent);
-            word-break: break-all;
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 0.05em;
+            font-family: 'Roboto Mono', monospace;
         }
 
-        .badge {
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 0.65rem;
-            padding: 0.28rem 0.8rem;
-            border: 1px solid var(--accent2);
-            color: var(--accent2);
-            letter-spacing: 0.1em;
+        .badge-sheet {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 20px;
+            background: rgba(9,180,232,0.25);
+            color: #09B4E8;
+            border: 1px solid rgba(9,180,232,0.4);
+            white-space: nowrap;
         }
 
         .fields-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 1px;
-            background: var(--border);
         }
 
-        .field { background: var(--surface); padding: 1rem 1.25rem; }
-        .field.wide { grid-column: 1 / -1; }
+        .field {
+            padding: 14px 20px;
+            border-bottom: 1px solid #f3f4f6;
+            border-right: 1px solid #f3f4f6;
+        }
+        .field:nth-child(even) { border-right: none; }
+        .field.wide {
+            grid-column: 1 / -1;
+            border-right: none;
+        }
+        .field:last-child, .field.wide:last-child { border-bottom: none; }
 
         .field-label {
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 0.6rem;
-            color: var(--muted);
-            letter-spacing: 0.12em;
+            font-size: 11px;
+            font-weight: 600;
+            color: #6b7280;
             text-transform: uppercase;
-            margin-bottom: 0.4rem;
+            letter-spacing: .4px;
+            margin-bottom: 4px;
         }
 
-        .field-value { font-size: 0.92rem; color: var(--text); }
-        .field-value.empty { color: var(--muted); font-style: italic; font-size: 0.8rem; }
+        .field-value { font-size: 14px; color: #111; font-weight: 500; }
+        .field-value.empty { color: #d1d5db; font-style: italic; font-weight: 400; }
 
-        /* NOT FOUND */
+        /* ── NOT FOUND ── */
         #not-found {
             display: none;
+            background: #fff;
+            border: 1px solid #fecaca;
+            border-radius: 12px;
             text-align: center;
-            padding: 3rem;
-            border: 1px dashed var(--border);
+            padding: 48px 32px;
         }
-        #not-found .code {
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 3.5rem;
-            color: var(--error);
-            opacity: 0.35;
-        }
-        #not-found p { color: var(--muted); font-size: 0.85rem; margin-top: 0.75rem; }
 
-        /* CACHE INFO */
-        .cache-info {
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 0.62rem;
-            color: var(--muted);
-            letter-spacing: 0.08em;
+        #not-found .code {
+            font-size: 48px;
+            font-weight: 700;
+            color: #fecaca;
         }
-        .cache-info a { color: var(--accent); text-decoration: none; }
+
+        #not-found p { color: #9ca3af; font-size: 13px; margin-top: 8px; }
+
+        /* ── CACHE INFO ── */
+        .cache-info {
+            font-size: 11px;
+            color: #9ca3af;
+        }
+        .cache-info a { color: #09B4E8; text-decoration: none; }
         .cache-info a:hover { text-decoration: underline; }
 
         @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(8px); }
             to   { opacity: 1; transform: translateY(0); }
         }
-        .fade-in { animation: fadeUp 0.3s ease forwards; }
+        .fade-in { animation: fadeUp 0.25s ease forwards; }
     </style>
 </head>
 <body>
 
-<header>
-    <div class="hex"></div>
-    <h1>LECTORE&nbsp;E &nbsp;//&nbsp; BJUMPER</h1>
-    <div class="status">
-        <div class="dot" id="dot"></div>
-        <span id="status-text">DESCONECTADO</span>
+<div class="topbar">
+    <div class="logo">
+        <div class="logo-icon">📡</div>
+        <div>
+            <div class="logo-title">LectoREE</div>
+            <div class="logo-sub">Trazabilidad de equipos · Bjumper</div>
+        </div>
     </div>
-</header>
+    <div class="status-badge status-off" id="statusBadge">Desconectado</div>
+</div>
 
-<main>
+<div class="main">
 
     <!-- LOGIN -->
     <div id="login-section">
@@ -302,8 +323,8 @@
     <!-- APP -->
     <div id="app-section" style="display:none;">
 
-        <div>
-            <div class="search-label">// Introduce o escanea el número de serie</div>
+        <div class="search-card">
+            <div class="search-label">Introduce o escanea el número de serie</div>
             <div class="search-row">
                 <input type="text" id="serial-input" placeholder="Nº DE SERIE..." autocomplete="off" />
                 <button id="search-btn" onclick="search()">BUSCAR</button>
@@ -325,7 +346,7 @@
         <div class="cache-info" id="cache-info"></div>
 
     </div>
-</main>
+</div>
 
 <script>
 // ── CONFIGURACIÓN ──────────────────────────────────────────
@@ -403,8 +424,9 @@ async function getToken() {
 function onLoggedIn() {
     document.getElementById("login-section").style.display = "none";
     document.getElementById("app-section").style.display   = "block";
-    document.getElementById("dot").classList.add("on");
-    document.getElementById("status-text").textContent     = "CONECTADO";
+    const b = document.getElementById("statusBadge");
+    b.className = "status-badge status-ok";
+    b.textContent = "Conectado";
 
     const input = document.getElementById("serial-input");
     input.focus();
