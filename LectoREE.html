@@ -515,9 +515,10 @@ function esc(s) {
 }
 
 // ── INIT ───────────────────────────────────────────────────
-msalApp.handleRedirectPromise().then(() => {
+(async () => {
+    await msalApp.initialize();
     if (msalApp.getAllAccounts().length > 0) onLoggedIn();
-});
+})();
 </script>
 </body>
 </html>
