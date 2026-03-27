@@ -454,6 +454,38 @@ async function loadExcel(force = false) {
 }
 
 // ── BÚSQUEDA ───────────────────────────────────────────────
+
+// Dado "RX2511001-RX2511100" y query "RX2511005", devuelve true
+function matchesSN(cell, query) {
+    const c = String(cell ?? "").trim();
+    const q = query.trim();
+
+    // Coincidencia exacta
+    if (c.toLowerCase() === q.toLowerCase()) return true;
+
+    // Rango: separar por guión
+    const dash = c.indexOf("-");
+    if (dash === -1) return false;
+
+    const startStr = c.slice(0, dash).trim();
+    const endRaw   = c.slice(dash + 1).trim();
+
+    // El final puede ser "RX2511100" o solo "2511100"
+    // Si no tiene letras, toma el prefijo del inicio
+    const prefix = startStr.match(/^[A-Za-z]+/)?.[0] ?? "";
+    const endStr = /^[A-Za-z]/.test(endRaw) ? endRaw : prefix + endRaw;
+
+    const startNum = parseInt(startStr.replace(/^[A-Za-z]+/, ""), 10);
+    const endNum   = parseInt(endStr.replace(/^[A-Za-z]+/, ""), 10);
+    const qNum     = parseInt(q.replace(/^[A-Za-z]+/, ""), 10);
+    const qPrefix  = q.match(/^[A-Za-z]+/)?.[0] ?? "";
+
+    if (isNaN(startNum) || isNaN(endNum) || isNaN(qNum)) return false;
+    if (qPrefix.toLowerCase() !== prefix.toLowerCase()) return false;
+
+    return qNum >= startNum && qNum <= endNum;
+}
+
 async function search() {
     const raw = document.getElementById("serial-input").value.trim();
     if (!raw) return;
@@ -466,9 +498,7 @@ async function search() {
 
     for (const [sheetName, rows] of Object.entries(data)) {
         const colSN = CFG.sheets[sheetName][0];
-        const match = rows.find(r =>
-            String(r[colSN] ?? "").trim().toLowerCase() === raw.toLowerCase()
-        );
+        const match = rows.find(r => matchesSN(r[colSN], raw));
         if (match) { renderResult(match, sheetName); return; }
     }
 
