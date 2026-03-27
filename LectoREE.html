@@ -336,11 +336,11 @@ const CFG = {
     sitePath: "/sites/COMPRAS-LOGISTICA",
     fileName: "Seguimiento de N de serie GPS-RX-TX.xls",
     sheets: {
-        "GPS NUEVO": [
-            "NUMEROS DE SERIE",
+        "P3690 GPS NUEVO": [
+            "NUMEROS\nDE SERIE",
             "NUMERO DE ORDEN",
             "TOTAL UNIDADES",
-            "FECHA DE SALIDA",
+            "FECHA DE\nSALIDA",
             "FABRICADO PARA",
             "FIRMWARE EQUIPO RECEPTOR",
             "TRIMBLE FIRMWARE",
@@ -348,11 +348,19 @@ const CFG = {
             "TRIMBLE FECHA",
             "OBSERVACIONES"
         ],
-        "RX y TX": [
-            "NUMEROS DE SERIE",
-            "NUMERO DE OBRA DE PRODUCCION",
-            "TOTAL UNIDADES",
-            "FECHA DE SALIDA",
+        "RX": [
+            "NUMEROS\nDE SERIE",
+            "NUMERO DE OBRA\nDE PRODUCCION",
+            "TOTAL\nUNIDADES",
+            "FECHA DE\nSALIDA",
+            "FABRICADO PARA",
+            "OBSERVACIONES"
+        ],
+        "TX": [
+            "NUMEROS\nDE SERIE",
+            "NUMERO DE OBRA\nDE PRODUCCION",
+            "TOTAL\nUNIDADES",
+            "FECHA DE\nSALIDA",
             "FABRICADO PARA",
             "OBSERVACIONES"
         ]
@@ -438,16 +446,16 @@ async function loadExcel(force = false) {
         excelCache = {};
         for (const sheetName of Object.keys(CFG.sheets)) {
             const ws = workbook.Sheets[sheetName];
-            if (ws) excelCache[sheetName] = XLSX.utils.sheet_to_json(ws, { defval: "" });
+            if (ws) excelCache[sheetName] = XLSX.utils.sheet_to_json(ws, { defval: "", range: 6 });
         }
 
         cacheTime = new Date();
 
-        // DEBUG — muestra pestañas y columnas reales del Excel
-        let dbg = "PESTAÑAS Y COLUMNAS ENCONTRADAS:\n";
+        // DEBUG temporal
+        let dbg = "";
         for (const [sn, rows] of Object.entries(excelCache)) {
-            dbg += `\n[${sn}] (${rows.length} filas)\n`;
-            if (rows.length > 0) dbg += "  Columnas: " + Object.keys(rows[0]).map(k => JSON.stringify(k)).join(", ");
+            dbg += `[${sn}] ${rows.length} filas\n`;
+            if (rows.length > 0) dbg += Object.keys(rows[0]).map(k => JSON.stringify(k)).join(" | ") + "\n\n";
         }
         alert(dbg);
 
