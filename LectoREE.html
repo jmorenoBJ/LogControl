@@ -366,7 +366,7 @@ const msalApp = new msal.PublicClientApplication({
     auth: {
         clientId:    CFG.clientId,
         authority:   `https://login.microsoftonline.com/${CFG.tenantId}`,
-        redirectUri: window.location.origin + '/LogControl/redirect.html'
+        redirectUri: 'https://jmorenobj.github.io/LogControl/LectoREE.html'
     },
     cache: { cacheLocation: "sessionStorage" }
 });
@@ -376,8 +376,7 @@ let cacheTime  = null;
 
 async function login() {
     try {
-        await msalApp.loginPopup({ scopes: SCOPES });
-        onLoggedIn();
+        await msalApp.loginRedirect({ scopes: SCOPES });
     } catch (e) {
         alert("Error al iniciar sesión:\n" + e.message);
     }
@@ -386,8 +385,12 @@ async function login() {
 async function getToken() {
     const account = msalApp.getAllAccounts()[0];
     if (!account) throw new Error("Sesión expirada. Recarga la página.");
-    const res = await msalApp.acquireTokenSilent({ scopes: SCOPES, account });
-    return res.accessToken;
+    try {
+        const res = await msalApp.acquireTokenSilent({ scopes: SCOPES, account });
+        return res.accessToken;
+    } catch (e) {
+        await msalApp.acquireTokenRedirect({ scopes: SCOPES, account });
+    }
 }
 
 function onLoggedIn() {
@@ -517,7 +520,12 @@ function esc(s) {
 // ── INIT ───────────────────────────────────────────────────
 (async () => {
     await msalApp.initialize();
-    if (msalApp.getAllAccounts().length > 0) onLoggedIn();
+    const result = await msalApp.handleRedirectPromise();
+    if (result) {
+        onLoggedIn();
+    } else if (msalApp.getAllAccounts().length > 0) {
+        onLoggedIn();
+    }
 })();
 </script>
 </body>
