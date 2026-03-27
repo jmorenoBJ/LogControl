@@ -339,13 +339,12 @@ const CFG = {
         "P3690 GPS NUEVO": [
             "NUMEROS\nDE SERIE",
             "NUMERO DE ORDEN",
-            "TOTAL UNIDADES",
+            "TOTAL\nUNIDADES",
             "FECHA DE\nSALIDA",
             "FABRICADO PARA",
-            "FIRMWARE EQUIPO RECEPTOR",
-            "TRIMBLE FIRMWARE",
-            "APLIC.RECEPTOR",
-            "TRIMBLE FECHA",
+            "FIRMWARE EQUIPO",
+            "RECEPTOR TRIMBLE\nFIRMWARE APLIC.",
+            "RECEPTOR TRIMBLE\nFECHA",
             "OBSERVACIONES"
         ],
         "RX": [
@@ -450,14 +449,6 @@ async function loadExcel(force = false) {
         }
 
         cacheTime = new Date();
-
-        // DEBUG temporal
-        let dbg = "";
-        for (const [sn, rows] of Object.entries(excelCache)) {
-            dbg += `[${sn}] ${rows.length} filas\n`;
-            if (rows.length > 0) dbg += Object.keys(rows[0]).map(k => JSON.stringify(k)).join(" | ") + "\n\n";
-        }
-        alert(dbg);
 
         hideLoading();
         updateCacheInfo();
